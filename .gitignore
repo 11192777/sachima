@@ -1,0 +1,9 @@
+target
+.idea/
+
+!**/src/main/**
+!**/src/test/**
+
+# MAC OS
+*.DS_Store
+e-archives.iml
