@@ -21,6 +21,7 @@ import org.zaizai.sachima.constant.StrPool;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -324,4 +325,11 @@ public class StringUtils implements StrPool {
         }
     }
 
+    public static String toLowerCase(String name) {
+        return isEmpty(name) ? name : name.toLowerCase();
+    }
+
+    public static String defaultString(String str) {
+        return isEmpty(str) ? StrPool.EMPYT : str;
+    }
 }

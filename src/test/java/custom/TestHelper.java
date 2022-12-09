@@ -4,6 +4,7 @@ package custom;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.zaizai.sachima.enums.DbType;
+import org.zaizai.sachima.exception.FastsqlColumnAmbiguousException;
 import org.zaizai.sachima.sql.ast.SQLStatement;
 import org.zaizai.sachima.util.SQLAdaptHelper;
 import org.zaizai.sachima.util.SQLUtils;
@@ -23,15 +24,12 @@ public class TestHelper {
 
     private static final Log LOG = LogFactory.getLog(DeleteTest.class);
 
-    protected static SQLStatement sqlStatement;
-
     public static void eq(String sql, String target) {
         eq(sql, target, false);
     }
 
     public static void eq(String sql, String target, boolean alreadyOracleSql) {
         if (!alreadyOracleSql) {
-            sqlStatement = getStatement(sql);
             sql = mysqlToOracle(sql);
         }
         if (Objects.equals(sql, target)) {
@@ -56,5 +54,9 @@ public class TestHelper {
         StringBuilder appender = new StringBuilder();
         SQLUtils.parseSingleStatement(sql, DbType.mysql).accept(new MySqlToOracleOVLimit3(appender));
         return appender.toString();
+    }
+
+    public static String toOracleNclob(String sql) {
+        return SQLAdaptHelper.translateMysqlToOracle(sql, new MySqlToOracleOVNclob(new StringBuffer(), false));
     }
 }

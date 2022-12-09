@@ -39,7 +39,9 @@ import org.zaizai.sachima.sql.dialect.oracle.parser.OracleFunctionDataType;
 import org.zaizai.sachima.sql.dialect.oracle.parser.OracleProcedureDataType;
 import org.zaizai.sachima.sql.visitor.SQLASTOutputVisitor;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleASTVisitor {
 

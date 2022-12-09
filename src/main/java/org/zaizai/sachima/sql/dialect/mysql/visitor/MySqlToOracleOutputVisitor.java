@@ -4,15 +4,17 @@ import org.zaizai.sachima.sql.ast.SQLExpr;
 import org.zaizai.sachima.sql.ast.expr.*;
 import org.zaizai.sachima.sql.ast.statement.SQLExprTableSource;
 import org.zaizai.sachima.sql.ast.statement.SQLSelectItem;
+import org.zaizai.sachima.sql.ast.statement.SQLSelectQueryBlock;
+import org.zaizai.sachima.sql.ast.statement.SQLUnionQueryTableSource;
 import org.zaizai.sachima.sql.dialect.oracle.constant.FunctionConstant;
 import org.zaizai.sachima.sql.dialect.oracle.parser.OracleLexer;
 import org.zaizai.sachima.sql.dialect.oracle.visitor.OracleOutputVisitor;
 import org.zaizai.sachima.sql.parser.Token;
 import org.zaizai.sachima.util.CollectionUtils;
+import org.zaizai.sachima.util.SQLUtils;
 import org.zaizai.sachima.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * <H1>Simple MySQL to Oracle</H1>
@@ -28,6 +30,7 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
     private static final String IN_ITEM_FORMAT = "(1, {})";
     private static final Number TRUE = 1;
     private static final Number FALSE = 0;
+    private String tableName = null;
 
     public MySqlToOracleOutputVisitor(Appendable appender) {
         super(appender);
@@ -58,6 +61,7 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
 
     @Override
     public boolean visit(SQLExprTableSource x) {
+        this.tableName = x.getTableName();
         if (x.getExpr() instanceof SQLIdentifierExpr) {
             this.identifierTransferredMeaning((SQLIdentifierExpr) x.getExpr());
         }
@@ -250,6 +254,11 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
             } else if (SQLBinaryOperator.NotEqual.equals(x.getOperator())) {
                 x.setOperator(SQLBinaryOperator.IsNot);
             }
+        } else if (x.getLeft() instanceof SQLPropertyExpr && Objects.nonNull(tableName)) {
+            SQLPropertyExpr filed = (SQLPropertyExpr) x.getLeft();
+            if (Objects.equals(isNclobType().get(tableName), filed.getName())) {
+                x.setLeft(new SQLMethodInvokeExpr(FunctionConstant.TO_CHAR, null, Collections.singletonList(filed)));
+            }
         }
         return super.visit(x);
     }
@@ -258,6 +267,11 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
         //How do you think it's boolean field?
         //if params has boolean field map. need cache?
         return String.valueOf(right).equalsIgnoreCase(Boolean.TRUE.toString()) ? TRUE : FALSE;
+    }
+
+
+    public Map<String, String> isNclobType() {
+        return Collections.emptyMap();
     }
 
 }

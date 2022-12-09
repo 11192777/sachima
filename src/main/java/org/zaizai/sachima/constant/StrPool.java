@@ -176,4 +176,9 @@ public interface StrPool {
      * 字符串常量：空 JSON {@code "{}"}
      */
     String EMPTY_JSON = "{}";
+
+    /**
+     * 字符串常量: 空字符串
+     */
+    String EMPYT = "";
 }
