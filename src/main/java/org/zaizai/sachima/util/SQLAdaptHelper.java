@@ -3,7 +3,6 @@ package org.zaizai.sachima.util;
 import org.zaizai.sachima.enums.DbType;
 import org.zaizai.sachima.sql.dialect.mysql.visitor.MySqlToOracleOutputVisitor;
 import org.zaizai.sachima.sql.visitor.SQLASTOutputVisitor;
-import org.zaizai.sachima.sql.visitor.SQLASTVisitor;
 import org.zaizai.sachima.sql.visitor.VisitorFeature;
 
 import java.util.Objects;

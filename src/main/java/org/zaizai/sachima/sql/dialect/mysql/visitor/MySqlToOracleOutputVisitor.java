@@ -1,17 +1,16 @@
 package org.zaizai.sachima.sql.dialect.mysql.visitor;
 
 import org.zaizai.sachima.sql.ast.SQLExpr;
+import org.zaizai.sachima.sql.ast.SQLName;
 import org.zaizai.sachima.sql.ast.expr.*;
 import org.zaizai.sachima.sql.ast.statement.SQLExprTableSource;
 import org.zaizai.sachima.sql.ast.statement.SQLSelectItem;
-import org.zaizai.sachima.sql.ast.statement.SQLSelectQueryBlock;
-import org.zaizai.sachima.sql.ast.statement.SQLUnionQueryTableSource;
+import org.zaizai.sachima.sql.dialect.mysql.visitor.handler.NclobTypeHandler;
 import org.zaizai.sachima.sql.dialect.oracle.constant.FunctionConstant;
 import org.zaizai.sachima.sql.dialect.oracle.parser.OracleLexer;
 import org.zaizai.sachima.sql.dialect.oracle.visitor.OracleOutputVisitor;
 import org.zaizai.sachima.sql.parser.Token;
 import org.zaizai.sachima.util.CollectionUtils;
-import org.zaizai.sachima.util.SQLUtils;
 import org.zaizai.sachima.util.StringUtils;
 
 import java.util.*;
@@ -61,7 +60,7 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
 
     @Override
     public boolean visit(SQLExprTableSource x) {
-        this.tableName = x.getTableName();
+        this.tableName = StringUtils.toLowerCase(x.getTableName());
         if (x.getExpr() instanceof SQLIdentifierExpr) {
             this.identifierTransferredMeaning((SQLIdentifierExpr) x.getExpr());
         }
@@ -254,9 +253,9 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
             } else if (SQLBinaryOperator.NotEqual.equals(x.getOperator())) {
                 x.setOperator(SQLBinaryOperator.IsNot);
             }
-        } else if (x.getLeft() instanceof SQLPropertyExpr && Objects.nonNull(tableName)) {
-            SQLPropertyExpr filed = (SQLPropertyExpr) x.getLeft();
-            if (Objects.equals(isNclobType().get(tableName), filed.getName())) {
+        } else if (Objects.nonNull(this.getNclobTypeHandler()) && x.getLeft() instanceof SQLName && Objects.nonNull(tableName)) {
+            SQLName filed = (SQLName) x.getLeft();
+            if (this.getNclobTypeHandler().contains(tableName, filed.getSimpleName())) {
                 x.setLeft(new SQLMethodInvokeExpr(FunctionConstant.TO_CHAR, null, Collections.singletonList(filed)));
             }
         }
@@ -270,8 +269,18 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
     }
 
 
-    public Map<String, String> isNclobType() {
-        return Collections.emptyMap();
+    /**
+     * <H2>NCLOB type.</H2>
+     * <pre>example: file_url(NCLOB)
+     *  MySQL:  select id from file where file_url = 'https://....'
+     *  Oracle: select id from file where TO_CHAR(file_url) = 'https://....'
+     * </pre>
+     *
+     * @author Qingyu.Meng
+     * @since 2022/12/12
+     */
+    public NclobTypeHandler getNclobTypeHandler() {
+        return null;
     }
 
 }
