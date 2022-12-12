@@ -19,18 +19,16 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class NclobTypeHandler {
 
-    long[] tableFiledHashArray;
+    long[] tableColumnHashArray;
 
     public NclobTypeHandler(Map<String, Set<String>> tableColumnMap) {
         if (MapUtils.isEmpty(tableColumnMap)) {
-            tableFiledHashArray = null;
+            tableColumnHashArray = null;
         } else {
             AtomicInteger index = new AtomicInteger();
-            this.tableFiledHashArray = new long[tableColumnMap.values().stream().mapToInt(Set::size).sum()];
-            tableColumnMap.forEach((table, columns) -> {
-                columns.forEach(column -> this.tableFiledHashArray[index.getAndIncrement()] = this.getIndexHash(table, column));
-            });
-            Arrays.sort(this.tableFiledHashArray);
+            this.tableColumnHashArray = new long[tableColumnMap.values().stream().mapToInt(Set::size).sum()];
+            tableColumnMap.forEach((table, columns) -> columns.forEach(column -> this.tableColumnHashArray[index.getAndIncrement()] = this.getIndexHash(table, column)));
+            Arrays.sort(this.tableColumnHashArray);
         }
     }
 
@@ -39,10 +37,10 @@ public class NclobTypeHandler {
     }
 
     public boolean contains(String tableName, String columnName) {
-        if (Objects.isNull(tableFiledHashArray) || StringUtils.isEmpty(tableName) || StringUtils.isEmpty(columnName)) {
+        if (Objects.isNull(tableColumnHashArray) || StringUtils.isEmpty(tableName) || StringUtils.isEmpty(columnName)) {
             return false;
         }
-        return Arrays.binarySearch(this.tableFiledHashArray, getIndexHash(tableName, columnName)) >= 0;
+        return Arrays.binarySearch(this.tableColumnHashArray, getIndexHash(tableName, columnName)) >= 0;
     }
 
 }

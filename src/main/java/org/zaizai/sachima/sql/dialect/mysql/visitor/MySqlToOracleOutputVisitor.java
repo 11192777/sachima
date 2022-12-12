@@ -129,6 +129,9 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
      *     <li>DATE_FORMAT() -> TO_CHAR
      *     select date_format(created_date, '%Y-%m-%d %H-%i-%s') from ea_form; ===> select TO_CHAR(created_date, 'yyyy-mm-dd hh24:mi:ss') from ea_form;
      *     </li>
+     *     <li>left([value], [num]) -> SUBSTR([value] , 0, [num])
+     *     select left(name, 2) from user ===> select substr(name, 0, 2) from user;
+     *     </li>
      * </ol>
      */
     @Override
@@ -157,6 +160,10 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
                 SQLCharExpr sqlCharExpr = (SQLCharExpr) x.getArguments().get(1);
                 sqlCharExpr.setText(sqlCharExpr.getText().replace("%Y", "yyyy").replace("%m", "mm").replace("%d", "dd").replace("%H", "hh24").replace("%i", "mi").replace("%s", "ss"));
             }
+        } else if (StringUtils.equalsIgnoreCase(methodName, FunctionConstant.LEFT)) {
+            x.setMethodName(FunctionConstant.SUBSTR);
+            x.getArguments().add(x.getArguments().get(1).clone());
+            x.getArguments().set(1, new SQLIntegerExpr(0));
         }
         return super.visit(x);
     }

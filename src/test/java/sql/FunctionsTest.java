@@ -2,6 +2,8 @@ package sql;
 
 import custom.TestHelper;
 import org.junit.Test;
+import org.zaizai.sachima.sql.ast.SQLStatement;
+import org.zaizai.sachima.util.StringUtils;
 
 /**
  * <H1></H1>
@@ -62,15 +64,17 @@ public class FunctionsTest extends TestHelper {
     }
 
 
-    @Test
+    @Test   //left -> substr
     public void case7() {
-
+        String sql = "select left(name, 10) from user;";
+        eq(sql, "select SUBSTR(name, 0, 10) from \"USER\";");
     }
 
 
     @Test
     public void case8() {
-
+        String sql = "select concat(left(name, 10), ',' ,name) from user;";
+        eq(sql, "select (SUBSTR(name, 0, 10)||','||name) from \"USER\";");
     }
 
 

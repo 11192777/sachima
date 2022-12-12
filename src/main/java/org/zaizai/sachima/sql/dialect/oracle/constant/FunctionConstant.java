@@ -52,5 +52,7 @@ public interface FunctionConstant {
 
     String TO_CHAR = "TO_CHAR";
 
+    String LEFT = "LEFT";
 
+    String SUBSTR = "SUBSTR";
 }
