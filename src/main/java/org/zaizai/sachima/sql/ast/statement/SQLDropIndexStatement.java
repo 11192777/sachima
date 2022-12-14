@@ -94,7 +94,7 @@ public class SQLDropIndexStatement extends SQLStatementImpl implements SQLDropSt
 
     @Override
     public List<SQLObject> getChildren() {
-        List<SQLObject> children = new ArrayList<SQLObject>();
+        List<SQLObject> children = new ArrayList<>();
         if (indexName != null) {
             children.add(indexName);
         }

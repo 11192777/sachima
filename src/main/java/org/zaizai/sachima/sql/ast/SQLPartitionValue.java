@@ -25,7 +25,7 @@ import java.util.List;
 public class SQLPartitionValue extends OracleSegmentAttributesImpl {
 
     protected Operator            operator;
-    protected final List<SQLExpr> items = new ArrayList<SQLExpr>();
+    protected final List<SQLExpr> items = new ArrayList<>();
 
     public SQLPartitionValue(Operator operator){
         super();

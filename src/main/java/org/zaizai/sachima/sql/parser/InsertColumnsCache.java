@@ -65,7 +65,7 @@ public class InsertColumnsCache {
         return false;
     }
 
-    public final static class Entry {
+    public static final class Entry {
         public final long hashCode64;
         public final String columnsString;
         public final String columnsFormattedString;

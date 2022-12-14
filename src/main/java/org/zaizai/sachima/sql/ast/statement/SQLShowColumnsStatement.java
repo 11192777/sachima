@@ -90,7 +90,7 @@ public class SQLShowColumnsStatement extends SQLStatementImpl implements SQLShow
     }
 
     public List<SQLObject> getChildren() {
-        List<SQLObject> children = new ArrayList<SQLObject>();
+        List<SQLObject> children = new ArrayList<>();
         if (table != null) {
             children.add(table);
         }

@@ -28,7 +28,7 @@ import static org.zaizai.sachima.sql.parser.Token.LITERAL_CHARS;
 public class MySqlLexer extends Lexer {
     public static SymbolTable quoteTable = new SymbolTable(8192);
 
-    public final static Keywords DEFAULT_MYSQL_KEYWORDS;
+    public static final Keywords DEFAULT_MYSQL_KEYWORDS;
 
     static {
         Map<String, Token> map = new HashMap<String, Token>();
@@ -755,25 +755,18 @@ public class MySqlLexer extends Lexer {
                 throw new NotAllowCommentException();
             }
 
-            return;
         }
     }
     
-    private final static boolean[] identifierFlags = new boolean[256];
+    private static final boolean[] identifierFlags = new boolean[256];
     static {
         for (char c = 0; c < identifierFlags.length; ++c) {
-            if (c >= 'A' && c <= 'Z') {
-                identifierFlags[c] = true;
-            } else if (c >= 'a' && c <= 'z') {
-                identifierFlags[c] = true;
-            } else if (c >= '0' && c <= '9') {
+            if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9')) {
                 identifierFlags[c] = true;
             }
         }
-        // identifierFlags['`'] = true;
         identifierFlags['_'] = true;
         identifierFlags['$'] = true;
-        //identifierFlags['-'] = true; // mysql
     }
 
     public static boolean isIdentifierChar(char c) {

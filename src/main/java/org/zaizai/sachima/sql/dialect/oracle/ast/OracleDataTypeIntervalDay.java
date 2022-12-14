@@ -27,7 +27,7 @@ public class OracleDataTypeIntervalDay extends SQLDataTypeImpl implements Oracle
 
     private boolean               toSecond          = false;
 
-    protected final List<SQLExpr> fractionalSeconds = new ArrayList<SQLExpr>();
+    protected final List<SQLExpr> fractionalSeconds = new ArrayList<>();
 
     public OracleDataTypeIntervalDay(){
         this.setName("INTERVAL DAY");

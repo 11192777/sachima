@@ -31,7 +31,7 @@ public class SQLDescribeStatement extends SQLStatementImpl implements SQLReplace
 
     // for odps
     protected SQLObjectType objectType;
-    protected List<SQLExpr> partition = new ArrayList<SQLExpr>();
+    protected List<SQLExpr> partition = new ArrayList<>();
 
     public SQLName getObject() {
         return object;

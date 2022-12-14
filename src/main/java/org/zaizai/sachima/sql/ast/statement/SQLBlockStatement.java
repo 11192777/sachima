@@ -26,8 +26,8 @@ import java.util.List;
 public class SQLBlockStatement extends SQLStatementImpl {
     private String             labelName;
     private String             endLabel;
-    private List<SQLParameter> parameters    = new ArrayList<SQLParameter>();
-    private List<SQLStatement> statementList = new ArrayList<SQLStatement>();
+    private List<SQLParameter> parameters    = new ArrayList<>();
+    private List<SQLStatement> statementList = new ArrayList<>();
     public SQLStatement        exception;
     private boolean            endOfCommit;
 

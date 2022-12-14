@@ -25,8 +25,8 @@ import java.util.List;
 
 public class SQLAlterTableSubpartitionLifecycle extends SQLObjectImpl implements SQLAlterTableItem {
 
-    private List<SQLIntegerExpr> partitionIds = new ArrayList<SQLIntegerExpr>();
-    private List<SQLIntegerExpr> subpartitionLifeCycle = new ArrayList<SQLIntegerExpr>();
+    private List<SQLIntegerExpr> partitionIds = new ArrayList<>();
+    private List<SQLIntegerExpr> subpartitionLifeCycle = new ArrayList<>();
 
     public SQLAlterTableSubpartitionLifecycle(){
 

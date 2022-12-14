@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SQLValuesExpr extends SQLExprImpl implements SQLReplaceable {
-    private List<SQLListExpr> values = new ArrayList<SQLListExpr>();
+    private List<SQLListExpr> values = new ArrayList<>();
 
     public List<SQLListExpr> getValues() {
         return values;

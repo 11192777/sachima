@@ -28,7 +28,7 @@ public final class SQLParameter extends SQLObjectImpl implements SQLObjectWithDa
     private boolean                  noCopy = false;
     private boolean                  constant = false;
     private SQLName                  cursorName;
-    private final List<SQLParameter> cursorParameters = new ArrayList<SQLParameter>();
+    private final List<SQLParameter> cursorParameters = new ArrayList<>();
     private boolean                  order;
     private boolean                  map;
     private boolean                  member;

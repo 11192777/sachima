@@ -14,7 +14,7 @@ import java.util.List;
 public class DrdsShowDDLJobs extends MySqlStatementImpl implements SQLShowStatement {
 
     private boolean full = false;
-    private List<Long> jobIds = new ArrayList<Long>();
+    private List<Long> jobIds = new ArrayList<>();
 
     public void accept0(MySqlASTVisitor visitor) {
         visitor.visit(this);

@@ -29,7 +29,7 @@ import java.util.Set;
 
 public class SQLBinaryOpExprGroup extends SQLExprImpl implements SQLReplaceable {
     private final SQLBinaryOperator operator;
-    private final List<SQLExpr>     items = new ArrayList<SQLExpr>();
+    private final List<SQLExpr>     items = new ArrayList<>();
     private DbType                  dbType;
 
     public SQLBinaryOpExprGroup(SQLBinaryOperator operator) {
@@ -172,7 +172,7 @@ public class SQLBinaryOpExprGroup extends SQLExprImpl implements SQLReplaceable 
         for (int i = 0; i < items.size(); i++) {
             if (!itemSet.add(items.get(i))) {
                 if (dupIndexList == null) {
-                    dupIndexList = new ArrayList<Integer>();
+                    dupIndexList = new ArrayList<>();
                 }
                 dupIndexList.add(i);
             }

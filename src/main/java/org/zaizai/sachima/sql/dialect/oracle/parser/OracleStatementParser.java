@@ -60,7 +60,7 @@ public class OracleStatementParser extends SQLStatementParser {
             OracleInsertStatement stmt = (OracleInsertStatement) insertStatement;
             this.getExprParser().parseHints(stmt.getHints());
         } else {
-            List<SQLHint> hints = new ArrayList<SQLHint>(1);
+            List<SQLHint> hints = new ArrayList<>(1);
             this.getExprParser().parseHints(hints);
         }
     }
@@ -2109,7 +2109,7 @@ public class OracleStatementParser extends SQLStatementParser {
 
         accept(Token.INSERT);
 
-        List<SQLHint> hints = new ArrayList<SQLHint>();
+        List<SQLHint> hints = new ArrayList<>();
 
         parseHints(hints);
 

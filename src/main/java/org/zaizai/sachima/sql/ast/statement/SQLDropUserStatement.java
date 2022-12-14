@@ -26,7 +26,7 @@ import java.util.List;
 
 public class SQLDropUserStatement extends SQLStatementImpl implements SQLDropStatement, SQLReplaceable {
 
-    private List<SQLExpr> users = new ArrayList<SQLExpr>(2);
+    private List<SQLExpr> users = new ArrayList<>(2);
 
     protected boolean ifExists = false;
     

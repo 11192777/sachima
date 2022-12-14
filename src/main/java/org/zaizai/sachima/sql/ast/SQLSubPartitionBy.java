@@ -25,8 +25,8 @@ public abstract class SQLSubPartitionBy extends SQLObjectImpl {
 
     protected SQLExpr               subPartitionsCount;
     protected boolean               linear;
-    protected List<SQLAssignItem>   options              = new ArrayList<SQLAssignItem>();
-    protected List<SQLSubPartition> subPartitionTemplate = new ArrayList<SQLSubPartition>();
+    protected List<SQLAssignItem>   options              = new ArrayList<>();
+    protected List<SQLSubPartition> subPartitionTemplate = new ArrayList<>();
 
     protected SQLIntegerExpr lifecycle;
 

@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SQLAlterTableAddColumn extends SQLObjectImpl implements SQLAlterTableItem {
-    private final List<SQLColumnDefinition> columns = new ArrayList<SQLColumnDefinition>();
+    private final List<SQLColumnDefinition> columns = new ArrayList<>();
 
     // for mysql
     private SQLName firstColumn;

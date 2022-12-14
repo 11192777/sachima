@@ -29,7 +29,7 @@ public class OracleLobStorageClause extends OracleSegmentAttributesImpl implemen
 
     private SQLName             segementName;
 
-    private final List<SQLName> items      = new ArrayList<SQLName>();
+    private final List<SQLName> items      = new ArrayList<>();
 
     private boolean             secureFile = false;
     private boolean             basicFile  = false;

@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OracleDeleteStatement extends SQLDeleteStatement {
-    private final List<SQLHint>   hints     = new ArrayList<SQLHint>();
+    private final List<SQLHint>   hints     = new ArrayList<>();
     private OracleReturningClause returning = null;
 
     public OracleDeleteStatement(){

@@ -39,7 +39,7 @@ public class OracleCreateTypeStatement extends OracleStatementImpl implements SQ
 
     private SQLName            under;
 
-    private List<SQLParameter> parameters = new ArrayList<SQLParameter>();
+    private List<SQLParameter> parameters = new ArrayList<>();
 
     private SQLDataType        tableOf;
 

@@ -17,8 +17,7 @@ package org.zaizai.sachima.sql.ast.statement;
 
 import org.zaizai.sachima.enums.DbType;
 import org.zaizai.sachima.exception.FastsqlException;
-import org.zaizai.sachima.util.CollectionUtils;
-import org.zaizai.sachima.util.SQLUtils;
+import org.zaizai.sachima.util.*;
 import org.zaizai.sachima.sql.ast.SQLDataType;
 import org.zaizai.sachima.sql.ast.SQLExpr;
 import org.zaizai.sachima.sql.ast.SQLObjectImpl;
@@ -29,8 +28,6 @@ import org.zaizai.sachima.sql.ast.expr.SQLIntegerExpr;
 import org.zaizai.sachima.sql.ast.expr.SQLPropertyExpr;
 import org.zaizai.sachima.sql.dialect.oracle.ast.OracleSQLObject;
 import org.zaizai.sachima.sql.visitor.SQLASTVisitor;
-import org.zaizai.sachima.util.FnvHash;
-import org.zaizai.sachima.util.StringUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,24 +37,24 @@ import java.util.Objects;
 public class SQLSelectItem extends SQLObjectImpl implements SQLReplaceable {
 
     protected SQLExpr expr;
-    protected String  alias;
+    protected String alias;
 
     protected boolean connectByRoot = false;
     protected long aliasHashCode64;
     protected List<String> aliasList;
 
-    public SQLSelectItem(){
+    public SQLSelectItem() {
     }
 
-    public SQLSelectItem(SQLExpr expr){
+    public SQLSelectItem(SQLExpr expr) {
         this(expr, null);
     }
 
-    public SQLSelectItem(int value){
+    public SQLSelectItem(int value) {
         this(new SQLIntegerExpr(value), null);
     }
 
-    public SQLSelectItem(SQLExpr expr, String alias){
+    public SQLSelectItem(SQLExpr expr, String alias) {
         this.expr = expr;
         this.alias = alias;
 
@@ -65,8 +62,8 @@ public class SQLSelectItem extends SQLObjectImpl implements SQLReplaceable {
             expr.setParent(this);
         }
     }
-    
-    public SQLSelectItem(SQLExpr expr, String alias, boolean connectByRoot){
+
+    public SQLSelectItem(SQLExpr expr, String alias, boolean connectByRoot) {
         this.connectByRoot = connectByRoot;
         this.expr = expr;
         this.alias = alias;
@@ -76,7 +73,7 @@ public class SQLSelectItem extends SQLObjectImpl implements SQLReplaceable {
         }
     }
 
-    public SQLSelectItem(SQLExpr expr, List<String> aliasList, boolean connectByRoot){
+    public SQLSelectItem(SQLExpr expr, List<String> aliasList, boolean connectByRoot) {
         this.connectByRoot = connectByRoot;
         this.expr = expr;
         this.aliasList = aliasList;
@@ -240,13 +237,13 @@ public class SQLSelectItem extends SQLObjectImpl implements SQLReplaceable {
             return false;
         }
 
-        long hash = FnvHash.hashCode64(alias);
+        long hash = FnvHashUtils.hashCode64(alias);
         return match(hash);
     }
 
     public long aliasHash() {
         if (this.aliasHashCode64 == 0) {
-            this.aliasHashCode64 = FnvHash.hashCode64(alias);
+            this.aliasHashCode64 = FnvHashUtils.hashCode64(alias);
         }
         return aliasHashCode64;
     }

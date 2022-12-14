@@ -1046,7 +1046,7 @@ public class MySqlStatementParser extends SQLStatementParser {
 
         if (lexer.token() == TABLE) {
             accept(Token.TABLE);
-            List<SQLName> names = new ArrayList<SQLName>();
+            List<SQLName> names = new ArrayList<>();
             this.exprParser.names(names, stmt);
 
             for (SQLName name : names) {
@@ -1146,7 +1146,7 @@ public class MySqlStatementParser extends SQLStatementParser {
         accept(Token.TABLE);
 
         MySqlOptimizeStatement stmt = new MySqlOptimizeStatement();
-        List<SQLName> names = new ArrayList<SQLName>();
+        List<SQLName> names = new ArrayList<>();
         this.exprParser.names(names, stmt);
 
         for (SQLName name : names) {
@@ -1710,13 +1710,8 @@ public class MySqlStatementParser extends SQLStatementParser {
                 }
             }
 
-            if (tddlHints) {
+            if (tddlHints || accept) {
                 SQLStatementImpl stmt = (SQLStatementImpl)this.parseStatement();
-                stmt.setHeadHints(hints);
-                statementList.add(stmt);
-                return true;
-            } else if (accept) {
-                SQLStatementImpl stmt = (SQLStatementImpl) this.parseStatement();
                 stmt.setHeadHints(hints);
                 statementList.add(stmt);
                 return true;
@@ -4166,7 +4161,7 @@ public class MySqlStatementParser extends SQLStatementParser {
         SQLReplaceStatement stmt = new SQLReplaceStatement();
         stmt.setDbType(DbType.mysql);
 
-        List<SQLCommentHint> list = new ArrayList<SQLCommentHint>();
+        List<SQLCommentHint> list = new ArrayList<>();
 
         while (lexer.token() == Token.HINT) {
             this.exprParser.parseHints(list);
@@ -4615,9 +4610,7 @@ public class MySqlStatementParser extends SQLStatementParser {
             } else if (lexer.identifierEquals(FnvHash.Constants.OVERWRITE)) {
                 lexer.nextToken();
                 stmt.setOverwrite(true);
-                if (lexer.token() == Token.TABLE) {
-                    lexer.nextToken();
-                } else if (lexer.token() == Token.INTO) {
+                if (lexer.token() == Token.TABLE || lexer.token() == Token.INTO) {
                     lexer.nextToken();
                 }
             }
@@ -4734,7 +4727,7 @@ public class MySqlStatementParser extends SQLStatementParser {
                     }
 
                     if (tableObject != null) {
-                        columnDefinitionList = new ArrayList<SQLColumnDefinition>();
+                        columnDefinitionList = new ArrayList<>();
                     }
 
                     List<SQLExpr> columns = stmt.getColumns();
@@ -4795,7 +4788,7 @@ public class MySqlStatementParser extends SQLStatementParser {
                         if (insertColumnsCache != null && tableName != null) {
                             String columnsString = lexer.subString(pos, lexer.pos() - pos);
 
-                            List<SQLExpr> clonedColumns = new ArrayList<SQLExpr>(columnSize);
+                            List<SQLExpr> clonedColumns = new ArrayList<>(columnSize);
                             for (int i = 0; i < columns.size(); i++) {
                                 clonedColumns.add(columns.get(i).clone());
                             }
@@ -8095,7 +8088,7 @@ public class MySqlStatementParser extends SQLStatementParser {
                 accept(Token.BY);
 
                 for (; ; ) {
-                    List<SQLAssignItem> storedByItem = new ArrayList<SQLAssignItem>();
+                    List<SQLAssignItem> storedByItem = new ArrayList<>();
                     accept(Token.LPAREN);
                     for (; ; ) {
                         SQLAssignItem assignItem = this.exprParser.parseAssignItem();

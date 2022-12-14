@@ -17,6 +17,7 @@ package org.zaizai.sachima.sql.ast;
 
 import org.zaizai.sachima.util.FnvHash;
 import org.zaizai.sachima.enums.DbType;
+import org.zaizai.sachima.util.FnvHashUtils;
 import org.zaizai.sachima.util.SQLUtils;
 import org.zaizai.sachima.sql.ast.expr.SQLIntegerExpr;
 import org.zaizai.sachima.sql.visitor.SQLASTVisitor;
@@ -28,24 +29,24 @@ import java.util.List;
 
 public class SQLDataTypeImpl extends SQLObjectImpl implements SQLDataType, SQLDbTypedObject {
 
-    private         String        name;
-    private         long          nameHashCode64;
-    protected final List<SQLExpr> arguments = new ArrayList<SQLExpr>();
-    private         Boolean       withTimeZone;
-    private         boolean       withLocalTimeZone = false;
-    private         DbType        dbType;
+    private String name;
+    private long nameHashCode64;
+    protected final List<SQLExpr> arguments = new ArrayList<>();
+    private Boolean withTimeZone;
+    private boolean withLocalTimeZone = false;
+    private DbType dbType;
 
-    private         boolean       unsigned;
-    private         boolean       zerofill;
+    private boolean unsigned;
+    private boolean zerofill;
 
     // for oracle
-    private         SQLExpr       indexBy;
+    private SQLExpr indexBy;
 
-    public SQLDataTypeImpl(){
+    public SQLDataTypeImpl() {
 
     }
 
-    public SQLDataTypeImpl(String name){
+    public SQLDataTypeImpl(String name) {
         this.name = name;
     }
 
@@ -85,7 +86,7 @@ public class SQLDataTypeImpl extends SQLObjectImpl implements SQLDataType, SQLDb
 
     public long nameHashCode64() {
         if (nameHashCode64 == 0) {
-            nameHashCode64 = FnvHash.hashCode64(name);
+            nameHashCode64 = FnvHashUtils.hashCode64(name);
         }
         return nameHashCode64;
     }
@@ -98,7 +99,7 @@ public class SQLDataTypeImpl extends SQLObjectImpl implements SQLDataType, SQLDb
     public List<SQLExpr> getArguments() {
         return this.arguments;
     }
-    
+
     public void addArgument(SQLExpr argument) {
         if (argument != null) {
             argument.setParent(this);
@@ -114,7 +115,7 @@ public class SQLDataTypeImpl extends SQLObjectImpl implements SQLDataType, SQLDb
         SQLDataTypeImpl dataType = (SQLDataTypeImpl) o;
 
         if (name != null ? !name.equals(dataType.name) : dataType.name != null) return false;
-        if (!arguments.equals(dataType.arguments)){
+        if (!arguments.equals(dataType.arguments)) {
             return false;
         }
         return withTimeZone != null ? withTimeZone.equals(dataType.withTimeZone) : dataType.withTimeZone == null;
@@ -123,7 +124,7 @@ public class SQLDataTypeImpl extends SQLObjectImpl implements SQLDataType, SQLDb
     @Override
     public int hashCode() {
         long value = nameHashCode64();
-        return (int)(value ^ (value >>> 32));
+        return (int) (value ^ (value >>> 32));
     }
 
     @Override

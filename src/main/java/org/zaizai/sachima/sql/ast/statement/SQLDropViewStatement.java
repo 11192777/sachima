@@ -25,7 +25,7 @@ import java.util.List;
 
 public class SQLDropViewStatement extends SQLStatementImpl implements SQLDropStatement {
 
-    protected List<SQLExprTableSource> tableSources = new ArrayList<SQLExprTableSource>();
+    protected List<SQLExprTableSource> tableSources = new ArrayList<>();
 
     protected boolean                  cascade      = false;
     protected boolean                  restrict     = false;

@@ -9,7 +9,7 @@ import java.util.List;
 public class SQLPrivilegeItem extends SQLObjectImpl {
 
     private SQLExpr action;
-    private List<SQLName> columns = new ArrayList<SQLName>();
+    private List<SQLName> columns = new ArrayList<>();
 
     public SQLExpr getAction() {
         return action;

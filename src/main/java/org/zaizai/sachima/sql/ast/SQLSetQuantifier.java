@@ -18,11 +18,11 @@ package org.zaizai.sachima.sql.ast;
 public interface SQLSetQuantifier {
 
     // SQL 92
-    public final static int ALL         = 1;
-    public final static int DISTINCT    = 2;
+    public static final int ALL         = 1;
+    public static final int DISTINCT    = 2;
 
-    public final static int UNIQUE      = 3;
-    public final static int DISTINCTROW = 4;
+    public static final int UNIQUE      = 3;
+    public static final int DISTINCTROW = 4;
 
     // <SetQuantifier>
 }

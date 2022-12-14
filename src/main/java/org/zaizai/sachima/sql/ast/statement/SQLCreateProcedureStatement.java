@@ -33,7 +33,7 @@ public class SQLCreateProcedureStatement extends SQLStatementImpl implements SQL
     private boolean            orReplace;
     private SQLName            name;
     private SQLStatement       block;
-    private List<SQLParameter> parameters = new ArrayList<SQLParameter>();
+    private List<SQLParameter> parameters = new ArrayList<>();
 
     // for oracle
     private String             javaCallSpec;

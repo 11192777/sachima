@@ -15,8 +15,8 @@ import java.util.List;
  * @version : SQLAlterTablePartition.java, v 0.1 2019年11月14日 21:50 gouzhiwen Exp $
  */
 public class SQLAlterTablePartitionSetProperties extends SQLObjectImpl implements SQLAlterTableItem {
-    private final List<SQLAssignItem> partition = new ArrayList<SQLAssignItem>(4);
-    private final List<SQLAssignItem> partitionProperties = new ArrayList<SQLAssignItem>(4);
+    private final List<SQLAssignItem> partition = new ArrayList<>(4);
+    private final List<SQLAssignItem> partitionProperties = new ArrayList<>(4);
 
     public List<SQLAssignItem> getPartitionProperties() {
         return partitionProperties;

@@ -43,7 +43,7 @@ public class MySqlLoadXmlStatement extends MySqlStatementImpl {
 
     private SQLExpr             ignoreLinesNumber;
 
-    private final List<SQLExpr> setList     = new ArrayList<SQLExpr>();
+    private final List<SQLExpr> setList     = new ArrayList<>();
 
     public SQLExpr getRowsIdentifiedBy() {
         return rowsIdentifiedBy;
@@ -147,7 +147,7 @@ public class MySqlLoadXmlStatement extends MySqlStatementImpl {
 
     @Override
     public List<SQLObject> getChildren() {
-        List<SQLObject> children = new ArrayList<SQLObject>();
+        List<SQLObject> children = new ArrayList<>();
         if (fileName != null) {
             children.add(fileName);
         }

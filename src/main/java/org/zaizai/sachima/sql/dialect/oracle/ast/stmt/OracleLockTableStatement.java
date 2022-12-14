@@ -92,7 +92,7 @@ public class OracleLockTableStatement extends OracleStatementImpl implements SQL
     }
 
     public List<SQLObject> getChildren() {
-        List<SQLObject> children = new ArrayList<SQLObject>();
+        List<SQLObject> children = new ArrayList<>();
         if (table != null) {
             children.add(table);
         }

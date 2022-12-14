@@ -25,7 +25,7 @@ import java.util.List;
 
 public class SQLRestoreStatement extends SQLStatementImpl {
     private SQLName type;
-    private List<SQLCharExpr> properties = new ArrayList<SQLCharExpr>();
+    private List<SQLCharExpr> properties = new ArrayList<>();
 
     @Override
     protected void accept0(SQLASTVisitor visitor) {

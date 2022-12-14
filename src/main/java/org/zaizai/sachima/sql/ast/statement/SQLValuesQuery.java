@@ -26,7 +26,7 @@ import java.util.List;
 public class SQLValuesQuery extends SQLObjectImpl implements SQLSelectQuery {
     private boolean          bracket  = false;
 
-    private List<SQLExpr> values = new ArrayList<SQLExpr>();
+    private List<SQLExpr> values = new ArrayList<>();
 
     public List<SQLExpr> getValues() {
         return values;

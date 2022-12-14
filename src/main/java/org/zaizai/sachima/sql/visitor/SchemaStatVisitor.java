@@ -31,6 +31,7 @@ import org.zaizai.sachima.stat.TableStat.Condition;
 import org.zaizai.sachima.stat.TableStat.Mode;
 import org.zaizai.sachima.stat.TableStat.Relationship;
 import org.zaizai.sachima.util.FnvHash;
+import org.zaizai.sachima.util.FnvHashUtils;
 import org.zaizai.sachima.util.SQLUtils;
 
 import java.util.*;
@@ -39,7 +40,7 @@ public class SchemaStatVisitor extends SQLASTVisitorAdapter {
 
     protected SchemaRepository repository;
 
-    protected final List<SQLName> originalTables = new ArrayList<SQLName>();
+    protected final List<SQLName> originalTables = new ArrayList<>();
 
     protected final HashMap<TableStat.Name, TableStat> tableStats = new LinkedHashMap<>();
     protected final Map<Long, Column> columns = new LinkedHashMap<>();
@@ -68,7 +69,7 @@ public class SchemaStatVisitor extends SQLASTVisitorAdapter {
     }
 
     public SchemaStatVisitor(DbType dbType) {
-        this(new SchemaRepository(dbType), new ArrayList<Object>());
+        this(new SchemaRepository(dbType), new ArrayList<>());
         this.dbType = dbType;
     }
 
@@ -173,7 +174,7 @@ public class SchemaStatVisitor extends SQLASTVisitorAdapter {
         long basic = tableHashCode64;
         basic ^= '.';
         basic *= FnvHash.PRIME;
-        long columnHashCode64 = FnvHash.hashCode64(basic, columnName);
+        long columnHashCode64 = FnvHashUtils.hashCode64(basic, columnName);
 
         Column column = this.columns.get(columnHashCode64);
         if (column == null && columnName != null) {
@@ -870,7 +871,7 @@ public class SchemaStatVisitor extends SQLASTVisitorAdapter {
                     long basic = tableHashCode64;
                     basic ^= '.';
                     basic *= FnvHash.PRIME;
-                    long columnHashCode64 = FnvHash.hashCode64(basic, column);
+                    long columnHashCode64 = FnvHashUtils.hashCode64(basic, column);
 
                     Column columnObj = this.columns.get(columnHashCode64);
                     if (columnObj == null) {
@@ -922,7 +923,7 @@ public class SchemaStatVisitor extends SQLASTVisitorAdapter {
                 long basic = tableHashCode64;
                 basic ^= '.';
                 basic *= FnvHash.PRIME;
-                long columnHashCode64 = FnvHash.hashCode64(basic, column);
+                long columnHashCode64 = FnvHashUtils.hashCode64(basic, column);
 
                 final Column old = columns.get(columnHashCode64);
                 if (old != null) {
@@ -1711,7 +1712,7 @@ public class SchemaStatVisitor extends SQLASTVisitorAdapter {
             SQLExpr owner = SQLUtils.toSQLExpr(tableName, dbType);
             hashCode = new SQLPropertyExpr(owner, columnName).hashCode64();
         } else {
-            hashCode = FnvHash.hashCode64(tableName, columnName);
+            hashCode = FnvHashUtils.hashCode64(tableName, columnName);
         }
         return columns.containsKey(hashCode);
     }
@@ -2884,7 +2885,7 @@ public class SchemaStatVisitor extends SQLASTVisitorAdapter {
 
             SQLUnionQuery leftUnion = (SQLUnionQuery) left;
 
-            List<SQLSelectQuery> rights = new ArrayList<SQLSelectQuery>();
+            List<SQLSelectQuery> rights = new ArrayList<>();
             rights.add(right);
 
             for (; ; ) {

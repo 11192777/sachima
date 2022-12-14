@@ -23,11 +23,11 @@ import java.util.List;
 
 public abstract class SQLInsertInto extends SQLStatementImpl implements SQLReplaceable {
     protected SQLExprTableSource        tableSource;
-    protected final List<SQLExpr>       columns = new ArrayList<SQLExpr>();
+    protected final List<SQLExpr>       columns = new ArrayList<>();
     protected transient String          columnsString;
     protected transient long            columnsStringHash;
     protected SQLSelect                 query;
-    protected final List<ValuesClause>  valuesList = new ArrayList<ValuesClause>();
+    protected final List<ValuesClause>  valuesList = new ArrayList<>();
     protected boolean                   overwrite  = false;
     protected List<SQLAssignItem>       partitions;
 
@@ -200,7 +200,7 @@ public abstract class SQLInsertInto extends SQLStatementImpl implements SQLRepla
         }
 
         if (partitions == null) {
-            partitions = new ArrayList<SQLAssignItem>();
+            partitions = new ArrayList<>();
         }
 
         this.partitions.add(partition);

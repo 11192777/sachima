@@ -25,7 +25,7 @@ import static org.zaizai.sachima.sql.visitor.SQLEvalVisitor.EVAL_VALUE;
 
 public class Char implements Function {
 
-    public final static Char instance = new Char();
+    public static final Char instance = new Char();
 
     public Object eval(SQLEvalVisitor visitor, SQLMethodInvokeExpr x) {
         if (x.getArguments().size() == 0) {

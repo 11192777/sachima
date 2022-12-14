@@ -28,11 +28,11 @@ import java.util.List;
 
 public class OracleUpdateStatement extends SQLUpdateStatement implements OracleStatement, SQLReplaceable {
 
-    private List<SQLHint>       hints         = new ArrayList<SQLHint>(1);
+    private List<SQLHint>       hints         = new ArrayList<>(1);
     private boolean             only          = false;
     private String              alias;
 
-    private final List<SQLExpr>       returningInto = new ArrayList<SQLExpr>();
+    private final List<SQLExpr>       returningInto = new ArrayList<>();
 
     public OracleUpdateStatement() {
         super(DbType.oracle);
@@ -119,7 +119,7 @@ public class OracleUpdateStatement extends SQLUpdateStatement implements OracleS
 
     public List<SQLHint> getHints() {
         if (hints == null) {
-            hints = new ArrayList<SQLHint>(2);
+            hints = new ArrayList<>(2);
         }
         return hints;
     }

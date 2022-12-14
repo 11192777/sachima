@@ -62,7 +62,7 @@ public class MySqlPrepareStatement extends MySqlStatementImpl {
 
     @Override
     public List<SQLObject> getChildren() {
-        List<SQLObject> children = new ArrayList<SQLObject>();
+        List<SQLObject> children = new ArrayList<>();
         if (name != null) {
             children.add(name);
         }

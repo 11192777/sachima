@@ -27,7 +27,7 @@ public class SampleClause extends OracleSQLObjectImpl implements SQLReplaceable 
 
     private boolean             block   = false;
 
-    private final List<SQLExpr> percent = new ArrayList<SQLExpr>();
+    private final List<SQLExpr> percent = new ArrayList<>();
 
     private SQLExpr             seedValue;
 

@@ -26,7 +26,7 @@ import java.util.List;
 
 public class SQLTruncateStatement extends SQLStatementImpl {
 
-    protected List<SQLExprTableSource> tableSources               = new ArrayList<SQLExprTableSource>(2);
+    protected List<SQLExprTableSource> tableSources               = new ArrayList<>(2);
     private boolean                    purgeSnapshotLog           = false;
     private boolean                    only;
     private Boolean                    restartIdentity;
@@ -40,11 +40,11 @@ public class SQLTruncateStatement extends SQLStatementImpl {
     private boolean                    restrictWhenDeleteTriggers = false;
     private boolean                    continueIdentity           = false;
     protected boolean                  ifExists                   = false;
-    protected List<SQLAssignItem>      partitions                 = new ArrayList<SQLAssignItem>();
+    protected List<SQLAssignItem>      partitions                 = new ArrayList<>();
 
     // adb
     protected boolean partitionAll = false;
-    protected List<SQLIntegerExpr> partitionsForADB = new ArrayList<SQLIntegerExpr>();
+    protected List<SQLIntegerExpr> partitionsForADB = new ArrayList<>();
 
     public SQLTruncateStatement(){
 

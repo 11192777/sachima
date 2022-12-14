@@ -1,12 +1,12 @@
 package org.zaizai.sachima.sql.ast;
 
-import org.zaizai.sachima.util.FnvHash;
 import org.zaizai.sachima.sql.ast.expr.SQLIdentifierExpr;
 import org.zaizai.sachima.sql.ast.statement.SQLAssignItem;
 import org.zaizai.sachima.sql.ast.statement.SQLSelectOrderByItem;
 import org.zaizai.sachima.sql.ast.statement.SQLTableSource;
 import org.zaizai.sachima.sql.visitor.SQLASTVisitor;
 import org.zaizai.sachima.util.FnvHash;
+import org.zaizai.sachima.util.FnvHashUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,14 +34,14 @@ public class SQLIndexDefinition extends SQLObjectImpl implements SQLIndex {
     private boolean key;
     private SQLName name;
     private SQLTableSource table;
-    private List<SQLSelectOrderByItem> columns = new ArrayList<SQLSelectOrderByItem>();
+    private List<SQLSelectOrderByItem> columns = new ArrayList<>();
     private SQLIndexOptions options;
 
     // DRDS
     private SQLExpr dbPartitionBy;
     private SQLExpr tbPartitionBy;
     private SQLExpr tbPartitions;
-    private List<SQLName> covering = new ArrayList<SQLName>();
+    private List<SQLName> covering = new ArrayList<>();
 
     // For fulltext index when create table.
     private SQLName analyzerName;
@@ -50,7 +50,7 @@ public class SQLIndexDefinition extends SQLObjectImpl implements SQLIndex {
     private SQLName withDicName;
 
     // Compatible layer.
-    private List<SQLAssignItem> compatibleOptions = new ArrayList<SQLAssignItem>();
+    private List<SQLAssignItem> compatibleOptions = new ArrayList<>();
 
     public boolean hasConstraint() {
         return hasConstraint;
@@ -414,8 +414,7 @@ public class SQLIndexDefinition extends SQLObjectImpl implements SQLIndex {
             return null;
         }
 
-        return getOption(
-                FnvHash.hashCode64(name));
+        return getOption(FnvHashUtils.hashCode64(name));
     }
 
     public SQLExpr getOption(long hash64) {
@@ -441,7 +440,7 @@ public class SQLIndexDefinition extends SQLObjectImpl implements SQLIndex {
                 return new SQLIdentifierExpr(options.getAlgorithm());
             }
             return null;
-        } else if (hash64 == FnvHash.hashCode64("LOCK")) {
+        } else if (hash64 == FnvHashUtils.hashCode64("LOCK")) {
             if (options.getLock() != null) {
                 return new SQLIdentifierExpr(options.getLock());
             }

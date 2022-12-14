@@ -39,7 +39,7 @@ public class MySqlDeclareHandlerStatement extends MySqlStatementImpl{
 	
 	
 	public MySqlDeclareHandlerStatement() {
-		conditionValues = new ArrayList<ConditionValue>();
+		conditionValues = new ArrayList<>();
 	}
 
 	public List<ConditionValue> getConditionValues() {

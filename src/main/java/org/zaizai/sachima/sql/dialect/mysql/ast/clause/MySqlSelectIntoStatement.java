@@ -32,7 +32,7 @@ public class MySqlSelectIntoStatement extends MySqlStatementImpl{
 	//select statement
 	private SQLSelect select;
 	//var list
-	private List<SQLExpr> varList=new ArrayList<SQLExpr>();
+	private List<SQLExpr> varList=new ArrayList<>();
 	
 	public SQLSelect getSelect() {
 		return select;

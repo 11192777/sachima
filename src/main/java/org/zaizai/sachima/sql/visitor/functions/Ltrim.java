@@ -23,7 +23,7 @@ import static org.zaizai.sachima.sql.visitor.SQLEvalVisitor.EVAL_VALUE;
 
 public class Ltrim implements Function {
 
-    public final static Ltrim instance = new Ltrim();
+    public static final Ltrim instance = new Ltrim();
 
     public Object eval(SQLEvalVisitor visitor, SQLMethodInvokeExpr x) {
         if (x.getArguments().size() != 1) {

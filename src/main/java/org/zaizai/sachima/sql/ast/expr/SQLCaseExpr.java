@@ -27,7 +27,7 @@ import java.util.List;
 public class SQLCaseExpr extends SQLExprImpl implements SQLReplaceable, Serializable {
 
     private static final long serialVersionUID = 1L;
-    private final List<Item>  items            = new ArrayList<Item>();
+    private final List<Item>  items            = new ArrayList<>();
     private SQLExpr           valueExpr;
     private SQLExpr           elseExpr;
 
@@ -93,7 +93,7 @@ public class SQLCaseExpr extends SQLExprImpl implements SQLReplaceable, Serializ
 
     @Override
     public List getChildren() {
-        List<SQLObject> children = new ArrayList<SQLObject>();
+        List<SQLObject> children = new ArrayList<>();
         if (valueExpr != null) {
             children.add(this.valueExpr);
         }

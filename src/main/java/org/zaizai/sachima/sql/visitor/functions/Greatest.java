@@ -28,7 +28,7 @@ import static org.zaizai.sachima.sql.visitor.SQLEvalVisitor.EVAL_VALUE;
 
 public class Greatest implements Function {
 
-    public final static Greatest instance = new Greatest();
+    public static final Greatest instance = new Greatest();
 
     public Object eval(SQLEvalVisitor visitor, SQLMethodInvokeExpr x) {
         Object result = null;

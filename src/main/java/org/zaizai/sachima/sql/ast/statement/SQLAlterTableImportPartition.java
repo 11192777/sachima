@@ -24,7 +24,7 @@ import java.util.List;
 
 public class SQLAlterTableImportPartition extends SQLObjectImpl implements SQLAlterTableItem {
 
-    private final List<SQLName> partitions = new ArrayList<SQLName>(4);
+    private final List<SQLName> partitions = new ArrayList<>(4);
 
     private boolean tablespace;
 

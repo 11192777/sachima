@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SQLAnalyzeTableStatement extends SQLStatementImpl {
-    protected final List<SQLExprTableSource> tableSources    = new ArrayList<SQLExprTableSource>();
+    protected final List<SQLExprTableSource> tableSources    = new ArrayList<>();
 
     private SQLPartitionRef     partition;
     private boolean             forColums = false;
@@ -34,8 +34,8 @@ public class SQLAnalyzeTableStatement extends SQLStatementImpl {
     private boolean             computeStatistics;
 
     private SQLIdentifierExpr   adbSchema; // for ADB
-    private List<SQLIdentifierExpr> adbColumns = new ArrayList<SQLIdentifierExpr>(); // for ADB
-    private List<SQLIdentifierExpr> adbColumnsGroup = new ArrayList<SQLIdentifierExpr>(); // for ADB
+    private List<SQLIdentifierExpr> adbColumns = new ArrayList<>(); // for ADB
+    private List<SQLIdentifierExpr> adbColumnsGroup = new ArrayList<>(); // for ADB
     private SQLExpr adbWhere; // for ADB
 
     public SQLAnalyzeTableStatement() {

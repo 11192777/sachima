@@ -35,7 +35,7 @@ public class OracleUsingIndexClause extends OracleSegmentAttributesImpl implemen
     private boolean             computeStatistics = false;
     private boolean             reverse;
 
-    private List<SQLPartition> localPartitionIndex = new ArrayList<SQLPartition>();
+    private List<SQLPartition> localPartitionIndex = new ArrayList<>();
 
     public OracleUsingIndexClause(){
 

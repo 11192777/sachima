@@ -14,7 +14,7 @@ import java.util.List;
 public class DrdsRecoverDDLJob extends MySqlStatementImpl implements SQLStatement {
 
     private boolean allJobs = false;
-    private List<Long> jobIds = new ArrayList<Long>();
+    private List<Long> jobIds = new ArrayList<>();
 
     public void accept0(MySqlASTVisitor visitor) {
         visitor.visit(this);

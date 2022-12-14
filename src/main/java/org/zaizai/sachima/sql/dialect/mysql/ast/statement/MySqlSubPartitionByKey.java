@@ -26,7 +26,7 @@ import java.util.List;
 
 public class MySqlSubPartitionByKey extends SQLSubPartitionBy implements MySqlObject {
     private int algorithm = 2;
-    private List<SQLName> columns = new ArrayList<SQLName>();
+    private List<SQLName> columns = new ArrayList<>();
 
     @Override
     protected void accept0(SQLASTVisitor visitor) {

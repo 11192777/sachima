@@ -31,7 +31,7 @@ public class SQLUnionQuery extends SQLObjectImpl implements SQLSelectQuery, SQLD
 
     private boolean          bracket  = false;
 
-    private List<SQLSelectQuery> relations = new ArrayList<SQLSelectQuery>();
+    private List<SQLSelectQuery> relations = new ArrayList<>();
     private SQLUnionOperator operator = SQLUnionOperator.UNION;
     private SQLOrderBy       orderBy;
 
@@ -249,7 +249,7 @@ public class SQLUnionQuery extends SQLObjectImpl implements SQLSelectQuery, SQLD
 
             SQLUnionQuery leftUnion = (SQLUnionQuery) left;
 
-            ArrayList<SQLSelectQuery> rights = new ArrayList<SQLSelectQuery>();
+            ArrayList<SQLSelectQuery> rights = new ArrayList<>();
             rights.add(right);
 
             for (; ; ) {

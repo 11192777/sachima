@@ -25,7 +25,7 @@ import java.util.Map;
 
 public class SQLEvalVisitorImpl extends SQLASTVisitorAdapter implements SQLEvalVisitor {
 
-    private List<Object>        parameters       = new ArrayList<Object>();
+    private List<Object>        parameters       = new ArrayList<>();
 
     private Map<String, Function> functions        = new HashMap<String, Function>();
 
@@ -34,7 +34,7 @@ public class SQLEvalVisitorImpl extends SQLASTVisitorAdapter implements SQLEvalV
     private boolean             markVariantIndex = true;
 
     public SQLEvalVisitorImpl(){
-        this(new ArrayList<Object>(1));
+        this(new ArrayList<>(1));
     }
 
     public SQLEvalVisitorImpl(List<Object> parameters){

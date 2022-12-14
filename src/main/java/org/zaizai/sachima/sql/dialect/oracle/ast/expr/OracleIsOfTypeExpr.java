@@ -27,7 +27,7 @@ import java.util.List;
 
 public class OracleIsOfTypeExpr extends SQLExprImpl implements OracleExpr, SQLReplaceable {
     private SQLExpr expr;
-    private List<SQLExpr> types = new ArrayList<SQLExpr>();
+    private List<SQLExpr> types = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {
@@ -90,7 +90,7 @@ public class OracleIsOfTypeExpr extends SQLExprImpl implements OracleExpr, SQLRe
 
     @Override
     public List<SQLObject> getChildren() {
-        List children = new ArrayList<SQLExpr>();
+        List children = new ArrayList<>();
         if (expr != null) {
             children.add(expr);
         }

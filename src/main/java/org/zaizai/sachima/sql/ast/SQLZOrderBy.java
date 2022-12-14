@@ -23,7 +23,7 @@ import java.util.List;
 
 public final class SQLZOrderBy extends SQLObjectImpl implements SQLReplaceable {
 
-    protected final List<SQLSelectOrderByItem> items = new ArrayList<SQLSelectOrderByItem>();
+    protected final List<SQLSelectOrderByItem> items = new ArrayList<>();
 
     // for postgres
     private boolean                            sibings;

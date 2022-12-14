@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MySqlJSONTableExpr extends MySqlExprImpl {
-    private final List<Column> columns = new ArrayList<Column>();
+    private final List<Column> columns = new ArrayList<>();
     private SQLExpr expr;
     private SQLExpr path;
 
@@ -60,7 +60,7 @@ public class MySqlJSONTableExpr extends MySqlExprImpl {
     }
 
     public static class Column extends MySqlObjectImpl {
-        private final List<Column> nestedColumns = new ArrayList<Column>();
+        private final List<Column> nestedColumns = new ArrayList<>();
         private SQLName name;
         private SQLDataType dataType;
         private SQLExpr path;

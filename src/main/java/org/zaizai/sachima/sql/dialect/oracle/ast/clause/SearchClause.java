@@ -31,7 +31,7 @@ public class SearchClause extends OracleSQLObjectImpl {
 
     private Type                          type;
 
-    private final List<SQLSelectOrderByItem> items = new ArrayList<SQLSelectOrderByItem>();
+    private final List<SQLSelectOrderByItem> items = new ArrayList<>();
 
     private SQLIdentifierExpr             orderingColumn;
 

@@ -25,9 +25,9 @@ import java.util.List;
 public class OracleSelectUnPivot extends OracleSelectPivotBase {
 
     private NullsIncludeType nullsIncludeType;
-    private final List<SQLExpr> items = new ArrayList<SQLExpr>();
+    private final List<SQLExpr> items = new ArrayList<>();
 
-    private final List<Item> pivotIn = new ArrayList<Item>();
+    private final List<Item> pivotIn = new ArrayList<>();
 
     public OracleSelectUnPivot() {
 

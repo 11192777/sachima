@@ -27,9 +27,9 @@ import java.util.List;
 public class OracleAlterTableSplitPartition extends OracleAlterTableItem {
 
     private SQLName                        name;
-    private List<SQLExpr>                  at            = new ArrayList<SQLExpr>();
-    private List<SQLExpr>                  values        = new ArrayList<SQLExpr>();
-    private List<NestedTablePartitionSpec> into          = new ArrayList<NestedTablePartitionSpec>();
+    private List<SQLExpr>                  at            = new ArrayList<>();
+    private List<SQLExpr>                  values        = new ArrayList<>();
+    private List<NestedTablePartitionSpec> into          = new ArrayList<>();
 
     private UpdateIndexesClause            updateIndexes = null;
 
@@ -88,7 +88,7 @@ public class OracleAlterTableSplitPartition extends OracleAlterTableItem {
 
         private SQLName         partition;
 
-        private List<SQLObject> segmentAttributeItems = new ArrayList<SQLObject>();
+        private List<SQLObject> segmentAttributeItems = new ArrayList<>();
 
         @Override
         public void accept0(OracleASTVisitor visitor) {
@@ -148,7 +148,7 @@ public class OracleAlterTableSplitPartition extends OracleAlterTableItem {
 
     public static class UpdateIndexesClause extends OracleSQLObjectImpl {
 
-        private List<SQLObject> items = new ArrayList<SQLObject>();
+        private List<SQLObject> items = new ArrayList<>();
 
         @Override
         public void accept0(OracleASTVisitor visitor) {

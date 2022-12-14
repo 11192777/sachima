@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SQLUnionDataType extends SQLDataTypeImpl {
-    private final List<SQLDataType> items = new ArrayList<SQLDataType>();
+    private final List<SQLDataType> items = new ArrayList<>();
 
     @Override
     public String getName() {

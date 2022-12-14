@@ -25,7 +25,7 @@ import java.util.List;
 
 public class SQLGroupingSetExpr extends SQLExprImpl implements SQLReplaceable {
 
-    private final List<SQLExpr> parameters = new ArrayList<SQLExpr>();
+    private final List<SQLExpr> parameters = new ArrayList<>();
 
     public SQLGroupingSetExpr clone() {
         SQLGroupingSetExpr x = new SQLGroupingSetExpr();

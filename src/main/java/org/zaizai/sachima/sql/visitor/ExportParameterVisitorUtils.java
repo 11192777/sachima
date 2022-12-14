@@ -97,7 +97,7 @@ public final class ExportParameterVisitorUtils {
         } else if (param instanceof SQLListExpr) {
             SQLListExpr list = ((SQLListExpr) param);
 
-            List<Object> listValues = new ArrayList<Object>();
+            List<Object> listValues = new ArrayList<>();
             for (int i = 0; i < list.getItems().size(); i++) {
                 SQLExpr listItem = list.getItems().get(i);
 
@@ -132,7 +132,7 @@ public final class ExportParameterVisitorUtils {
                     mergedList = ((SQLBinaryOpExpr) parent).getMergedList();
                 }
                 if (mergedList != null) {
-                    List<Object> mergedListParams = new ArrayList<Object>(mergedList.size() + 1);
+                    List<Object> mergedListParams = new ArrayList<>(mergedList.size() + 1);
                     for (int i = 0; i < mergedList.size(); ++i) {
                         SQLObject item = mergedList.get(i);
                         if (item instanceof SQLBinaryOpExpr) {

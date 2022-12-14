@@ -26,7 +26,7 @@ import java.util.List;
 public class MySqlExecuteStatement extends MySqlStatementImpl {
 
     private SQLName             statementName;
-    private final List<SQLExpr> parameters = new ArrayList<SQLExpr>();
+    private final List<SQLExpr> parameters = new ArrayList<>();
 
     public SQLName getStatementName() {
         return statementName;
@@ -50,7 +50,7 @@ public class MySqlExecuteStatement extends MySqlStatementImpl {
 
     @Override
     public List<SQLObject> getChildren() {
-        List<SQLObject> children = new ArrayList<SQLObject>();
+        List<SQLObject> children = new ArrayList<>();
         if (statementName != null) {
             children.add(statementName);
         }

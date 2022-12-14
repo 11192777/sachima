@@ -26,7 +26,7 @@ import static org.zaizai.sachima.sql.visitor.SQLEvalVisitor.EVAL_VALUE;
 
 
 public class Lcase implements Function {
-    public final static Lcase instance = new Lcase();
+    public static final Lcase instance = new Lcase();
     
     public Object eval(SQLEvalVisitor visitor, SQLMethodInvokeExpr x) {
         if (x.getArguments().size() != 1) {

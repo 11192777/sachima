@@ -15,12 +15,12 @@
  */
 package org.zaizai.sachima.sql.dialect.mysql.visitor;
 
-import org.zaizai.sachima.util.SQLUtils;
 import org.zaizai.sachima.sql.ast.SQLExpr;
 import org.zaizai.sachima.sql.ast.statement.SQLColumnDefinition;
 import org.zaizai.sachima.sql.ast.statement.SQLTableElement;
 import org.zaizai.sachima.sql.dialect.mysql.ast.MySqlUnique;
 import org.zaizai.sachima.sql.dialect.mysql.ast.statement.MySqlCreateTableStatement;
+import org.zaizai.sachima.util.SQLUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,9 +34,9 @@ public class MySqlShowColumnOutpuVisitor extends MySqlOutputVisitor {
     }
 
     public boolean visit(MySqlCreateTableStatement x) {
-        List<SQLColumnDefinition> columns = new ArrayList<SQLColumnDefinition>();
-        List<String> dataTypes = new ArrayList<String>();
-        List<String> defaultValues = new ArrayList<String>();
+        List<SQLColumnDefinition> columns = new ArrayList<>();
+        List<String> dataTypes = new ArrayList<>();
+        List<String> defaultValues = new ArrayList<>();
 
         int name_len = -1, dataType_len = -1, defaultVal_len = 7, extra_len = 5;
         for (SQLTableElement element : x.getTableElementList()) {

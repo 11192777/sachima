@@ -31,7 +31,7 @@ public class OracleInsertStatement extends SQLInsertStatement implements OracleS
 
     private OracleReturningClause returning;
     private SQLErrorLoggingClause errorLogging;
-    private List<SQLHint>         hints = new ArrayList<SQLHint>();
+    private List<SQLHint>         hints = new ArrayList<>();
 
     public OracleInsertStatement() {
         dbType = DbType.oracle;

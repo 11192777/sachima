@@ -24,7 +24,7 @@ import java.util.List;
 public class SQLArrayExpr extends SQLExprImpl implements SQLReplaceable  {
 
     private SQLExpr       expr;
-    private List<SQLExpr> values = new ArrayList<SQLExpr>();
+    private List<SQLExpr> values = new ArrayList<>();
 
     public SQLArrayExpr() {
 
@@ -83,7 +83,7 @@ public class SQLArrayExpr extends SQLExprImpl implements SQLReplaceable  {
     }
 
     public List<SQLObject> getChildren() {
-        List<SQLObject> children = new ArrayList<SQLObject>();
+        List<SQLObject> children = new ArrayList<>();
         children.add(this.expr);
         children.addAll(this.values);
         return children;

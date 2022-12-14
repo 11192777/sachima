@@ -25,7 +25,7 @@ import java.util.List;
 
 public class OracleExceptionStatement extends OracleStatementImpl implements OracleStatement {
 
-    private List<Item> items = new ArrayList<Item>();
+    private List<Item> items = new ArrayList<>();
 
     public List<Item> getItems() {
         return items;
@@ -42,7 +42,7 @@ public class OracleExceptionStatement extends OracleStatementImpl implements Ora
     public static class Item extends OracleSQLObjectImpl {
 
         private SQLExpr            when;
-        private List<SQLStatement> statements = new ArrayList<SQLStatement>();
+        private List<SQLStatement> statements = new ArrayList<>();
 
         public SQLExpr getWhen() {
             return when;

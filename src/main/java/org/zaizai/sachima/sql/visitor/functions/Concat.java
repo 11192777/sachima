@@ -24,7 +24,7 @@ import static org.zaizai.sachima.sql.visitor.SQLEvalVisitor.EVAL_VALUE;
 
 public class Concat implements Function {
 
-    public final static Concat instance = new Concat();
+    public static final Concat instance = new Concat();
 
     public Object eval(SQLEvalVisitor visitor, SQLMethodInvokeExpr x) {
         StringBuilder buf = new StringBuilder();
@@ -47,10 +47,7 @@ public class Concat implements Function {
         for (SQLExpr param : x.getArguments()) {
             if (param instanceof SQLValuableExpr) {
                 Object val = ((SQLValuableExpr) param).getValue();
-                if (val instanceof String) {
-                    buf.append(val);
-                    continue;
-                } else if (val instanceof Integer) {
+                if (val instanceof String || val instanceof Integer) {
                     buf.append(val);
                     continue;
                 }

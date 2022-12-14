@@ -15,6 +15,7 @@
  */
 package org.zaizai.sachima.sql.dialect.mysql.ast.expr;
 
+import org.zaizai.sachima.util.FnvHashUtils;
 import org.zaizai.sachima.util.SQLUtils;
 import org.zaizai.sachima.sql.ast.SQLName;
 import org.zaizai.sachima.sql.ast.SQLObject;
@@ -127,7 +128,7 @@ public class MySqlUserName extends MySqlExprImpl implements SQLName, Cloneable {
     public long nameHashCode64() {
         if (userNameHashCod64 == 0
                 && userName != null) {
-            userNameHashCod64 = FnvHash.hashCode64(userName);
+            userNameHashCod64 = FnvHashUtils.hashCode64(userName);
         }
         return userNameHashCod64;
     }
@@ -136,10 +137,10 @@ public class MySqlUserName extends MySqlExprImpl implements SQLName, Cloneable {
     public long hashCode64() {
         if (hashCode64 == 0) {
             if (host != null) {
-                long hash = FnvHash.hashCode64(host);
+                long hash = FnvHashUtils.hashCode64(host);
                 hash ^= '@';
                 hash *= 0x100000001b3L;
-                hash = FnvHash.hashCode64(hash, userName);
+                hash = FnvHashUtils.hashCode64(hash, userName);
 
                 hashCode64 = hash;
             } else {

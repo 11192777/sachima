@@ -24,7 +24,7 @@ import java.util.List;
 public class SQLSubqueryTableSource extends SQLTableSourceImpl {
 
     protected SQLSelect select;
-    protected List<SQLName> columns = new ArrayList<SQLName>();
+    protected List<SQLName> columns = new ArrayList<>();
 
     public SQLSubqueryTableSource(){
 

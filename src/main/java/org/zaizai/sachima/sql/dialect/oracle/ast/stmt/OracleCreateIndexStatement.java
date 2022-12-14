@@ -105,11 +105,11 @@ public class OracleCreateIndexStatement extends SQLCreateIndexStatement implemen
     }
 
     private boolean local;
-    private List<SQLName> localStoreIn = new ArrayList<SQLName>();
-    private List<SQLPartition> localPartitions = new ArrayList<SQLPartition>();
+    private List<SQLName> localStoreIn = new ArrayList<>();
+    private List<SQLPartition> localPartitions = new ArrayList<>();
 
     private boolean global;
-    private List<SQLPartitionBy> globalPartitions = new ArrayList<SQLPartitionBy>();
+    private List<SQLPartitionBy> globalPartitions = new ArrayList<>();
 
     protected void accept0(SQLASTVisitor visitor) {
         accept0((OracleASTVisitor) visitor);

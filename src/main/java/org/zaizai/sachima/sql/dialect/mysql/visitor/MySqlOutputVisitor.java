@@ -15,7 +15,6 @@
  */
 package org.zaizai.sachima.sql.dialect.mysql.visitor;
 
-import org.zaizai.sachima.util.FnvHash;
 import org.zaizai.sachima.enums.DbType;
 import org.zaizai.sachima.sql.ast.*;
 import org.zaizai.sachima.sql.ast.expr.*;
@@ -31,7 +30,9 @@ import org.zaizai.sachima.sql.dialect.mysql.ast.statement.MySqlCreateUserStateme
 import org.zaizai.sachima.sql.visitor.ExportParameterVisitorUtils;
 import org.zaizai.sachima.sql.visitor.SQLASTOutputVisitor;
 import org.zaizai.sachima.sql.visitor.VisitorFeature;
+import org.zaizai.sachima.util.CollectionUtils;
 import org.zaizai.sachima.util.FnvHash;
+import org.zaizai.sachima.util.FnvHashUtils;
 
 import java.io.IOException;
 import java.security.AccessControlException;
@@ -77,8 +78,7 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
     }
 
     public boolean isShardingSupport() {
-        return this.parameterized
-                && shardingSupport;
+        return this.parameterized && shardingSupport;
     }
 
     public void setShardingSupport(boolean shardingSupport) {
@@ -385,7 +385,7 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         }
 
         if (x.getStep() != null) {
-            print0(ucase ? " STEP " : " STEP ");
+            print0(" STEP ");
             printExpr(x.getStep());
         }
 
@@ -693,8 +693,7 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         }
 
         SQLExpr comment = x.getComment();
-        if (indexDefinition.hasOptions()
-                && indexDefinition.getOptions().getComment() == comment) {
+        if (indexDefinition.hasOptions() && indexDefinition.getOptions().getComment() == comment) {
             comment = null;
         }
 
@@ -736,19 +735,10 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
 
             if (hasSpecial) {
                 boolean regForPresto = false;
-                if (isEnabled(VisitorFeature.OutputRegForPresto)
-                        && x.getParent() instanceof SQLMethodInvokeExpr) {
+                if (isEnabled(VisitorFeature.OutputRegForPresto) && x.getParent() instanceof SQLMethodInvokeExpr) {
                     SQLMethodInvokeExpr regCall = (SQLMethodInvokeExpr) x.getParent();
                     long nameHash = regCall.methodNameHashCode64();
-                    regForPresto = (x == regCall.getArguments().get(1))
-                            && (nameHash == FnvHash.Constants.REGEXP_SUBSTR
-                            || nameHash == FnvHash.Constants.REGEXP_COUNT
-                            || nameHash == FnvHash.Constants.REGEXP_EXTRACT
-                            || nameHash == FnvHash.Constants.REGEXP_EXTRACT_ALL
-                            || nameHash == FnvHash.Constants.REGEXP_LIKE
-                            || nameHash == FnvHash.Constants.REGEXP_REPLACE
-                            || nameHash == FnvHash.Constants.REGEXP_SPLIT)
-                    ;
+                    regForPresto = (x == regCall.getArguments().get(1)) && (nameHash == FnvHash.Constants.REGEXP_SUBSTR || nameHash == FnvHash.Constants.REGEXP_COUNT || nameHash == FnvHash.Constants.REGEXP_EXTRACT || nameHash == FnvHash.Constants.REGEXP_EXTRACT_ALL || nameHash == FnvHash.Constants.REGEXP_LIKE || nameHash == FnvHash.Constants.REGEXP_REPLACE || nameHash == FnvHash.Constants.REGEXP_SPLIT);
                 }
 
                 for (int i = 0; i < text.length(); ++i) {
@@ -1250,21 +1240,16 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
 
     protected void printValuesList(List<SQLInsertStatement.ValuesClause> valuesList) {
 
-        if (this.parameterized
-                && valuesList.size() > 1
-                && !this.parameterizedQuesUnMergeValuesList) {
+        if (this.parameterized && valuesList.size() > 1 && !this.parameterizedQuesUnMergeValuesList) {
             print0(ucase ? "VALUES " : "values ");
             this.indentCount++;
 
             boolean allConst = true;
             if (valuesList.size() > 1) {
-                for (int index = 0; index < valuesList.size(); index++) {
-                    List<SQLExpr> values = valuesList.get(index).getValues();
-                    for (int i = 0; i < values.size(); i++) {
-                        SQLExpr value = values.get(i);
-                        if (value instanceof SQLLiteralExpr || value instanceof SQLVariantRefExpr) {
-                            continue;
-                        } else if (value instanceof SQLMethodInvokeExpr && ((SQLMethodInvokeExpr) value).getArguments().size() == 0) {
+                for (SQLInsertStatement.ValuesClause valuesClause : valuesList) {
+                    for (SQLExpr value : valuesClause.getValues()) {
+                        if (value instanceof SQLLiteralExpr || value instanceof SQLVariantRefExpr
+                                || (value instanceof SQLMethodInvokeExpr && ((SQLMethodInvokeExpr) value).getArguments().isEmpty())) {
                             continue;
                         }
                         allConst = false;
@@ -1275,6 +1260,7 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
                     }
                 }
             }
+
 
             if (!allConst) {
                 for (int index = 0; index < valuesList.size(); index++) {
@@ -1287,24 +1273,17 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
             } else if (valuesList.size() > 1 && this.parameters != null) {
                 SQLInsertStatement.ValuesClause first = valuesList.get(0);
 
-                List<Object> valuesParameters = new ArrayList<Object>(first.getValues().size());
+                List<Object> valuesParameters = new ArrayList<>(first.getValues().size());
                 visit(first, valuesParameters);
                 this.parameters.add(valuesParameters);
 
                 for (int index = 1; index < valuesList.size(); index++) {
                     List<SQLExpr> values = valuesList.get(index).getValues();
-                    valuesParameters = new ArrayList<Object>(values.size());
+                    valuesParameters = new ArrayList<>(values.size());
 
                     for (int i = 0, size = values.size(); i < size; ++i) {
                         SQLExpr expr = values.get(i);
-                        if (expr instanceof SQLIntegerExpr
-                                || expr instanceof SQLBooleanExpr
-                                || expr instanceof SQLNumberExpr
-                                || expr instanceof SQLCharExpr
-                                || expr instanceof SQLNCharExpr
-                                || expr instanceof SQLTimestampExpr
-                                || expr instanceof SQLDateExpr
-                                || expr instanceof SQLTimeExpr) {
+                        if (expr instanceof SQLIntegerExpr || expr instanceof SQLBooleanExpr || expr instanceof SQLNumberExpr || expr instanceof SQLCharExpr || expr instanceof SQLNCharExpr || expr instanceof SQLTimestampExpr || expr instanceof SQLDateExpr || expr instanceof SQLTimeExpr) {
                             incrementReplaceCunt();
                             ExportParameterVisitorUtils.exportParameter(valuesParameters, expr);
                         } else if (expr instanceof SQLNullExpr) {
@@ -2758,7 +2737,7 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
             print0(ucase ? "FULL " : "full ");
         }
         if (x.isPhysical()) {
-            print0(ucase ? "PHYSICAL_SLOW" : "PHYSICAL_SLOW");
+            print0("PHYSICAL_SLOW");
         } else {
             print0(ucase ? "SLOW" : "slow");
         }
@@ -3766,7 +3745,7 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         if (charset != null) {
             print(charset);
 
-            long charsetHashCode = FnvHash.hashCode64(charset);
+            long charsetHashCode = FnvHashUtils.hashCode64(charset);
             if (charsetHashCode == FnvHash.Constants._UCS2 || charsetHashCode == FnvHash.Constants._UTF16) {
                 print(" x'");
             } else {
@@ -3889,9 +3868,7 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         boolean mysqlSpecial = false;
 
         if (DbType.mysql == dbType) {
-            mysqlSpecial = "NAMES".equalsIgnoreCase(tagetString)
-                    || "CHARACTER SET".equalsIgnoreCase(tagetString)
-                    || "CHARSET".equalsIgnoreCase(tagetString);
+            mysqlSpecial = "NAMES".equalsIgnoreCase(tagetString) || "CHARACTER SET".equalsIgnoreCase(tagetString) || "CHARSET".equalsIgnoreCase(tagetString);
         }
 
         if (!mysqlSpecial) {
@@ -3960,7 +3937,7 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
             print0(")");
             if (x.getAdbWhere() != null) {
                 println();
-                print0(ucase ? " WHERE " : " WHERE ");
+                print0(" WHERE ");
                 printExpr(x.getAdbWhere());
             }
         } else if (!x.getAdbColumnsGroup().isEmpty()) {
@@ -3969,13 +3946,13 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
             print0(")");
             if (x.getAdbWhere() != null) {
                 println();
-                print0(ucase ? " WHERE " : " WHERE ");
+                print0(" WHERE ");
                 printExpr(x.getAdbWhere());
             }
         } else if (!x.getTableSources().isEmpty()) {
             if (x.getAdbWhere() != null) {
                 println();
-                print0(ucase ? " WHERE " : " WHERE ");
+                print0(" WHERE ");
                 printExpr(x.getAdbWhere());
             }
         }
@@ -4088,7 +4065,7 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
 
         printAndAccept(x.getItems(), ", ");
 
-        if (x.getHints() != null && x.getHints().size() > 0) {
+        if (CollectionUtils.isNotEmpty(x.getHints())) {
             print(' ');
             printAndAccept(x.getHints(), " ");
         }
@@ -4128,7 +4105,7 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
         }
 
         List<SQLParameter> parameters = x.getParameters();
-        if (parameters.size() != 0) {
+        if (CollectionUtils.isNotEmpty(parameters)) {
             this.indentCount++;
             if (parent instanceof SQLCreateProcedureStatement) {
                 printIndent();
@@ -5250,8 +5227,7 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
             if (i != 0) {
                 print0(", ");
             }
-            tables.get(i)
-                    .accept(this);
+            tables.get(i).accept(this);
         }
         return false;
     }
@@ -5438,6 +5414,6 @@ public class MySqlOutputVisitor extends SQLASTOutputVisitor implements MySqlASTV
     }
 
     public void endVisit(MysqlAlterTableAlterCheck x) {
-
+        //nothing
     }
-} //
+}

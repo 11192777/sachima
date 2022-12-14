@@ -35,7 +35,7 @@ public class SQLSubmitJobStatement extends SQLStatementImpl {
 
 	@Override
 	public List<SQLObject> getChildren() {
-		ArrayList<SQLObject> children = new ArrayList<SQLObject>();
+		ArrayList<SQLObject> children = new ArrayList<>();
 		children.add(statment);
 		return children;
 	}

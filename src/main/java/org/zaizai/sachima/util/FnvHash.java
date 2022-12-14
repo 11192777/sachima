@@ -15,8 +15,6 @@
  */
 package org.zaizai.sachima.util;
 
-import java.util.Arrays;
-
 public final class FnvHash extends FnvHashUtils{
 
     public interface Constants {

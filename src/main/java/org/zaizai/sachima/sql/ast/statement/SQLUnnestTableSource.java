@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SQLUnnestTableSource extends SQLTableSourceImpl {
-    private final List<SQLExpr> items = new ArrayList<SQLExpr>();
-    protected List<SQLName> columns = new ArrayList<SQLName>();
+    private final List<SQLExpr> items = new ArrayList<>();
+    protected List<SQLName> columns = new ArrayList<>();
     private boolean ordinality = false;
 
     public SQLUnnestTableSource() {

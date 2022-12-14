@@ -17,6 +17,7 @@ package org.zaizai.sachima.sql.ast.expr;
 
 import org.zaizai.sachima.util.FnvHash;
 import org.zaizai.sachima.exception.FastsqlException;
+import org.zaizai.sachima.util.FnvHashUtils;
 import org.zaizai.sachima.util.SQLUtils;
 import org.zaizai.sachima.sql.ast.*;
 import org.zaizai.sachima.sql.dialect.oracle.visitor.OracleASTVisitor;
@@ -83,7 +84,7 @@ public class SQLMethodInvokeExpr extends SQLExprImpl implements SQLReplaceable, 
     public long methodNameHashCode64() {
         if (methodNameHashCode64 == 0
                 && methodName != null) {
-            methodNameHashCode64 = FnvHash.hashCode64(methodName);
+            methodNameHashCode64 = FnvHashUtils.hashCode64(methodName);
         }
         return methodNameHashCode64;
     }
@@ -206,7 +207,7 @@ public class SQLMethodInvokeExpr extends SQLExprImpl implements SQLReplaceable, 
             return this.arguments;
         }
 
-        List<SQLObject> children = new ArrayList<SQLObject>();
+        List<SQLObject> children = new ArrayList<>();
         children.add(owner);
         children.addAll(this.arguments);
         return children;

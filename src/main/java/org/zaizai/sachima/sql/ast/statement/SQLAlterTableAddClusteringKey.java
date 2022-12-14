@@ -27,7 +27,7 @@ import java.util.List;
 
 public class SQLAlterTableAddClusteringKey extends SQLObjectImpl implements SQLAlterTableItem {
     private SQLName                          name;
-    private final List<SQLName> columns = new ArrayList<SQLName>();
+    private final List<SQLName> columns = new ArrayList<>();
 
     public SQLAlterTableAddClusteringKey() {
 

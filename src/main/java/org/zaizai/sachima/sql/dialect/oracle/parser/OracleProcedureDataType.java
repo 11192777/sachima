@@ -24,7 +24,7 @@ import java.util.List;
 
 public class OracleProcedureDataType extends SQLDataTypeImpl {
     private boolean isStatic = false;
-    private final List<SQLParameter> parameters = new ArrayList<SQLParameter>();
+    private final List<SQLParameter> parameters = new ArrayList<>();
 
     private SQLStatement block;
 

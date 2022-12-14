@@ -25,7 +25,7 @@ import java.util.Objects;
 public class SQLWithSubqueryClause extends SQLObjectImpl {
 
     private Boolean           recursive;
-    private final List<Entry> entries = new ArrayList<Entry>();
+    private final List<Entry> entries = new ArrayList<>();
 
     public SQLWithSubqueryClause clone() {
         SQLWithSubqueryClause x = new SQLWithSubqueryClause();

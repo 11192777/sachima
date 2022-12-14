@@ -28,7 +28,7 @@ public class MySqlAlterUserStatement extends MySqlStatementImpl implements SQLAl
 
     private boolean ifExists = false;
 
-    private final List<AlterUser> alterUsers = new ArrayList<AlterUser>();
+    private final List<AlterUser> alterUsers = new ArrayList<>();
 
     private PasswordOption passwordOption;
 
@@ -53,7 +53,7 @@ public class MySqlAlterUserStatement extends MySqlStatementImpl implements SQLAl
     }
 
     public List<SQLExpr> getUsers() {
-        List<SQLExpr> users = new ArrayList<SQLExpr>();
+        List<SQLExpr> users = new ArrayList<>();
         for (AlterUser alterUser : alterUsers) {
             users.add(alterUser.user);
         }

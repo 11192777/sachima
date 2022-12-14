@@ -27,8 +27,8 @@ import org.zaizai.sachima.util.FnvHash;
 import java.util.Arrays;
 
 public class AdsExprParser extends SQLExprParser {
-    private final static String[] AGGREGATE_FUNCTIONS;
-    private final static long[]   AGGREGATE_FUNCTIONS_CODES;
+    private static final String[] AGGREGATE_FUNCTIONS;
+    private static final long[]   AGGREGATE_FUNCTIONS_CODES;
 
     static {
         String[] strings = { "AVG", "COUNT", "MAX", "MIN", "STDDEV", "SUM", "ROW_NUMBER",

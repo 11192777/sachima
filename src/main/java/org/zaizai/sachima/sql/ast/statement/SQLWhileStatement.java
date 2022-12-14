@@ -29,7 +29,7 @@ public class SQLWhileStatement extends SQLStatementImpl implements SQLReplaceabl
 	
 	//while expr
 	private SQLExpr            condition;
-	private List<SQLStatement> statements = new ArrayList<SQLStatement>();
+	private List<SQLStatement> statements = new ArrayList<>();
 	//while label name
 	private String labelName;
 	
@@ -52,7 +52,7 @@ public class SQLWhileStatement extends SQLStatementImpl implements SQLReplaceabl
 
 	@Override
 	public List<SQLObject> getChildren() {
-		List<SQLObject> children = new ArrayList<SQLObject>();
+		List<SQLObject> children = new ArrayList<>();
 		children.add(condition);
 		children.addAll(this.statements);
 		return children;

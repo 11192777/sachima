@@ -27,8 +27,8 @@ public class SQLArchiveTableStatement extends SQLStatementImpl {
     private SQLName table;
 
     private SQLName type;
-    private List<SQLIntegerExpr> spIdList = new ArrayList<SQLIntegerExpr>();
-    private List<SQLIntegerExpr> pIdList = new ArrayList<SQLIntegerExpr>();
+    private List<SQLIntegerExpr> spIdList = new ArrayList<>();
+    private List<SQLIntegerExpr> pIdList = new ArrayList<>();
 
     @Override
     protected void accept0(SQLASTVisitor visitor) {

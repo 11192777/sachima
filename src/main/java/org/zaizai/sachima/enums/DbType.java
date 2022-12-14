@@ -1,6 +1,7 @@
 package org.zaizai.sachima.enums;
 
 import org.zaizai.sachima.util.FnvHash;
+import org.zaizai.sachima.util.FnvHashUtils;
 
 public enum DbType {
     other(1),
@@ -16,7 +17,7 @@ public enum DbType {
 
     DbType(long mask) {
         this.mask = mask;
-        this.hashCode64 = FnvHash.hashCode64(name());
+        this.hashCode64 = FnvHashUtils.hashCode64(name());
     }
 
     public static long of(DbType... types) {

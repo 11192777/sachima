@@ -23,7 +23,7 @@ import java.util.List;
 
 public class OracleAlterSessionStatement extends OracleStatementImpl implements OracleAlterStatement {
 
-    private List<SQLAssignItem> items = new ArrayList<SQLAssignItem>();
+    private List<SQLAssignItem> items = new ArrayList<>();
 
     @Override
     public void accept0(OracleASTVisitor visitor) {

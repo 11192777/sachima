@@ -27,7 +27,7 @@ import static org.zaizai.sachima.sql.visitor.SQLEvalVisitor.EVAL_VALUE;
 
 public class Least implements Function {
 
-    public final static Least instance = new Least();
+    public static final Least instance = new Least();
 
     public Object eval(SQLEvalVisitor visitor, SQLMethodInvokeExpr x) {
         Object result = null;

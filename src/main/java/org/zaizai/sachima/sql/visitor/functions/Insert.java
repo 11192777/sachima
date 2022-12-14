@@ -23,7 +23,7 @@ import static org.zaizai.sachima.sql.visitor.SQLEvalVisitor.EVAL_VALUE;
 
 public class Insert implements Function {
 
-    public final static Insert instance = new Insert();
+    public static final Insert instance = new Insert();
 
     public Object eval(SQLEvalVisitor visitor, SQLMethodInvokeExpr x) {
         if (x.getArguments().size() != 4) {

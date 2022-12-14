@@ -70,7 +70,7 @@ public class MySqlDeleteStatement extends SQLDeleteStatement {
 
     public List<SQLCommentHint> getHints() {
         if (hints == null) {
-            hints = new ArrayList<SQLCommentHint>();
+            hints = new ArrayList<>();
         }
         return hints;
     }

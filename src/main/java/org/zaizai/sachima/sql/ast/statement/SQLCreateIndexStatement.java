@@ -34,8 +34,8 @@ public class SQLCreateIndexStatement extends SQLStatementImpl implements SQLCrea
     protected SQLTableSource in;
     protected SQLExternalRecordFormat rowFormat;
     protected SQLName storedAs;
-    protected List<SQLAssignItem> properties = new ArrayList<SQLAssignItem>();
-    protected List<SQLAssignItem> tableProperties = new ArrayList<SQLAssignItem>();
+    protected List<SQLAssignItem> properties = new ArrayList<>();
+    protected List<SQLAssignItem> tableProperties = new ArrayList<>();
     protected boolean storing;
     protected boolean ifNotExists;
 
@@ -126,7 +126,7 @@ public class SQLCreateIndexStatement extends SQLStatementImpl implements SQLCrea
 
     @Override
     public List<SQLObject> getChildren() {
-        List<SQLObject> children = new ArrayList<SQLObject>();
+        List<SQLObject> children = new ArrayList<>();
         if (indexDefinition.getName() != null) {
             children.add(indexDefinition.getName());
         }

@@ -24,7 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class SQLFloatExpr extends SQLNumericLiteralExpr implements SQLValuableExpr, Comparable<SQLFloatExpr> {
-    public final static SQLDataType DATA_TYPE = new SQLDataTypeImpl("FLOAT");
+    public static final SQLDataType DATA_TYPE = new SQLDataTypeImpl("FLOAT");
 
     private float value;
 

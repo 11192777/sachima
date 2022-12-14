@@ -21,6 +21,7 @@ import org.zaizai.sachima.sql.ast.statement.SQLCreateTableStatement;
 import org.zaizai.sachima.sql.ast.statement.SQLTableElement;
 import org.zaizai.sachima.sql.ast.statement.SQLUniqueConstraint;
 import org.zaizai.sachima.util.FnvHash;
+import org.zaizai.sachima.util.FnvHashUtils;
 
 /**
  * Created by wenshao on 03/06/2017.
@@ -44,7 +45,7 @@ public class SchemaObject {
         this.type = type;
         this.statement = statement;
 
-        this.hashCode64 = FnvHash.hashCode64(name);
+        this.hashCode64 = FnvHashUtils.hashCode64(name);
     }
 
     public SchemaObject clone() {
@@ -71,7 +72,7 @@ public class SchemaObject {
     }
 
     public SQLColumnDefinition findColumn(String columName) {
-        long hash = FnvHash.hashCode64(columName);
+        long hash = FnvHashUtils.hashCode64(columName);
         return findColumn(hash);
     }
 

@@ -25,7 +25,7 @@ import java.util.List;
 
 public class MySqlRenameTableStatement extends MySqlStatementImpl implements SQLAlterStatement  {
 
-    private List<Item> items = new ArrayList<Item>(2);
+    private List<Item> items = new ArrayList<>(2);
 
     public List<Item> getItems() {
         return items;

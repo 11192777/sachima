@@ -66,7 +66,7 @@ public class SQLDropResourceStatement extends SQLStatementImpl implements SQLDro
 
     @Override
     public List<SQLObject> getChildren() {
-        List<SQLObject> children = new ArrayList<SQLObject>();
+        List<SQLObject> children = new ArrayList<>();
         if (name != null) {
             children.add(name);
         }

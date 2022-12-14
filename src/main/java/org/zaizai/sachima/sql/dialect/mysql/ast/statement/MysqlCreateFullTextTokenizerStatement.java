@@ -6,9 +6,8 @@ import org.zaizai.sachima.sql.ast.expr.SQLIdentifierExpr;
 import org.zaizai.sachima.sql.ast.expr.SQLTextLiteralExpr;
 import org.zaizai.sachima.sql.ast.expr.SQLValuableExpr;
 import org.zaizai.sachima.sql.ast.statement.SQLAssignItem;
-import org.zaizai.sachima.sql.dialect.mysql.ast.FullTextType;
 import org.zaizai.sachima.sql.dialect.mysql.visitor.MySqlASTVisitor;
-import org.zaizai.sachima.util.FnvHash;
+import org.zaizai.sachima.util.SqlExprUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +20,7 @@ public class MysqlCreateFullTextTokenizerStatement extends MySqlStatementImpl {
     private SQLName            name;
     private SQLTextLiteralExpr typeName;
     private SQLTextLiteralExpr userDefinedDict;
-    protected final List<SQLAssignItem> options = new ArrayList<SQLAssignItem>();
+    protected final List<SQLAssignItem> options = new ArrayList<>();
 
     public void accept0(MySqlASTVisitor visitor) {
         if (visitor.visit(this)) {
@@ -72,27 +71,8 @@ public class MysqlCreateFullTextTokenizerStatement extends MySqlStatementImpl {
         options.add(assignItem);
     }
 
-    public SQLExpr getOption(String name) {
-        if (name == null) {
-            return null;
-        }
-
-        long hash64 = FnvHash.hashCode64(name);
-
-        for (SQLAssignItem item : options) {
-            final SQLExpr target = item.getTarget();
-            if (target instanceof SQLIdentifierExpr) {
-                if (((SQLIdentifierExpr) target).hashCode64() == hash64) {
-                    return item.getValue();
-                }
-            }
-        }
-
-        return null;
-    }
-
     public Object getOptionValue(String name) {
-        SQLExpr option = getOption(name);
+        SQLExpr option = SqlExprUtils.getSQLAssignItemValue(name, options);
         if (option instanceof SQLValuableExpr) {
             return ((SQLValuableExpr) option).getValue();
         }

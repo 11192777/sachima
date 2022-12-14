@@ -23,8 +23,8 @@ import java.util.List;
 
 public class SQLForeignKeyImpl extends SQLConstraintImpl implements SQLForeignKeyConstraint {
     private SQLExprTableSource referencedTable;
-    private List<SQLName>      referencingColumns = new ArrayList<SQLName>();
-    private List<SQLName>      referencedColumns  = new ArrayList<SQLName>();
+    private List<SQLName>      referencingColumns = new ArrayList<>();
+    private List<SQLName>      referencedColumns  = new ArrayList<>();
     private boolean            onDeleteCascade    = false;
     private boolean            onDeleteSetNull    = false;
     private boolean            disableNovalidate  = false;

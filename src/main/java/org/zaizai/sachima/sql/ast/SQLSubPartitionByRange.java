@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SQLSubPartitionByRange extends SQLSubPartitionBy {
-    private List<SQLExpr> columns = new ArrayList<SQLExpr>();
+    private List<SQLExpr> columns = new ArrayList<>();
 
     public List<SQLExpr> getColumns() {
         return columns;

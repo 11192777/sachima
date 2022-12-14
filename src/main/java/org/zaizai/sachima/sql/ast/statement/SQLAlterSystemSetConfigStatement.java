@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SQLAlterSystemSetConfigStatement extends SQLStatementImpl implements SQLAlterStatement {
-    private List<SQLAssignItem> options = new ArrayList<SQLAssignItem>();
+    private List<SQLAssignItem> options = new ArrayList<>();
 
     public List<SQLAssignItem> getOptions() {
         return options;

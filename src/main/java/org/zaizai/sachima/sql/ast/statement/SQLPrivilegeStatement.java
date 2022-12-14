@@ -24,8 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class SQLPrivilegeStatement extends SQLStatementImpl {
-    protected final List<SQLPrivilegeItem> privileges = new ArrayList<SQLPrivilegeItem>();
-    protected List<SQLExpr> users = new ArrayList<SQLExpr>();
+    protected final List<SQLPrivilegeItem> privileges = new ArrayList<>();
+    protected List<SQLExpr> users = new ArrayList<>();
     protected SQLObject resource;
 
     // mysql

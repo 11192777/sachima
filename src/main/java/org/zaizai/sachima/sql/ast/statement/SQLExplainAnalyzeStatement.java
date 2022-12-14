@@ -45,7 +45,7 @@ public class SQLExplainAnalyzeStatement extends SQLStatementImpl {
 
     @Override
     public List<SQLObject> getChildren() {
-        List<SQLObject> children = new ArrayList<SQLObject>();
+        List<SQLObject> children = new ArrayList<>();
         if (select != null) {
             children.add(select);
         }

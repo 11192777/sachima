@@ -24,7 +24,7 @@ import static org.zaizai.sachima.sql.visitor.SQLEvalVisitor.EVAL_VALUE;
 
 public class Left implements Function {
 
-    public final static Left instance = new Left();
+    public static final Left instance = new Left();
 
     public Object eval(SQLEvalVisitor visitor, SQLMethodInvokeExpr x) {
         if (x.getArguments().size() != 2) {

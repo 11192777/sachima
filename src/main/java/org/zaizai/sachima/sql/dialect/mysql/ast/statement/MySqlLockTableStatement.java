@@ -28,7 +28,7 @@ import java.util.List;
 
 public class MySqlLockTableStatement extends MySqlStatementImpl implements SQLLockTableStatement {
 
-    private List<Item> items = new ArrayList<Item>();
+    private List<Item> items = new ArrayList<>();
 
     @Override
     public void accept0(MySqlASTVisitor visitor) {

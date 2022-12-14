@@ -76,7 +76,7 @@ public class SQLCommentStatement extends SQLStatementImpl {
 
     @Override
     public List<SQLObject> getChildren() {
-        List<SQLObject> children = new ArrayList<SQLObject>();
+        List<SQLObject> children = new ArrayList<>();
         if (on != null) {
             children.add(on);
         }

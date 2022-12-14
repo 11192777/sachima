@@ -26,7 +26,7 @@ import java.util.List;
 public class SQLAlterTableGroupStatement extends SQLStatementImpl implements SQLAlterStatement {
     private SQLName           name;
 
-    private List<SQLAssignItem> options = new ArrayList<SQLAssignItem>();
+    private List<SQLAssignItem> options = new ArrayList<>();
 
     public SQLAlterTableGroupStatement() {
 

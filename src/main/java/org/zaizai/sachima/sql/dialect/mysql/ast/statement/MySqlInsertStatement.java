@@ -37,7 +37,7 @@ public class MySqlInsertStatement extends SQLInsertStatement {
 
     protected List<SQLCommentHint>      hints;
 
-    private final List<SQLExpr> duplicateKeyUpdate = new ArrayList<SQLExpr>();
+    private final List<SQLExpr> duplicateKeyUpdate = new ArrayList<>();
 
     public MySqlInsertStatement() {
         dbType = DbType.mysql;

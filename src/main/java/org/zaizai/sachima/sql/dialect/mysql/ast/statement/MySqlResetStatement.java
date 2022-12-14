@@ -22,7 +22,7 @@ import java.util.List;
 
 public class MySqlResetStatement extends MySqlStatementImpl {
 
-    private List<String> options = new ArrayList<String>();
+    private List<String> options = new ArrayList<>();
 
     public List<String> getOptions() {
         return options;

@@ -22,7 +22,7 @@ public class SQLIndexOptions extends SQLObjectImpl {
     private String lock;
     private boolean invisible;
     private boolean visible;
-    private List<SQLAssignItem> otherOptions = new ArrayList<SQLAssignItem>();
+    private List<SQLAssignItem> otherOptions = new ArrayList<>();
 
     public SQLIndexOptions() {
 

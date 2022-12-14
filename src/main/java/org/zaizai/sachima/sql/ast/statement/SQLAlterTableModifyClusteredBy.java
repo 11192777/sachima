@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SQLAlterTableModifyClusteredBy extends SQLObjectImpl implements SQLAlterTableItem {
-    private List<SQLName> clusterColumns = new ArrayList<SQLName>();
+    private List<SQLName> clusterColumns = new ArrayList<>();
 
     public List<SQLName> getClusterColumns() {
         return clusterColumns;

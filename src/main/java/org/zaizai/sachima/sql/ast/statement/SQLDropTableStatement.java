@@ -28,7 +28,7 @@ import java.util.List;
 public class SQLDropTableStatement extends SQLStatementImpl implements SQLDropStatement {
     private List<SQLCommentHint> hints;
 
-    protected List<SQLExprTableSource> tableSources = new ArrayList<SQLExprTableSource>();
+    protected List<SQLExprTableSource> tableSources = new ArrayList<>();
     protected boolean                  purge;
     protected boolean                  cascade      = false;
     protected boolean                  restrict     = false;

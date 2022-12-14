@@ -20,7 +20,7 @@ import org.zaizai.sachima.sql.visitor.SQLEvalVisitor;
 
 public class Nil implements Function {
 
-    public final static Nil instance = new Nil();
+    public static final Nil instance = new Nil();
 
     @Override
     public Object eval(SQLEvalVisitor visitor, SQLMethodInvokeExpr x) {

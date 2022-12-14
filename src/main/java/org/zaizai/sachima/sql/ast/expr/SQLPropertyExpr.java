@@ -16,6 +16,7 @@
 package org.zaizai.sachima.sql.ast.expr;
 
 import org.zaizai.sachima.exception.FastsqlException;
+import org.zaizai.sachima.util.FnvHashUtils;
 import org.zaizai.sachima.util.SQLUtils;
 import org.zaizai.sachima.sql.ast.*;
 import org.zaizai.sachima.sql.ast.statement.*;
@@ -109,7 +110,7 @@ public final class SQLPropertyExpr extends SQLExprImpl implements SQLName, SQLRe
             hash ^= '.';
             hash *= FnvHash.PRIME;
         }
-        hash = FnvHash.hashCode64(hash, name);
+        hash = FnvHashUtils.hashCode64(hash, name);
         hashCode64 = hash;
     }
 
@@ -250,7 +251,7 @@ public final class SQLPropertyExpr extends SQLExprImpl implements SQLName, SQLRe
     public long nameHashCode64() {
         if (nameHashCod64 == 0
                 && name != null) {
-            nameHashCod64 = FnvHash.hashCode64(name);
+            nameHashCod64 = FnvHashUtils.hashCode64(name);
         }
         return nameHashCod64;
     }

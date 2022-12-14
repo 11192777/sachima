@@ -29,7 +29,7 @@ import static org.zaizai.sachima.sql.visitor.SQLEvalVisitor.EVAL_VALUE;
 
 public class ToChar implements Function {
 
-    public final static ToChar instance = new ToChar();
+    public static final ToChar instance = new ToChar();
 
     public Object eval(SQLEvalVisitor visitor, SQLMethodInvokeExpr x) {
         final List<SQLExpr> arguments = x.getArguments();

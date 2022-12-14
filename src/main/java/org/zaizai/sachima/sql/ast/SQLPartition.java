@@ -28,7 +28,7 @@ public class SQLPartition extends OracleSegmentAttributesImpl implements OracleS
 
     protected SQLExpr               subPartitionsCount;
 
-    protected List<SQLSubPartition> subPartitions = new ArrayList<SQLSubPartition>();
+    protected List<SQLSubPartition> subPartitions = new ArrayList<>();
 
     protected SQLPartitionValue     values;
     

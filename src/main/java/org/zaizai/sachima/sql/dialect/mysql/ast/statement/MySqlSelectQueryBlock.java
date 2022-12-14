@@ -102,7 +102,7 @@ public class MySqlSelectQueryBlock extends SQLSelectQueryBlock implements MySqlO
 
     public List<SQLExpr> getProcedureArgumentList() {
         if (procedureArgumentList == null) {
-            procedureArgumentList = new ArrayList<SQLExpr>(2);
+            procedureArgumentList = new ArrayList<>(2);
         }
         return procedureArgumentList;
     }

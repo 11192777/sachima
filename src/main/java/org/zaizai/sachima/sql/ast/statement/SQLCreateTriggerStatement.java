@@ -38,7 +38,7 @@ public class SQLCreateTriggerStatement extends SQLStatementImpl implements SQLCr
 
     private boolean                  forEachRow     = false;
 
-    private List<SQLName>            updateOfColumns = new ArrayList<SQLName>();
+    private List<SQLName>            updateOfColumns = new ArrayList<>();
 
     private SQLExpr                  when;
     private SQLStatement             body;
@@ -64,7 +64,7 @@ public class SQLCreateTriggerStatement extends SQLStatementImpl implements SQLCr
 
     @Override
     public List<SQLObject> getChildren() {
-        List<SQLObject> children = new ArrayList<SQLObject>();
+        List<SQLObject> children = new ArrayList<>();
         if (name != null) {
             children.add(name);
         }

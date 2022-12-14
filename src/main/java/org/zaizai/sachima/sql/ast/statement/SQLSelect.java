@@ -51,7 +51,7 @@ public class SQLSelect extends SQLObjectImpl implements SQLDbTypedObject {
 
     public List<SQLHint> getHints() {
         if (hints == null) {
-            hints = new ArrayList<SQLHint>(2);
+            hints = new ArrayList<>(2);
         }
         return hints;
     }
@@ -191,7 +191,7 @@ public class SQLSelect extends SQLObjectImpl implements SQLDbTypedObject {
         x.forBrowse = forBrowse;
 
         if (forXmlOptions != null) {
-            x.forXmlOptions = new ArrayList<String>(forXmlOptions);
+            x.forXmlOptions = new ArrayList<>(forXmlOptions);
         }
 
         if (xmlPath != null) {
@@ -245,7 +245,7 @@ public class SQLSelect extends SQLObjectImpl implements SQLDbTypedObject {
 
     public List<String> getForXmlOptions() {
         if (forXmlOptions == null) {
-            forXmlOptions = new ArrayList<String>(4);
+            forXmlOptions = new ArrayList<>(4);
         }
 
         return forXmlOptions;

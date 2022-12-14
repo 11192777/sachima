@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MySqlCheckTableStatement extends MySqlStatementImpl {
-    private final List<SQLExprTableSource> tables = new ArrayList<SQLExprTableSource>();
+    private final List<SQLExprTableSource> tables = new ArrayList<>();
 
 
     public MySqlCheckTableStatement() {

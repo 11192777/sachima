@@ -355,7 +355,7 @@ public class SQLUtils {
 
     public static List<SQLStatement> parseStatements(String sql, DbType dbType, SQLParserFeature... features) {
         SQLStatementParser parser = SQLParserUtils.createSQLStatementParser(sql, dbType, features);
-        List<SQLStatement> stmtList = new ArrayList<SQLStatement>();
+        List<SQLStatement> stmtList = new ArrayList<>();
         parser.parseStatementList(stmtList, -1, null);
         if (parser.getLexer().token() != Token.EOF) {
             throw new ParserException("syntax error : " + sql);
@@ -850,7 +850,7 @@ public class SQLUtils {
         }
 
         tableName = normalize(tableName);
-        long hash = FnvHash.hashCode64(tableName);
+        long hash = FnvHashUtils.hashCode64(tableName);
         return Utils.hex_t(hash);
     }
 
@@ -969,7 +969,7 @@ public class SQLUtils {
             throw new IllegalArgumentException("The SQL must be insert statement.");
         }
 
-        List<SQLInsertStatement> insertLists = new ArrayList<SQLInsertStatement>();
+        List<SQLInsertStatement> insertLists = new ArrayList<>();
 
         SQLInsertStatement insertStatement = (SQLInsertStatement) statement;
 

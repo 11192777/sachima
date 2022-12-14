@@ -15,14 +15,14 @@
  */
 package org.zaizai.sachima.sql.ast.statement;
 
-import org.zaizai.sachima.util.SQLUtils;
 import org.zaizai.sachima.sql.ast.*;
 import org.zaizai.sachima.sql.ast.expr.SQLAllColumnExpr;
 import org.zaizai.sachima.sql.ast.expr.SQLIdentifierExpr;
 import org.zaizai.sachima.sql.ast.expr.SQLPropertyExpr;
 import org.zaizai.sachima.sql.repository.SchemaObject;
 import org.zaizai.sachima.sql.visitor.SQLASTVisitor;
-import org.zaizai.sachima.util.FnvHash;
+import org.zaizai.sachima.util.FnvHashUtils;
+import org.zaizai.sachima.util.SQLUtils;
 import org.zaizai.sachima.util.StringUtils;
 
 import java.util.ArrayList;
@@ -231,7 +231,7 @@ public class SQLExprTableSource extends SQLTableSourceImpl implements SQLReplace
 
     public List<SQLName> getPartitions() {
         if (this.partitions == null) {
-            this.partitions = new ArrayList<SQLName>(2);
+            this.partitions = new ArrayList<>(2);
         }
 
         return partitions;
@@ -250,7 +250,7 @@ public class SQLExprTableSource extends SQLTableSourceImpl implements SQLReplace
         }
 
         if (this.partitions == null) {
-            this.partitions = new ArrayList<SQLName>(2);
+            this.partitions = new ArrayList<>(2);
         }
         this.partitions.add(partition);
     }
@@ -306,7 +306,7 @@ public class SQLExprTableSource extends SQLTableSourceImpl implements SQLReplace
         }
 
         if (columns != null) {
-            x.columns = new ArrayList<SQLName>(columns.size());
+            x.columns = new ArrayList<>(columns.size());
 
             for (SQLName column : columns) {
                 SQLName clonedColumn = column.clone();
@@ -318,7 +318,7 @@ public class SQLExprTableSource extends SQLTableSourceImpl implements SQLReplace
 
     public List<SQLName> getColumns() {
         if (columns == null) {
-            columns = new ArrayList<SQLName>(2);
+            columns = new ArrayList<>(2);
         }
         return columns;
     }
@@ -336,7 +336,7 @@ public class SQLExprTableSource extends SQLTableSourceImpl implements SQLReplace
     }
 
     public boolean containsAlias(String alias) {
-        long hashCode64 = FnvHash.hashCode64(alias);
+        long hashCode64 = FnvHashUtils.hashCode64(alias);
 
         return containsAlias(hashCode64);
     }
@@ -366,7 +366,7 @@ public class SQLExprTableSource extends SQLTableSourceImpl implements SQLReplace
             return null;
         }
 
-        long hash = FnvHash.hashCode64(columnName);
+        long hash = FnvHashUtils.hashCode64(columnName);
         return findColumn(hash);
     }
 
@@ -421,7 +421,7 @@ public class SQLExprTableSource extends SQLTableSourceImpl implements SQLReplace
             return null;
         }
 
-        long hash = FnvHash.hashCode64(columnName);
+        long hash = FnvHashUtils.hashCode64(columnName);
         return findTableSourceWithColumn(hash, columnName, 0);
     }
 
@@ -496,7 +496,7 @@ public class SQLExprTableSource extends SQLTableSourceImpl implements SQLReplace
 
         if (alias != null) {
             if (aliasHashCode64 == 0) {
-                aliasHashCode64 = FnvHash.hashCode64(alias);
+                aliasHashCode64 = FnvHashUtils.hashCode64(alias);
             }
             return aliasHashCode64;
         }

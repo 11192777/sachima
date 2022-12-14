@@ -19,7 +19,6 @@ import org.zaizai.sachima.sql.ast.*;
 import org.zaizai.sachima.sql.ast.expr.SQLIdentifierExpr;
 import org.zaizai.sachima.sql.dialect.oracle.ast.OracleSegmentAttributes;
 import org.zaizai.sachima.sql.visitor.SQLASTVisitor;
-import org.zaizai.sachima.util.FnvHash;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +28,7 @@ import java.util.List;
  */
 public class SQLCreateMaterializedViewStatement extends SQLStatementImpl implements OracleSegmentAttributes, SQLCreateStatement, SQLReplaceable {
     private SQLName name;
-    private List<SQLName> columns = new ArrayList<SQLName>();
+    private final List<SQLName> columns = new ArrayList<>();
 
     private boolean refreshFast;
     private boolean refreshComplete;
@@ -76,10 +75,10 @@ public class SQLCreateMaterializedViewStatement extends SQLStatementImpl impleme
 
     // for ADB
     protected boolean refreshOnOverWrite;
-    protected List<SQLTableElement> tableElementList = new ArrayList<SQLTableElement>();
+    protected List<SQLTableElement> tableElementList = new ArrayList<>();
     protected SQLName distributedByType;
-    protected List<SQLName> distributedBy = new ArrayList<SQLName>();
-    protected final List<SQLAssignItem> tableOptions = new ArrayList<SQLAssignItem>();
+    protected List<SQLName> distributedBy = new ArrayList<>();
+    protected final List<SQLAssignItem> tableOptions = new ArrayList<>();
     protected SQLExpr comment;
 
     public SQLName getName() {
@@ -402,25 +401,6 @@ public class SQLCreateMaterializedViewStatement extends SQLStatementImpl impleme
 
     public List<SQLAssignItem> getTableOptions() {
         return tableOptions;
-    }
-
-    public SQLExpr getOption(String name) {
-        if (name == null) {
-            return null;
-        }
-
-        long hash64 = FnvHash.hashCode64(name);
-
-        for (SQLAssignItem item : tableOptions) {
-            final SQLExpr target = item.getTarget();
-            if (target instanceof SQLIdentifierExpr) {
-                if (((SQLIdentifierExpr) target).hashCode64() == hash64) {
-                    return item.getValue();
-                }
-            }
-        }
-
-        return null;
     }
 
     public SQLExpr getComment() {

@@ -26,7 +26,7 @@ import java.util.List;
 public class SQLAlterTableDropPartition extends SQLObjectImpl implements SQLAlterTableItem {
     private boolean ifExists = false;
     private boolean purge;
-    private final List<SQLExpr> partitions = new ArrayList<SQLExpr>(4);
+    private final List<SQLExpr> partitions = new ArrayList<>(4);
 
     public List<SQLExpr> getPartitions() {
         return partitions;

@@ -23,7 +23,7 @@ import java.util.List;
 
 public class OracleAlterTablespaceAddDataFile extends OracleSQLObjectImpl implements OracleAlterTablespaceItem {
 
-    private List<OracleFileSpecification> files = new ArrayList<OracleFileSpecification>();
+    private List<OracleFileSpecification> files = new ArrayList<>();
 
     @Override
     public void accept0(OracleASTVisitor visitor) {

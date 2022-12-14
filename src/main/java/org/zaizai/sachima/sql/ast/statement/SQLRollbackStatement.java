@@ -54,7 +54,7 @@ public class SQLRollbackStatement extends SQLStatementImpl {
 
     @Override
     public List<SQLObject> getChildren() {
-        List<SQLObject> children = new ArrayList<SQLObject>();
+        List<SQLObject> children = new ArrayList<>();
         if (to != null) {
             children.add(to);
         }

@@ -166,7 +166,7 @@ public class SQLDeleteStatement extends SQLStatementImpl implements SQLReplaceab
 
     @Override
     public List<SQLObject> getChildren() {
-        List<SQLObject> children = new ArrayList<SQLObject>();
+        List<SQLObject> children = new ArrayList<>();
         if (with != null) {
             children.add(with);
         }

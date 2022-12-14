@@ -62,7 +62,7 @@ public class SQLInsertStatement extends SQLInsertInto implements SQLStatement {
 
     @Override
     public List<SQLObject> getChildren() {
-        List<SQLObject> children = new ArrayList<SQLObject>();
+        List<SQLObject> children = new ArrayList<>();
 
         children.add(tableSource);
         children.addAll(this.columns);
@@ -89,11 +89,11 @@ public class SQLInsertStatement extends SQLInsertInto implements SQLStatement {
         private transient int    replaceCount;
 
         public ValuesClause(){
-            this(new ArrayList<SQLExpr>());
+            this(new ArrayList<>());
         }
 
         public ValuesClause clone() {
-            ValuesClause x = new ValuesClause(new ArrayList<SQLExpr>(this.values.size()));
+            ValuesClause x = new ValuesClause(new ArrayList<>(this.values.size()));
             for (Object v : values) {
                 x.addValue(v);
             }

@@ -4371,7 +4371,7 @@ public class SQLStatementParser extends SQLParser {
             return this.parseDeleteStatement();
         }
 
-        List<SQLStatement> list = new ArrayList<SQLStatement>(1);
+        List<SQLStatement> list = new ArrayList<>(1);
         this.parseStatementList(list, 1, null);
         return list.get(0);
     }
@@ -4382,7 +4382,7 @@ public class SQLStatementParser extends SQLParser {
      *                不然会忽略语法错误，且截断sql,导致update和delete无where条件下执行！！！
      */
     public SQLStatement parseStatement(final boolean tryBest) {
-        List<SQLStatement> list = new ArrayList<SQLStatement>();
+        List<SQLStatement> list = new ArrayList<>();
         this.parseStatementList(list, 1, null);
         if (tryBest) {
             if (lexer.token != Token.EOF) {
@@ -5263,7 +5263,7 @@ public class SQLStatementParser extends SQLParser {
                     values.setOriginalString(orginalString);
                 }
             } else {
-                values = new SQLInsertStatement.ValuesClause(new ArrayList<SQLExpr>(0));
+                values = new SQLInsertStatement.ValuesClause(new ArrayList<>(0));
             }
 
             valueClauseList.add(values);
@@ -5810,7 +5810,7 @@ public class SQLStatementParser extends SQLParser {
                     values.setOriginalString(orginalString);
                 }
             } else {
-                values = new SQLInsertStatement.ValuesClause(new ArrayList<SQLExpr>(0));
+                values = new SQLInsertStatement.ValuesClause(new ArrayList<>(0));
             }
 
             valueClauseList.add(values);

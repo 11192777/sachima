@@ -32,7 +32,7 @@ public class SQLAlterDatabaseStatement extends SQLStatementImpl implements SQLAl
 
     private SQLAlterDatabaseItem item;
 
-    private List<SQLAssignItem> properties = new ArrayList<SQLAssignItem>();
+    private List<SQLAssignItem> properties = new ArrayList<>();
     
     public SQLAlterDatabaseStatement() {
         

@@ -29,7 +29,7 @@ public final class SQLInListExpr extends SQLExprImpl implements SQLReplaceable, 
     private static final long serialVersionUID = 1L;
     private boolean not = false;
     private SQLExpr expr;
-    private List<SQLExpr> targetList = new ArrayList<SQLExpr>();
+    private List<SQLExpr> targetList = new ArrayList<>();
 
     //for ads query hint
     protected SQLCommentHint hint;
@@ -146,7 +146,7 @@ public final class SQLInListExpr extends SQLExprImpl implements SQLReplaceable, 
     }
 
     public List<SQLObject> getChildren() {
-        List<SQLObject> children = new ArrayList<SQLObject>();
+        List<SQLObject> children = new ArrayList<>();
         if (this.expr != null) {
             children.add(this.expr);
         }

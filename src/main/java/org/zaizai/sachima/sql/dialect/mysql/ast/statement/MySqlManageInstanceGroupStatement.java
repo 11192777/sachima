@@ -27,7 +27,7 @@ import java.util.List;
 
 public class MySqlManageInstanceGroupStatement extends MySqlStatementImpl {
 
-    private List<SQLExpr> groupNames = new ArrayList<SQLExpr>();
+    private List<SQLExpr> groupNames = new ArrayList<>();
     private SQLIntegerExpr replication;
     private SQLName operation;
 
@@ -42,7 +42,7 @@ public class MySqlManageInstanceGroupStatement extends MySqlStatementImpl {
     }
 
     public List<String> getGroupNamesToString() {
-        List<String> names = new ArrayList<String>(groupNames.size());
+        List<String> names = new ArrayList<>(groupNames.size());
         for (SQLExpr groupName : groupNames) {
             names.add(groupName.toString());
         }

@@ -23,7 +23,7 @@ import static org.zaizai.sachima.sql.visitor.SQLEvalVisitor.EVAL_VALUE;
 
 public class Bin implements Function {
 
-    public final static Bin instance = new Bin();
+    public static final Bin instance = new Bin();
 
     public Object eval(SQLEvalVisitor visitor, SQLMethodInvokeExpr x) {
         if (x.getArguments().size() != 1) {

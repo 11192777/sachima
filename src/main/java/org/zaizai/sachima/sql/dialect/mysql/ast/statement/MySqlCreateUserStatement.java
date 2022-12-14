@@ -26,7 +26,7 @@ import java.util.List;
 
 public class MySqlCreateUserStatement extends MySqlStatementImpl implements SQLCreateStatement {
 
-    private List<UserSpecification> users = new ArrayList<UserSpecification>(2);
+    private List<UserSpecification> users = new ArrayList<>(2);
 
     private boolean ifNotExists = false;
 

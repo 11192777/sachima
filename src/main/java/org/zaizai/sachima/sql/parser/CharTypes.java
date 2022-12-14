@@ -19,14 +19,10 @@ import static org.zaizai.sachima.sql.parser.LayoutCharacters.EOI;
 
 public class CharTypes {
 
-    private final static boolean[] hexFlags = new boolean[256];
+    private static final boolean[] hexFlags = new boolean[256];
     static {
         for (char c = 0; c < hexFlags.length; ++c) {
-            if (c >= 'A' && c <= 'F') {
-                hexFlags[c] = true;
-            } else if (c >= 'a' && c <= 'f') {
-                hexFlags[c] = true;
-            } else if (c >= '0' && c <= '9') {
+            if ((c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f') || (c >= '0' && c <= '9')) {
                 hexFlags[c] = true;
             }
         }
@@ -40,12 +36,10 @@ public class CharTypes {
         return c >= '0' && c <= '9';
     }
 
-    private final static boolean[] firstIdentifierFlags = new boolean[256];
+    private static final boolean[] firstIdentifierFlags = new boolean[256];
     static {
         for (char c = 0; c < firstIdentifierFlags.length; ++c) {
-            if (c >= 'A' && c <= 'Z') {
-                firstIdentifierFlags[c] = true;
-            } else if (c >= 'a' && c <= 'z') {
+            if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) {
                 firstIdentifierFlags[c] = true;
             }
         }
@@ -61,15 +55,11 @@ public class CharTypes {
         return c != '　' && c != '，';
     }
 
-    private final static String[] stringCache = new String[256];
-    private final static boolean[] identifierFlags = new boolean[256];
+    private static final String[] stringCache = new String[256];
+    private static final boolean[] identifierFlags = new boolean[256];
     static {
         for (char c = 0; c < identifierFlags.length; ++c) {
-            if (c >= 'A' && c <= 'Z') {
-                identifierFlags[c] = true;
-            } else if (c >= 'a' && c <= 'z') {
-                identifierFlags[c] = true;
-            } else if (c >= '0' && c <= '9') {
+            if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9')) {
                 identifierFlags[c] = true;
             }
         }
@@ -100,7 +90,7 @@ public class CharTypes {
         return null;
     }
 
-    private final static boolean[] whitespaceFlags = new boolean[256];
+    private static final boolean[] whitespaceFlags = new boolean[256];
     static {
         for (int i = 0; i <= 32; ++i) {
             whitespaceFlags[i] = true;

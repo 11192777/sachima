@@ -25,10 +25,10 @@ import org.zaizai.sachima.util.Utils;
 import java.math.BigDecimal;
 
 public class SQLNumberExpr extends SQLNumericLiteralExpr implements SQLValuableExpr {
-    public final static SQLDataType DATA_TYPE_NUMBER = new SQLDataTypeImpl("number");
+    public static final SQLDataType DATA_TYPE_NUMBER = new SQLDataTypeImpl("number");
 
-    public final static SQLDataType DATA_TYPE_DOUBLE = new SQLDataTypeImpl("double");
-    public final static SQLDataType DATA_TYPE_BIGINT = SQLIntegerExpr.DATA_TYPE;
+    public static final SQLDataType DATA_TYPE_DOUBLE = new SQLDataTypeImpl("double");
+    public static final SQLDataType DATA_TYPE_BIGINT = SQLIntegerExpr.DATA_TYPE;
 
     private Number number;
 

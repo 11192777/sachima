@@ -28,7 +28,7 @@ import static org.zaizai.sachima.sql.visitor.SQLEvalVisitor.EVAL_ERROR;
 
 public class ToDate implements Function {
 
-    public final static ToDate instance = new ToDate();
+    public static final ToDate instance = new ToDate();
 
     public Object eval(SQLEvalVisitor visitor, SQLMethodInvokeExpr x) {
         final List<SQLExpr> arguments = x.getArguments();

@@ -42,7 +42,7 @@ public class OracleExportParameterVisitor extends OracleParameterizedOutputVisit
     }
 
     public OracleExportParameterVisitor() {
-        this(new ArrayList<Object>());
+        this(new ArrayList<>());
     }
 
     public OracleExportParameterVisitor(List<Object> parameters){
@@ -50,7 +50,7 @@ public class OracleExportParameterVisitor extends OracleParameterizedOutputVisit
     }
 
     public OracleExportParameterVisitor(final Appendable appender) {
-        this(new ArrayList<Object>(),appender,true);
+        this(new ArrayList<>(),appender,true);
     }
 
     public List<Object> getParameters() {

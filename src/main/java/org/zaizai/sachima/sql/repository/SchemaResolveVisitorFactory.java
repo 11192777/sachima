@@ -964,7 +964,7 @@ class SchemaResolveVisitorFactory {
 
         List<SQLSelectItem> selectList = x.getSelectList();
 
-        List<SQLSelectItem> columns = new ArrayList<SQLSelectItem>();
+        List<SQLSelectItem> columns = new ArrayList<>();
         for (int i = selectList.size() - 1; i >= 0; i--) {
             SQLSelectItem selectItem = selectList.get(i);
             SQLExpr expr = selectItem.getExpr();
@@ -1904,7 +1904,7 @@ class SchemaResolveVisitorFactory {
 
             SQLUnionQuery leftUnion = (SQLUnionQuery) left;
 
-            List<SQLSelectQuery> rights = new ArrayList<SQLSelectQuery>();
+            List<SQLSelectQuery> rights = new ArrayList<>();
             rights.add(right);
 
             for (; ; ) {

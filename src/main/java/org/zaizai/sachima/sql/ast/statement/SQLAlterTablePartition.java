@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class SQLAlterTablePartition extends SQLObjectImpl implements SQLAlterTableItem {
 
-    private final List<SQLAssignItem> partition = new ArrayList<SQLAssignItem>(4);
+    private final List<SQLAssignItem> partition = new ArrayList<>(4);
 
     public List<SQLAssignItem> getPartition() {
         return partition;

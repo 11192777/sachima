@@ -182,7 +182,7 @@ public class MySqlSelectIntoParser extends SQLSelectParser {
      */
 	protected List<SQLExpr> parseIntoArgs() {
 		
-		List<SQLExpr> args=new ArrayList<SQLExpr>();
+		List<SQLExpr> args=new ArrayList<>();
 		if (lexer.token() == (Token.INTO)) {
 			accept(Token.INTO);
 			//lexer.nextToken();

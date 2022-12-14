@@ -24,7 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class SQLDoubleExpr extends SQLNumericLiteralExpr implements SQLValuableExpr, Comparable<SQLDoubleExpr> {
-    public final static SQLDataType DATA_TYPE = new SQLDataTypeImpl("DOUBLE");
+    public static final SQLDataType DATA_TYPE = new SQLDataTypeImpl("DOUBLE");
 
     private double value;
 

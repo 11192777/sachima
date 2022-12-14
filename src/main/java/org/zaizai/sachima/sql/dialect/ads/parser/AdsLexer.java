@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AdsLexer extends Lexer {
-    public final static Keywords DEFAULT_ADS_KEYWORDS;
+    public static final Keywords DEFAULT_ADS_KEYWORDS;
 
     static {
         Map<String, Token> map = new HashMap<String, Token>();

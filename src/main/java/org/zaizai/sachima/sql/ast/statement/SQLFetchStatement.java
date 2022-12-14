@@ -25,7 +25,7 @@ public class SQLFetchStatement extends SQLStatementImpl implements SQLReplaceabl
 
     private SQLName       cursorName;
     private boolean       bulkCollect;
-    private List<SQLExpr> into = new ArrayList<SQLExpr>();
+    private List<SQLExpr> into = new ArrayList<>();
     private SQLLimit      limit;
 
     @Override

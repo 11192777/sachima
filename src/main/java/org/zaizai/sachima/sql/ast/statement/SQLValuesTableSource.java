@@ -31,8 +31,8 @@ import java.util.List;
  */
 public class SQLValuesTableSource extends SQLTableSourceImpl implements SQLSelectQuery, SQLReplaceable {
     private boolean bracket;
-    private List<SQLListExpr> values = new ArrayList<SQLListExpr>();
-    private List<SQLName> columns = new ArrayList<SQLName>();
+    private List<SQLListExpr> values = new ArrayList<>();
+    private List<SQLName> columns = new ArrayList<>();
 
     public SQLValuesTableSource() {
 

@@ -22,8 +22,8 @@ public class MysqlCreateFullTextAnalyzerStatement extends MySqlStatementImpl {
     private SQLName    name;
 
     private String tokenizer;
-    private List<String> charfilters = new ArrayList<String>();
-    private List<String> tokenizers = new ArrayList<String>();
+    private List<String> charfilters = new ArrayList<>();
+    private List<String> tokenizers = new ArrayList<>();
 
     public void accept0(MySqlASTVisitor visitor) {
         if (visitor.visit(this)) {

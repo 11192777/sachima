@@ -33,7 +33,7 @@ public class OracleCreatePackageStatement extends OracleStatementImpl implements
 
     private boolean body;
 
-    private final List<SQLStatement> statements = new ArrayList<SQLStatement>();
+    private final List<SQLStatement> statements = new ArrayList<>();
 
     public OracleCreatePackageStatement() {
         super.setDbType(DbType.oracle);

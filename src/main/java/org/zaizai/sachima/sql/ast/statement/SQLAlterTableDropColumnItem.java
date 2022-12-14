@@ -24,7 +24,7 @@ import java.util.List;
 
 public class SQLAlterTableDropColumnItem extends SQLObjectImpl implements SQLAlterTableItem {
 
-    private List<SQLName> columns = new ArrayList<SQLName>();
+    private List<SQLName> columns = new ArrayList<>();
 
     private boolean       cascade = false;
 

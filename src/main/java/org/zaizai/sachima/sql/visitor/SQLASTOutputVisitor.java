@@ -155,7 +155,7 @@ public class SQLASTOutputVisitor extends SQLASTVisitorAdapter implements Paramet
 
     public List<Object> getParameters() {
         if (parameters == null) {
-            parameters = new ArrayList<Object>();
+            parameters = new ArrayList<>();
         }
 
         return parameters;
@@ -664,7 +664,7 @@ public class SQLASTOutputVisitor extends SQLASTVisitorAdapter implements Paramet
         if (this.parameterized) {
             SQLExpr firstLeft = null;
             SQLBinaryOperator firstOp = null;
-            List<Object> parameters = new ArrayList<Object>(items.size());
+            List<Object> parameters = new ArrayList<>(items.size());
 
             List<SQLBinaryOpExpr> literalItems = null;
 
@@ -679,7 +679,7 @@ public class SQLASTOutputVisitor extends SQLASTVisitorAdapter implements Paramet
                         if (right instanceof SQLLiteralExpr && !(right instanceof SQLNullExpr)) {
                             if (left instanceof SQLLiteralExpr) {
                                 if (literalItems == null) {
-                                    literalItems = new ArrayList<SQLBinaryOpExpr>();
+                                    literalItems = new ArrayList<>();
                                 }
                                 literalItems.add(binaryItem);
                                 continue;
@@ -831,7 +831,7 @@ public class SQLASTOutputVisitor extends SQLASTVisitorAdapter implements Paramet
             this.indentCount++;
         }
 
-        List<SQLExpr> groupList = new ArrayList<SQLExpr>();
+        List<SQLExpr> groupList = new ArrayList<>();
         SQLExpr left = x.getLeft();
         SQLExpr right = x.getRight();
 
@@ -1619,7 +1619,7 @@ public class SQLASTOutputVisitor extends SQLASTVisitorAdapter implements Paramet
                     incrementReplaceCunt();
                     if (this.parameters != null) {
                         if (parameterizedMergeInList) {
-                            List<Object> subList = new ArrayList<Object>(x.getTargetList().size());
+                            List<Object> subList = new ArrayList<>(x.getTargetList().size());
                             for (SQLExpr target : x.getTargetList()) {
                                 ExportParameterVisitorUtils.exportParameter(subList, target);
                             }
@@ -3613,7 +3613,7 @@ public class SQLASTOutputVisitor extends SQLASTVisitorAdapter implements Paramet
                 }
             }
 
-            List<SQLSelectQuery> rights = new ArrayList<SQLSelectQuery>();
+            List<SQLSelectQuery> rights = new ArrayList<>();
             rights.add(right);
 
             while (true) {
@@ -4870,7 +4870,7 @@ public class SQLASTOutputVisitor extends SQLASTVisitorAdapter implements Paramet
 
     @Override
     public boolean visit(SQLOver x) {
-        print0(ucase ? "(" : "(");
+        print0("(");
         if (x.getPartitionBy().size() > 0) {
             print0(ucase ? "PARTITION BY " : "partition by ");
             printAndAccept(x.getPartitionBy(), ", ");

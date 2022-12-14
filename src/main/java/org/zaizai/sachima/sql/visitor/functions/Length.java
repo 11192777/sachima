@@ -26,7 +26,7 @@ import static org.zaizai.sachima.sql.visitor.SQLEvalVisitor.EVAL_VALUE;
 
 
 public class Length implements Function {
-    public final static Length instance = new Length();
+    public static final Length instance = new Length();
     
     public Object eval(SQLEvalVisitor visitor, SQLMethodInvokeExpr x) {
         if (x.getArguments().size() != 1) {

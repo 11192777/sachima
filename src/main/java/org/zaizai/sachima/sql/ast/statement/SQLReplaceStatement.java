@@ -27,8 +27,8 @@ public class SQLReplaceStatement extends SQLStatementImpl {
     protected boolean             delayed     = false;
 
     protected SQLExprTableSource  tableSource;
-    protected final List<SQLExpr> columns     = new ArrayList<SQLExpr>();
-    protected List<SQLInsertStatement.ValuesClause>  valuesList  = new ArrayList<SQLInsertStatement.ValuesClause>();
+    protected final List<SQLExpr> columns     = new ArrayList<>();
+    protected List<SQLInsertStatement.ValuesClause>  valuesList  = new ArrayList<>();
     protected SQLQueryExpr query;
 
     protected List<SQLCommentHint>                hints;
@@ -169,7 +169,7 @@ public class SQLReplaceStatement extends SQLStatementImpl {
 
     public List<SQLCommentHint> getHints() {
         if (hints == null) {
-            hints = new ArrayList<SQLCommentHint>(2);
+            hints = new ArrayList<>(2);
         }
         return hints;
     }
@@ -184,7 +184,7 @@ public class SQLReplaceStatement extends SQLStatementImpl {
         }
 
         if (partitions == null) {
-            partitions = new ArrayList<SQLAssignItem>();
+            partitions = new ArrayList<>();
         }
 
         this.partitions.add(partition);

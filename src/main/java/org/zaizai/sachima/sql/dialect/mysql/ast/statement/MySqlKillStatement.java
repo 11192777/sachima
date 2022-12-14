@@ -29,7 +29,7 @@ import java.util.List;
 public class MySqlKillStatement extends SQLStatementImpl {
 
     private Type          type;
-    private List<SQLExpr> threadIds = new ArrayList<SQLExpr>();
+    private List<SQLExpr> threadIds = new ArrayList<>();
 
     public static enum Type {
                              CONNECTION, QUERY

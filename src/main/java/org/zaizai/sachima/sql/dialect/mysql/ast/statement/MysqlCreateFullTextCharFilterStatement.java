@@ -6,9 +6,8 @@ import org.zaizai.sachima.sql.ast.expr.SQLIdentifierExpr;
 import org.zaizai.sachima.sql.ast.expr.SQLTextLiteralExpr;
 import org.zaizai.sachima.sql.ast.expr.SQLValuableExpr;
 import org.zaizai.sachima.sql.ast.statement.SQLAssignItem;
-import org.zaizai.sachima.sql.dialect.mysql.ast.FullTextType;
 import org.zaizai.sachima.sql.dialect.mysql.visitor.MySqlASTVisitor;
-import org.zaizai.sachima.util.FnvHash;
+import org.zaizai.sachima.util.FnvHashUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +21,7 @@ public class MysqlCreateFullTextCharFilterStatement extends MySqlStatementImpl {
     private SQLName            name; // for all, not null
     private SQLTextLiteralExpr typeName;  // for charfilter/tokenizer/tokenfilter
 
-    protected final List<SQLAssignItem> options = new ArrayList<SQLAssignItem>(); // charfilter/tokenizer/tokenfilter
+    protected final List<SQLAssignItem> options = new ArrayList<>(); // charfilter/tokenizer/tokenfilter
 
     public void accept0(MySqlASTVisitor visitor) {
         if (visitor.visit(this)) {
@@ -70,7 +69,7 @@ public class MysqlCreateFullTextCharFilterStatement extends MySqlStatementImpl {
             return null;
         }
 
-        long hash64 = FnvHash.hashCode64(name);
+        long hash64 = FnvHashUtils.hashCode64(name);
 
         for (SQLAssignItem item : options) {
             final SQLExpr target = item.getTarget();

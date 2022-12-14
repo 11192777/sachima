@@ -37,8 +37,8 @@ public class OracleMultiInsertStatement extends OracleStatementImpl {
 
     private SQLSelect     subQuery;
     private Option        option;
-    private List<Entry>   entries = new ArrayList<Entry>();
-    private List<SQLHint> hints   = new ArrayList<SQLHint>(1);
+    private List<Entry>   entries = new ArrayList<>();
+    private List<SQLHint> hints   = new ArrayList<>(1);
 
     public List<SQLHint> getHints() {
         return hints;
@@ -90,7 +90,7 @@ public class OracleMultiInsertStatement extends OracleStatementImpl {
 
     public static class ConditionalInsertClause extends OracleSQLObjectImpl implements Entry {
 
-        private List<ConditionalInsertClauseItem> items = new ArrayList<ConditionalInsertClauseItem>();
+        private List<ConditionalInsertClauseItem> items = new ArrayList<>();
         private InsertIntoClause                  elseItem;
 
         public InsertIntoClause getElseItem() {

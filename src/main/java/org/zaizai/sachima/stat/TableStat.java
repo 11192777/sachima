@@ -16,6 +16,7 @@
 package org.zaizai.sachima.stat;
 
 import org.zaizai.sachima.enums.DbType;
+import org.zaizai.sachima.util.FnvHashUtils;
 import org.zaizai.sachima.util.SQLUtils;
 import org.zaizai.sachima.sql.ast.SQLExpr;
 import org.zaizai.sachima.sql.ast.expr.SQLPropertyExpr;
@@ -183,7 +184,7 @@ public class TableStat {
         private final long hashCode64;
 
         public Name(String name) {
-            this(name, FnvHash.hashCode64(name));
+            this(name, FnvHashUtils.hashCode64(name));
         }
 
         public Name(String name, long hashCode64) {
@@ -298,7 +299,7 @@ public class TableStat {
 
         private final Column column;
         private final String operator;
-        private final List<Object> values = new ArrayList<Object>();
+        private final List<Object> values = new ArrayList<>();
 
         public Condition(Column column, String operator) {
             this.column = column;
@@ -430,7 +431,7 @@ public class TableStat {
                 SQLExpr owner = SQLUtils.toSQLExpr(table, dbType);
                 hashCode64 = new SQLPropertyExpr(owner, name).hashCode64();
             } else {
-                hashCode64 = FnvHash.hashCode64(table, name);
+                hashCode64 = FnvHashUtils.hashCode64(table, name);
             }
         }
 

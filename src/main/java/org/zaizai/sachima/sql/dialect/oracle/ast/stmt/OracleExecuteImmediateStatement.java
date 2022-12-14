@@ -27,11 +27,11 @@ public class OracleExecuteImmediateStatement extends OracleStatementImpl {
 
     private SQLExpr dynamicSql;
 
-    private final List<SQLArgument> arguments = new ArrayList<SQLArgument>();
+    private final List<SQLArgument> arguments = new ArrayList<>();
 
-    private final List<SQLExpr> into = new ArrayList<SQLExpr>();
+    private final List<SQLExpr> into = new ArrayList<>();
 
-    private final List<SQLExpr> returnInto = new ArrayList<SQLExpr>();
+    private final List<SQLExpr> returnInto = new ArrayList<>();
 
     public OracleExecuteImmediateStatement(){
     }

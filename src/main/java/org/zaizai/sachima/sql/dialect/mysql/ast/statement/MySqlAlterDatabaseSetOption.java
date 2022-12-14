@@ -19,7 +19,6 @@ import org.zaizai.sachima.sql.ast.SQLExpr;
 import org.zaizai.sachima.sql.ast.SQLName;
 import org.zaizai.sachima.sql.ast.expr.SQLIdentifierExpr;
 import org.zaizai.sachima.sql.ast.statement.SQLAlterDatabaseItem;
-import org.zaizai.sachima.sql.ast.statement.SQLAlterTableItem;
 import org.zaizai.sachima.sql.ast.statement.SQLAssignItem;
 import org.zaizai.sachima.sql.dialect.mysql.ast.MySqlObjectImpl;
 import org.zaizai.sachima.sql.dialect.mysql.visitor.MySqlASTVisitor;
@@ -29,7 +28,7 @@ import java.util.List;
 
 public class MySqlAlterDatabaseSetOption extends MySqlObjectImpl implements SQLAlterDatabaseItem {
 
-    private List<SQLAssignItem> options = new ArrayList<SQLAssignItem>();
+    private List<SQLAssignItem> options = new ArrayList<>();
     private SQLName on;
 
     @Override

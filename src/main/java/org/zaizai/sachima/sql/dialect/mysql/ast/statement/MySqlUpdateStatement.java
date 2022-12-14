@@ -224,7 +224,7 @@ public class MySqlUpdateStatement extends SQLUpdateStatement implements MySqlSta
 
     public List<SQLCommentHint> getHints() {
         if (hints == null) {
-            hints = new ArrayList<SQLCommentHint>(2);
+            hints = new ArrayList<>(2);
         }
         return hints;
     }

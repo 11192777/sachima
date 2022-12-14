@@ -27,7 +27,7 @@ public class SQLLoopStatement extends SQLStatementImpl {
 
     private String labelName;
 
-    private final List<SQLStatement> statements = new ArrayList<SQLStatement>();
+    private final List<SQLStatement> statements = new ArrayList<>();
 
     @Override
     public void accept0(SQLASTVisitor visitor) {
@@ -78,7 +78,7 @@ public class SQLLoopStatement extends SQLStatementImpl {
         }
 
         if (this.headHints != null) {
-            List<SQLCommentHint> headHintsClone = new ArrayList<SQLCommentHint>(this.headHints.size());
+            List<SQLCommentHint> headHintsClone = new ArrayList<>(this.headHints.size());
             for (SQLCommentHint hint : headHints) {
                 SQLCommentHint h2 = hint.clone();
                 h2.setParent(x);

@@ -20,6 +20,7 @@ import org.zaizai.sachima.enums.DbType;
 import org.zaizai.sachima.sql.ast.SQLObject;
 import org.zaizai.sachima.sql.ast.expr.SQLNumberExpr;
 import org.zaizai.sachima.sql.dialect.mysql.parser.MySqlLexer;
+import org.zaizai.sachima.util.FnvHashUtils;
 import org.zaizai.sachima.util.StringUtils;
 
 import java.math.BigDecimal;
@@ -65,52 +66,52 @@ import static org.zaizai.sachima.sql.parser.Token.RPAREN;
 public class Lexer {
     protected static SymbolTable symbols_l2 = new SymbolTable(512);
 
-    protected int          features       = 0; //SQLParserFeature.of(SQLParserFeature.EnableSQLBinaryOpExprGroup);
-    protected TimeZone     timeZone;
-    public    final String text;
-    protected int          pos;
-    protected int          mark;
-    protected int          numberSale;
-    protected boolean      numberExp;
+    protected int features = 0; //SQLParserFeature.of(SQLParserFeature.EnableSQLBinaryOpExprGroup);
+    protected TimeZone timeZone;
+    public final String text;
+    protected int pos;
+    protected int mark;
+    protected int numberSale;
+    protected boolean numberExp;
 
-    protected char         ch;
+    protected char ch;
 
-    protected char[]       buf;
-    protected int          bufPos;
+    protected char[] buf;
+    protected int bufPos;
 
-    protected Token        token;
+    protected Token token;
 
     protected Keywords keywords = Keywords.DEFAULT_KEYWORDS;
 
-    protected String       stringVal;
-    protected long         hash_lower; // fnv1a_64
-    protected long         hash;
+    protected String stringVal;
+    protected long hash_lower; // fnv1a_64
+    protected long hash;
 
-    protected int            commentCount = 0;
-    protected List<String>   comments     = null;
-    protected boolean        skipComment  = true;
-    private SavePoint        savePoint    = null;
+    protected int commentCount = 0;
+    protected List<String> comments = null;
+    protected boolean skipComment = true;
+    private SavePoint savePoint = null;
 
     /*
      * anti sql injection
      */
-    private boolean          allowComment = true;
-    private int              varIndex     = -1;
+    private boolean allowComment = true;
+    private int varIndex = -1;
     protected CommentHandler commentHandler;
-    protected boolean        endOfComment = false;
-    protected boolean        keepComments = false;
-    protected int            line         = 0;
-    protected int            lines        = 0;
-    protected DbType         dbType;
+    protected boolean endOfComment = false;
+    protected boolean keepComments = false;
+    protected int line = 0;
+    protected int lines = 0;
+    protected DbType dbType;
 
-    protected boolean        optimizedForParameterized = false;
-    protected boolean        keepSourceLocation = false;
+    protected boolean optimizedForParameterized = false;
+    protected boolean keepSourceLocation = false;
 
-    protected int            startPos;
-    protected int            posLine;
-    protected int            posColumn;
+    protected int startPos;
+    protected int posLine;
+    protected int posColumn;
 
-    public Lexer(String input){
+    public Lexer(String input) {
         this(input, (CommentHandler) null);
     }
 
@@ -118,12 +119,12 @@ public class Lexer {
 //        this(input, (CommentHandler) null, dbType);
 //    }
 
-    public Lexer(String input, CommentHandler commentHandler){
+    public Lexer(String input, CommentHandler commentHandler) {
         this(input, true);
         this.commentHandler = commentHandler;
     }
 
-    public Lexer(String input, CommentHandler commentHandler, DbType dbType){
+    public Lexer(String input, CommentHandler commentHandler, DbType dbType) {
         this(input, true);
         this.commentHandler = commentHandler;
         this.dbType = dbType;
@@ -196,10 +197,10 @@ public class Lexer {
     }
 
     public static class SavePoint {
-        int   bp;
-        int   sp;
-        int   np;
-        char  ch;
+        int bp;
+        int sp;
+        int np;
+        char ch;
         long hash;
         long hash_lower;
         public Token token;
@@ -243,7 +244,7 @@ public class Lexer {
         this.ch = charAt(pos);
     }
 
-    public Lexer(String input, boolean skipComment){
+    public Lexer(String input, boolean skipComment) {
         this.skipComment = skipComment;
 
         this.text = input;
@@ -257,7 +258,7 @@ public class Lexer {
         }
     }
 
-    public Lexer(char[] input, int inputLength, boolean skipComment){
+    public Lexer(char[] input, int inputLength, boolean skipComment) {
         this(new String(input, 0, inputLength), skipComment);
     }
 
@@ -310,13 +311,7 @@ public class Lexer {
         this.posColumn = column;
 
         StringBuilder buf = new StringBuilder();
-        buf
-                .append("pos ")
-                .append(pos)
-                .append(", line ")
-                .append(line)
-                .append(", column ")
-                .append(column);
+        buf.append("pos ").append(pos).append(", line ").append(line).append(", column ").append(column);
         if (token != null) {
             if (token.name != null) {
                 buf.append(", token ").append(token.name);
@@ -325,12 +320,8 @@ public class Lexer {
             }
         }
 
-        if (token == Token.IDENTIFIER
-                || token == Token.LITERAL_ALIAS
-                || token == Token.LITERAL_CHARS) {
-            buf.append(" ")
-                    .append(
-                            stringVal());
+        if (token == Token.IDENTIFIER || token == Token.LITERAL_ALIAS || token == Token.LITERAL_CHARS) {
+            buf.append(" ").append(stringVal());
         }
 
         if (isEnabled(SQLParserFeature.PrintSQLWhileParsingFailed)) {
@@ -515,7 +506,7 @@ public class Lexer {
             return;
         }
 
-        if  (ch == '-') {
+        if (ch == '-') {
             char next = charAt(pos + 1);
             if (next >= '0' && next <= '9') {
                 bufPos = 0;
@@ -532,11 +523,7 @@ public class Lexer {
 
         if (ch == 'n' || ch == 'N') {
             char c1 = 0, c2, c3, c4;
-            if (pos + 4 < text.length()
-                    && ((c1 = text.charAt(pos + 1)) == 'u' || c1 == 'U')
-                    && ((c2 = text.charAt(pos + 2)) == 'l' || c2 == 'L')
-                    && ((c3 = text.charAt(pos + 3)) == 'l' || c3 == 'L')
-                    && (isWhitespace(c4 = text.charAt(pos + 4)) || c4 == ',' || c4 == ')' || c4 == '）')) {
+            if (pos + 4 < text.length() && ((c1 = text.charAt(pos + 1)) == 'u' || c1 == 'U') && ((c2 = text.charAt(pos + 2)) == 'l' || c2 == 'L') && ((c3 = text.charAt(pos + 3)) == 'l' || c3 == 'L') && (isWhitespace(c4 = text.charAt(pos + 4)) || c4 == ',' || c4 == ')' || c4 == '）')) {
                 pos += 4;
                 ch = c4;
                 token = Token.NULL;
@@ -616,9 +603,7 @@ public class Lexer {
             char c2 = text.charAt(pos + 2);
             char c3 = text.charAt(pos + 3);
 
-            if ((c1 == 'o' || c1 == 'O')
-                    && (c2 == 't' || c2 == 'T')
-                    && isWhitespace(c3)) {
+            if ((c1 == 'o' || c1 == 'O') && (c2 == 't' || c2 == 'T') && isWhitespace(c3)) {
                 pos += 3;
                 ch = c3;
                 token = Token.NOT;
@@ -627,11 +612,7 @@ public class Lexer {
             }
 
             char c4;
-            if (pos + 4 < text.length()
-                    && (c1 == 'u' || c1 == 'U')
-                    && (c2 == 'l' || c2 == 'L')
-                    && (c3 == 'l' || c3 == 'L')
-                    && isWhitespace(c4 = text.charAt(pos + 4))) {
+            if (pos + 4 < text.length() && (c1 == 'u' || c1 == 'U') && (c2 == 'l' || c2 == 'L') && (c3 == 'l' || c3 == 'L') && isWhitespace(c4 = text.charAt(pos + 4))) {
                 pos += 4;
                 ch = c4;
                 token = Token.NULL;
@@ -668,7 +649,7 @@ public class Lexer {
     }
 
     public final SQLType scanSQLType() {
-        while(true) {
+        while (true) {
             while (isWhitespace(ch)) {
                 ch = charAt(++pos);
             }
@@ -710,7 +691,7 @@ public class Lexer {
         }
 
         long hashCode = FnvHash.BASIC;
-        while(true) {
+        while (true) {
             char c;
             if (ch >= 'a' && ch <= 'z') {
                 c = ch;
@@ -825,7 +806,7 @@ public class Lexer {
             }
 
             _for:
-            for (int i = 0; i < 1000;++i) {
+            for (int i = 0; i < 1000; ++i) {
                 switch (token) {
                     case EOF:
                     case ERROR:
@@ -876,7 +857,7 @@ public class Lexer {
                 return SQLType.ALTER_TABLE;
             }
         } else if (sqlType == SQLType.INSERT) {
-            for (int i = 0; i < 1000;++i) {
+            for (int i = 0; i < 1000; ++i) {
                 nextToken();
 
                 if (token == SELECT) {
@@ -912,10 +893,7 @@ public class Lexer {
             scanAlias();
 
             int p;
-            if (stringVal.length() > 1
-                    && stringVal.indexOf('"') == -1
-                    && ((p = stringVal.indexOf('\'', 1)) == -1 || p == stringVal.length() - 1)
-            ) {
+            if (stringVal.length() > 1 && stringVal.indexOf('"') == -1 && ((p = stringVal.indexOf('\'', 1)) == -1 || p == stringVal.length() - 1)) {
                 char[] chars = stringVal.toCharArray();
                 chars[0] = '"';
                 chars[chars.length - 1] = '"';
@@ -953,7 +931,7 @@ public class Lexer {
         this.lines = 0;
         int startLine = line;
 
-        while(true) {
+        while (true) {
             if (isWhitespace(ch)) {
                 if (ch == '\n') {
                     line++;
@@ -1073,9 +1051,7 @@ public class Lexer {
                     return;
                 case '.':
                     scanChar();
-                    if (isDigit(ch)
-                            && (pos == 1 || token != IDENTIFIER)
-                    ) {
+                    if (isDigit(ch) && (pos == 1 || token != IDENTIFIER)) {
                         unscan();
                         scanNumber();
                         return;
@@ -1115,7 +1091,7 @@ public class Lexer {
                     scanVariable_at();
                     return;
                 case '-':
-                    char next = charAt(pos +1);
+                    char next = charAt(pos + 1);
                     if (next == '-') {
                         scanComment();
                         if ((token == Token.LINE_COMMENT || token == Token.MULTI_LINE_COMMENT) && skipComment) {
@@ -1144,9 +1120,7 @@ public class Lexer {
                     return;
                 case '/':
                     char nextChar = charAt(pos + 1);
-                    if (nextChar == '/'
-                            || nextChar == '*'
-                            || (nextChar == '!' && isEnabled(SQLParserFeature.TDDLHint))) {
+                    if (nextChar == '/' || nextChar == '*' || (nextChar == '!' && isEnabled(SQLParserFeature.TDDLHint))) {
                         scanComment();
                         if ((token == Token.LINE_COMMENT || token == Token.MULTI_LINE_COMMENT) && skipComment) {
                             bufPos = 0;
@@ -1180,8 +1154,7 @@ public class Lexer {
                         return;
                     }
 
-                    if (ch == '\\' && charAt(pos + 1) == 'N'
-                            && DbType.mysql == dbType) {
+                    if (ch == '\\' && charAt(pos + 1) == 'N' && DbType.mysql == dbType) {
                         scanChar();
                         scanChar();
                         token = Token.NULL;
@@ -1417,7 +1390,7 @@ public class Lexer {
         boolean hasSpecial = false;
         Token preToken = this.token;
 
-        while(true) {
+        while (true) {
             if (isEOF()) {
                 lexError("unclosed.str.lit");
                 return;
@@ -1512,7 +1485,7 @@ public class Lexer {
 
         mark = pos;
         boolean hasSpecial = false;
-        while(true) {
+        while (true) {
             if (isEOF()) {
                 lexError("unclosed.str.lit");
                 return;
@@ -1558,13 +1531,13 @@ public class Lexer {
                         putChar((char) 0x1A); // ctrl + Z
                         break;
                     case '%':
-                        if(dbType == DbType.mysql) {
+                        if (dbType == DbType.mysql) {
                             putChar('\\');
                         }
                         putChar('%');
                         break;
                     case '_':
-                        if(dbType == DbType.mysql) {
+                        if (dbType == DbType.mysql) {
                             putChar('\\');
                         }
                         putChar('_');
@@ -1691,7 +1664,7 @@ public class Lexer {
 
         mark = pos;
         boolean hasSpecial = false;
-        while(true) {
+        while (true) {
             if (isEOF()) {
                 lexError("unclosed.str.lit");
                 return;
@@ -1737,13 +1710,13 @@ public class Lexer {
                         putChar((char) 0x1A); // ctrl + Z
                         break;
                     case '%':
-                        if(dbType == DbType.mysql) {
+                        if (dbType == DbType.mysql) {
                             putChar('\\');
                         }
                         putChar('%');
                         break;
                     case '_':
-                        if(dbType == DbType.mysql) {
+                        if (dbType == DbType.mysql) {
                             putChar('\\');
                         }
                         putChar('_');
@@ -1846,7 +1819,7 @@ public class Lexer {
         //putChar(ch);
 
         putChar(ch);
-        while(true) {
+        while (true) {
             if (isEOF()) {
                 lexError("unclosed.str.lit");
                 return;
@@ -1943,7 +1916,7 @@ public class Lexer {
             pos++;
             bufPos++;
 
-            while(true) {
+            while (true) {
                 ch = charAt(++pos);
 
                 if (ch == '}') {
@@ -1967,7 +1940,7 @@ public class Lexer {
             return;
         }
 
-        while(true) {
+        while (true) {
             ch = charAt(++pos);
 
             if (!isIdentifierChar(ch)) {
@@ -1999,7 +1972,7 @@ public class Lexer {
             bufPos++;
         }
 
-        while(true) {
+        while (true) {
             ch = charAt(++pos);
 
             if (!isIdentifierChar(ch)) {
@@ -2021,8 +1994,7 @@ public class Lexer {
             throw new NotAllowCommentException();
         }
 
-        if ((ch == '/' && charAt(pos + 1) == '/')
-                || (ch == '-' && charAt(pos + 1) == '-')) {
+        if ((ch == '/' && charAt(pos + 1) == '/') || (ch == '-' && charAt(pos + 1) == '-')) {
             scanSingleLineComment();
         } else if (ch == '/' && charAt(pos + 1) == '*') {
             scanMultiLineComment();
@@ -2066,20 +2038,16 @@ public class Lexer {
                 bufPos++;
             }
 
-            while(true) {
+            while (true) {
                 char c2;
-                if (ch == '*'
-                        && ((c2 = charAt(pos + 1)) == '/'
-                            || (c2 == ' ' && charAt(pos + 2) == '/')
-                            || (c2 == ' ' && charAt(pos + 2) == ' ' && charAt(pos + 3) == '/'))
-                ) {
+                if (ch == '*' && ((c2 = charAt(pos + 1)) == '/' || (c2 == ' ' && charAt(pos + 2) == '/') || (c2 == ' ' && charAt(pos + 2) == ' ' && charAt(pos + 3) == '/'))) {
                     if (c2 == ' ') {
-                        bufPos ++;
+                        bufPos++;
                         scanChar();
                     }
 
                     if (charAt(pos + 1) == ' ') {
-                        bufPos ++;
+                        bufPos++;
                         scanChar();
                     }
 
@@ -2124,7 +2092,7 @@ public class Lexer {
             scanChar();
             bufPos++;
 
-            while(true) {
+            while (true) {
                 if (ch == '\r') {
                     if (charAt(pos + 1) == '\n') {
                         line++;
@@ -2174,7 +2142,7 @@ public class Lexer {
         mark = pos;
         bufPos = 0;
 
-        while(true) {
+        while (true) {
             if (ch == '/' && charAt(pos + 1) == '*') {
                 scanChar();
                 scanChar();
@@ -2225,7 +2193,7 @@ public class Lexer {
         scanChar();
         scanChar();
 
-        while(true) {
+        while (true) {
             if (ch == '\r') {
                 if (charAt(pos + 1) == '\n') {
                     line++;
@@ -2321,12 +2289,12 @@ public class Lexer {
         mark = pos;
         bufPos = 1;
         char ch = 0;
-        while(true) {
+        while (true) {
             char c0 = ch;
             ch = charAt(++pos);
 
             if (!isIdentifierChar(ch)) {
-                if ((ch == '（'  || ch == '）') && c0 > 256) {
+                if ((ch == '（' || ch == '）') && c0 > 256) {
                     bufPos++;
                     continue;
                 }
@@ -2387,7 +2355,7 @@ public class Lexer {
         if (ch == '0' && charAt(pos + 1) == 'b') {
             int i = 2;
             int mark = pos + 2;
-            for (;;++i) {
+            for (; ; ++i) {
                 char ch = charAt(pos + i);
                 if (ch == '0' || ch == '1') {
                     continue;
@@ -2409,7 +2377,7 @@ public class Lexer {
             ch = charAt(++pos);
         }
 
-        while(true) {
+        while (true) {
             if (ch >= '0' && ch <= '9') {
                 bufPos++;
             } else {
@@ -2426,7 +2394,7 @@ public class Lexer {
             bufPos++;
             ch = charAt(++pos);
 
-            for (numberSale = 0;;numberSale++) {
+            for (numberSale = 0; ; numberSale++) {
                 if (ch >= '0' && ch <= '9') {
                     bufPos++;
                 } else {
@@ -2438,8 +2406,7 @@ public class Lexer {
             numberExp = true;
         }
 
-        if ((ch == 'e' || ch == 'E')
-                && (isDigit(charAt(pos + 1)) || (isDigit2(charAt(pos + 1)) && isDigit2(charAt(pos + 2))))) {
+        if ((ch == 'e' || ch == 'E') && (isDigit(charAt(pos + 1)) || (isDigit2(charAt(pos + 1)) && isDigit2(charAt(pos + 2))))) {
             numberExp = true;
 
             bufPos++;
@@ -2450,7 +2417,7 @@ public class Lexer {
                 ch = charAt(++pos);
             }
 
-            while(true) {
+            while (true) {
                 if (ch >= '0' && ch <= '9') {
                     bufPos++;
                 } else {
@@ -2467,17 +2434,14 @@ public class Lexer {
         if (numberSale > 0 || numberExp) {
             token = Token.LITERAL_FLOAT;
         } else {
-            if (isFirstIdentifierChar(ch)
-                    && ch != '）'
-                    && !(ch == 'b' && bufPos == 1 && charAt(pos - 1) == '0')
-            ) {
+            if (isFirstIdentifierChar(ch) && ch != '）' && !(ch == 'b' && bufPos == 1 && charAt(pos - 1) == '0')) {
                 bufPos++;
-                while(true) {
+                while (true) {
                     char c0 = ch;
                     ch = charAt(++pos);
 
                     if (!isIdentifierChar(ch)) {
-                        if (ch == '（'  || ch == '）' && c0 > 256) {
+                        if (ch == '（' || ch == '）' && c0 > 256) {
                             bufPos++;
                             continue;
                         }
@@ -2488,7 +2452,7 @@ public class Lexer {
                 }
 
                 stringVal = addSymbol();
-                hash_lower = FnvHash.hashCode64(stringVal);
+                hash_lower = FnvHashUtils.hashCode64(stringVal);
                 token = Token.IDENTIFIER;
             } else {
                 token = Token.LITERAL_INT;
@@ -2504,7 +2468,7 @@ public class Lexer {
             ch = charAt(++pos);
         }
 
-        while(true) {
+        while (true) {
             if (CharTypes.isHex(ch)) {
                 bufPos++;
             } else {
@@ -2631,10 +2595,10 @@ public class Lexer {
         }
     }
 
-    private static final long  MULTMIN_RADIX_TEN   = Long.MIN_VALUE / 10;
-    private static final long  N_MULTMAX_RADIX_TEN = -Long.MAX_VALUE / 10;
+    private static final long MULTMIN_RADIX_TEN = Long.MIN_VALUE / 10;
+    private static final long N_MULTMAX_RADIX_TEN = -Long.MAX_VALUE / 10;
 
-    private final static int[] digits              = new int[(int) '9' + 1];
+    private static final int[] digits = new int[(int) '9' + 1];
 
     static {
         for (int i = '0'; i <= '9'; ++i) {
@@ -2671,8 +2635,7 @@ public class Lexer {
             // Accumulating negatively avoids surprises near MAX_VALUE
             digit = charAt(i++) - '0';
             if (result < multmin) {
-                return new BigInteger(
-                        numberString());
+                return new BigInteger(numberString());
             }
             result *= 10;
             if (result < limit + digit) {
@@ -2747,16 +2710,16 @@ public class Lexer {
         }
 
         char[] value = sub_chars(mark, bufPos);
-        if (!StringUtils.isNumber(value)){
-            throw new ParserException(value+" is not a number! " + info());
+        if (!StringUtils.isNumber(value)) {
+            throw new ParserException(value + " is not a number! " + info());
         }
         return new BigDecimal(value);
     }
 
     public SQLNumberExpr numberExpr() {
         char[] value = sub_chars(mark, bufPos);
-        if (!StringUtils.isNumber(value)){
-            throw new ParserException(value+" is not a number! " + info());
+        if (!StringUtils.isNumber(value)) {
+            throw new ParserException(value + " is not a number! " + info());
         }
 
         return new SQLNumberExpr(value);
@@ -2765,8 +2728,8 @@ public class Lexer {
 
     public SQLNumberExpr numberExpr(SQLObject parent) {
         char[] value = sub_chars(mark, bufPos);
-        if (!StringUtils.isNumber(value)){
-            throw new ParserException(value+" is not a number! " + info());
+        if (!StringUtils.isNumber(value)) {
+            throw new ParserException(value + " is not a number! " + info());
         }
 
         return new SQLNumberExpr(value, parent);
@@ -2774,8 +2737,8 @@ public class Lexer {
 
     public SQLNumberExpr numberExpr(boolean negate) {
         char[] value = sub_chars(mark, bufPos);
-        if (!StringUtils.isNumber(value)){
-            throw new ParserException(value+" is not a number! " + info());
+        if (!StringUtils.isNumber(value)) {
+            throw new ParserException(value + " is not a number! " + info());
         }
 
         if (negate) {
@@ -2830,7 +2793,7 @@ public class Lexer {
                 || comment.indexOf('&') != -1 //
                 || comment.indexOf('|') != -1 //
                 || comment.indexOf('^') != -1 //
-                ) {
+        ) {
             return false;
         }
         return true;
@@ -2838,7 +2801,7 @@ public class Lexer {
 
     protected void addComment(String comment) {
         if (comments == null) {
-            comments = new ArrayList<String>(2);
+            comments = new ArrayList<>(2);
         }
         comments.add(comment);
     }
@@ -2911,7 +2874,7 @@ public class Lexer {
         StringBuffer buf = new StringBuffer();
 
         for_:
-        while(true) {
+        while (true) {
             Token token = lexer.token;
             switch (token) {
                 case LITERAL_ALIAS:

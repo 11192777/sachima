@@ -84,7 +84,7 @@ public class SQLCreateTableGroupStatement extends SQLStatementImpl implements SQ
 
     @Override
     public List<SQLObject> getChildren() {
-        List<SQLObject> children = new ArrayList<SQLObject>();
+        List<SQLObject> children = new ArrayList<>();
         if (name != null) {
             children.add(name);
         }

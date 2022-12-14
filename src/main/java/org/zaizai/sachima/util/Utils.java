@@ -17,14 +17,7 @@ package org.zaizai.sachima.util;
 
 import org.zaizai.sachima.lang.Assert;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.io.Reader;
-import java.io.StringWriter;
+import java.io.*;
 import java.lang.management.ManagementFactory;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -37,7 +30,7 @@ import java.util.Set;
 
 public class Utils {
 
-    public final static int DEFAULT_BUFFER_SIZE = 1024 * 4;
+    public static final int DEFAULT_BUFFER_SIZE = 1024 * 4;
 
     public static String read(InputStream in) {
         if (in == null) {

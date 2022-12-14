@@ -42,7 +42,7 @@ public class SQLAlterViewStatement extends SQLStatementImpl implements SQLCreate
 
     protected SQLExprTableSource tableSource;
 
-    protected final List<SQLTableElement> columns = new ArrayList<SQLTableElement>();
+    protected final List<SQLTableElement> columns = new ArrayList<>();
 
     private boolean withCheckOption;
     private boolean withCascaded;
@@ -233,7 +233,7 @@ public class SQLAlterViewStatement extends SQLStatementImpl implements SQLCreate
     }
 
     public List<SQLObject> getChildren() {
-        List<SQLObject> children = new ArrayList<SQLObject>();
+        List<SQLObject> children = new ArrayList<>();
         if (tableSource != null) {
             children.add(tableSource);
         }

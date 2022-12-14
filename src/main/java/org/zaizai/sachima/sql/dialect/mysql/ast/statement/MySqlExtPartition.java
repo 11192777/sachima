@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MySqlExtPartition extends MySqlObjectImpl implements Cloneable {
-    private final List<Item> items = new ArrayList<Item>();
+    private final List<Item> items = new ArrayList<>();
 
     public List<Item> getItems() {
         return items;

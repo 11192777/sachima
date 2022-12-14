@@ -24,7 +24,7 @@ import java.util.List;
 
 public class CycleClause extends OracleSQLObjectImpl {
 
-    private final List<SQLExpr> aliases = new ArrayList<SQLExpr>();
+    private final List<SQLExpr> aliases = new ArrayList<>();
     private SQLExpr             mark;
     private SQLExpr             value;
     private SQLExpr             defaultValue;

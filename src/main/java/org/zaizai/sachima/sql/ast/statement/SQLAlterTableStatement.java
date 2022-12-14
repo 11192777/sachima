@@ -31,7 +31,7 @@ import java.util.List;
 public class SQLAlterTableStatement extends SQLStatementImpl implements SQLDDLStatement, SQLAlterStatement {
 
     private SQLExprTableSource      tableSource;
-    private List<SQLAlterTableItem> items                   = new ArrayList<SQLAlterTableItem>();
+    private List<SQLAlterTableItem> items                   = new ArrayList<>();
 
     // for mysql
     private boolean                 ignore                  = false;
@@ -43,13 +43,13 @@ public class SQLAlterTableStatement extends SQLStatementImpl implements SQLDDLSt
 
     private boolean                 removePatiting          = false;
     private boolean                 upgradePatiting         = false;
-    private List<SQLAssignItem>     tableOptions = new ArrayList<SQLAssignItem>();
+    private List<SQLAssignItem>     tableOptions = new ArrayList<>();
     private SQLPartitionBy          partition               = null;
 
     // odps
     private boolean                 mergeSmallFiles         = false;
-    protected final List<SQLSelectOrderByItem> clusteredBy      = new ArrayList<SQLSelectOrderByItem>();
-    protected final List<SQLSelectOrderByItem> sortedBy         = new ArrayList<SQLSelectOrderByItem>();
+    protected final List<SQLSelectOrderByItem> clusteredBy      = new ArrayList<>();
+    protected final List<SQLSelectOrderByItem> sortedBy         = new ArrayList<>();
     protected int                   buckets;
     protected int                   shards;
 
@@ -199,7 +199,7 @@ public class SQLAlterTableStatement extends SQLStatementImpl implements SQLDDLSt
 
     @Override
     public List<SQLObject> getChildren() {
-        List<SQLObject> children = new ArrayList<SQLObject>();
+        List<SQLObject> children = new ArrayList<>();
         if (tableSource != null) {
             children.add(tableSource);
         }

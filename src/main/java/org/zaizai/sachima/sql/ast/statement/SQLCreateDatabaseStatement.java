@@ -35,13 +35,13 @@ public class SQLCreateDatabaseStatement extends SQLStatementImpl implements SQLC
     protected boolean                         ifNotExists = false;
     protected SQLExpr                         comment;
     protected SQLExpr                         location; // hive
-    protected final List<SQLAssignItem>       dbProperties = new ArrayList<SQLAssignItem>();
+    protected final List<SQLAssignItem>       dbProperties = new ArrayList<>();
     protected Map<String, SQLExpr>            options = new HashMap<String, SQLExpr>(); // for ads
     protected String                          user;
 
     protected SQLExpr                         password; // drds
-    protected final List<SQLAssignItem> storedOn = new ArrayList<SQLAssignItem>(); // drds
-    protected final List<List<SQLAssignItem>> storedBy = new ArrayList<List<SQLAssignItem>>(); // drds stored by
+    protected final List<SQLAssignItem> storedOn = new ArrayList<>(); // drds
+    protected final List<List<SQLAssignItem>> storedBy = new ArrayList<>(); // drds stored by
     protected SQLExpr                         storedAs;  // drds
     protected SQLExpr                         storedIn;  // drds
 
@@ -65,7 +65,7 @@ public class SQLCreateDatabaseStatement extends SQLStatementImpl implements SQLC
 
     @Override
     public List<SQLObject> getChildren() {
-        List<SQLObject> children = new ArrayList<SQLObject>();
+        List<SQLObject> children = new ArrayList<>();
         if (name != null) {
             children.add(name);
         }

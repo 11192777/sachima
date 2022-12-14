@@ -23,7 +23,7 @@ import java.util.List;
 
 public class OracleAlterTableModify extends OracleAlterTableItem {
 
-    private List<SQLColumnDefinition> columns = new ArrayList<SQLColumnDefinition>();
+    private List<SQLColumnDefinition> columns = new ArrayList<>();
 
     @Override
     public void accept0(OracleASTVisitor visitor) {

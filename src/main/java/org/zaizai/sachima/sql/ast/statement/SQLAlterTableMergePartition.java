@@ -24,7 +24,7 @@ import java.util.List;
 
 public class SQLAlterTableMergePartition extends SQLObjectImpl implements SQLAlterTableItem {
 
-    private final List<SQLPartitionSpec> partitions  = new ArrayList<SQLPartitionSpec>(4);
+    private final List<SQLPartitionSpec> partitions  = new ArrayList<>(4);
     private boolean ifExists = false;
     private SQLPartitionSpec overwritePartition;
 

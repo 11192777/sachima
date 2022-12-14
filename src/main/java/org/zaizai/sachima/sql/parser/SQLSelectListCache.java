@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class SQLSelectListCache {
-    private final static Log LOG = LogFactory.getLog(SQLSelectListCache.class);
+    private static final Log LOG = LogFactory.getLog(SQLSelectListCache.class);
     private final DbType dbType;
     private final List<Entry> entries = new CopyOnWriteArrayList<Entry>();
 

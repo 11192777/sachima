@@ -33,7 +33,7 @@ import java.util.List;
 public class SQLSetStatement extends SQLStatementImpl {
     private Option option;
 
-    private List<SQLAssignItem> items = new ArrayList<SQLAssignItem>();
+    private List<SQLAssignItem> items = new ArrayList<>();
     
     private List<SQLCommentHint> hints;
 

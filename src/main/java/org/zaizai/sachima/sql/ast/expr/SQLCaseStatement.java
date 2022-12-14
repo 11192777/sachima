@@ -23,9 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SQLCaseStatement extends SQLStatementImpl implements Serializable {
-    private final List<Item>    items            = new ArrayList<Item>();
+    private final List<Item>    items            = new ArrayList<>();
     private SQLExpr             valueExpr;
-    private List<SQLStatement>  elseStatements = new ArrayList<SQLStatement>();
+    private List<SQLStatement>  elseStatements = new ArrayList<>();
 
     public SQLCaseStatement(){
 
@@ -84,7 +84,7 @@ public class SQLCaseStatement extends SQLStatementImpl implements Serializable {
 
     @Override
     public List<SQLObject> getChildren() {
-        List<SQLObject> children = new ArrayList<SQLObject>();
+        List<SQLObject> children = new ArrayList<>();
         if (valueExpr != null) {
             children.add(valueExpr);
         }

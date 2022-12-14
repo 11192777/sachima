@@ -17,6 +17,7 @@ package org.zaizai.sachima.sql.ast.statement;
 
 import org.zaizai.sachima.util.FnvHash;
 import org.zaizai.sachima.enums.DbType;
+import org.zaizai.sachima.util.FnvHashUtils;
 import org.zaizai.sachima.util.SQLUtils;
 import org.zaizai.sachima.sql.ast.*;
 import org.zaizai.sachima.sql.ast.expr.*;
@@ -31,7 +32,7 @@ import java.util.TreeSet;
 
 public class SQLSelectQueryBlock extends SQLObjectImpl implements SQLSelectQuery, SQLReplaceable, SQLDbTypedObject {
     protected int                        distionOption;
-    protected final List<SQLSelectItem>  selectList      = new ArrayList<SQLSelectItem>();
+    protected final List<SQLSelectItem>  selectList      = new ArrayList<>();
 
     protected SQLTableSource             from;
     protected SQLExprTableSource         into;
@@ -110,7 +111,7 @@ public class SQLSelectQueryBlock extends SQLObjectImpl implements SQLSelectQuery
             x.setParent(this);
         }
         if (windows == null) {
-            windows = new ArrayList<SQLWindow>(4);
+            windows = new ArrayList<>(4);
         }
         this.windows.add(x);
     }
@@ -170,7 +171,7 @@ public class SQLSelectQueryBlock extends SQLObjectImpl implements SQLSelectQuery
                                 set.add(itemItem);
                             }
 
-                            List<SQLExpr> andList = new ArrayList<SQLExpr>();
+                            List<SQLExpr> andList = new ArrayList<>();
                             for (SQLExpr exprItem : inListExpr.getTargetList()) {
                                 if (set.contains(exprItem)) {
                                     andList.add(exprItem.clone());
@@ -651,7 +652,7 @@ public class SQLSelectQueryBlock extends SQLObjectImpl implements SQLSelectQuery
 
     public List<SQLSelectOrderByItem> getDistributeBy() {
         if (distributeBy == null) {
-            distributeBy = new ArrayList<SQLSelectOrderByItem>();
+            distributeBy = new ArrayList<>();
         }
 
         return distributeBy;
@@ -669,14 +670,14 @@ public class SQLSelectQueryBlock extends SQLObjectImpl implements SQLSelectQuery
         }
 
         if (distributeBy == null) {
-            distributeBy = new ArrayList<SQLSelectOrderByItem>();
+            distributeBy = new ArrayList<>();
         }
         distributeBy.add(new SQLSelectOrderByItem(x));
     }
 
     public void addDistributeBy(SQLSelectOrderByItem item) {
         if (distributeBy == null) {
-            distributeBy = new ArrayList<SQLSelectOrderByItem>();
+            distributeBy = new ArrayList<>();
         }
         if (item != null) {
             item.setParent(this);
@@ -686,7 +687,7 @@ public class SQLSelectQueryBlock extends SQLObjectImpl implements SQLSelectQuery
 
     public List<SQLSelectOrderByItem> getSortBy() {
         if (sortBy == null) {
-            sortBy = new ArrayList<SQLSelectOrderByItem>();
+            sortBy = new ArrayList<>();
         }
         return sortBy;
     }
@@ -697,7 +698,7 @@ public class SQLSelectQueryBlock extends SQLObjectImpl implements SQLSelectQuery
 
     public void addSortBy(SQLSelectOrderByItem item) {
         if (sortBy == null) {
-            sortBy = new ArrayList<SQLSelectOrderByItem>();
+            sortBy = new ArrayList<>();
         }
         if (item != null) {
             item.setParent(this);
@@ -884,7 +885,7 @@ public class SQLSelectQueryBlock extends SQLObjectImpl implements SQLSelectQuery
 
     public List<SQLExpr> getForUpdateOf() {
         if (forUpdateOf == null) {
-            forUpdateOf = new ArrayList<SQLExpr>(1);
+            forUpdateOf = new ArrayList<>(1);
         }
         return forUpdateOf;
     }
@@ -963,7 +964,7 @@ public class SQLSelectQueryBlock extends SQLObjectImpl implements SQLSelectQuery
 
         if (distributeBy != null) {
             if (x.distributeBy == null) {
-                x.distributeBy = new ArrayList<SQLSelectOrderByItem>();
+                x.distributeBy = new ArrayList<>();
             }
 
             for (int i = 0; i < distributeBy.size(); i++) {
@@ -975,7 +976,7 @@ public class SQLSelectQueryBlock extends SQLObjectImpl implements SQLSelectQuery
 
         if (sortBy != null) {
             if (x.sortBy == null) {
-                x.sortBy = new ArrayList<SQLSelectOrderByItem>();
+                x.sortBy = new ArrayList<>();
             }
 
             for (int i = 0; i < sortBy.size(); i++) {
@@ -987,7 +988,7 @@ public class SQLSelectQueryBlock extends SQLObjectImpl implements SQLSelectQuery
 
         if (clusterBy != null) {
             if (x.clusterBy == null) {
-                x.clusterBy = new ArrayList<SQLSelectOrderByItem>();
+                x.clusterBy = new ArrayList<>();
             }
 
             for (int i = 0; i < clusterBy.size(); i++) {
@@ -1079,7 +1080,7 @@ public class SQLSelectQueryBlock extends SQLObjectImpl implements SQLSelectQuery
             return null;
         }
 
-        long hash = FnvHash.hashCode64(ident);
+        long hash = FnvHashUtils.hashCode64(ident);
         return findSelectItem(hash);
     }
 
@@ -1178,7 +1179,7 @@ public class SQLSelectQueryBlock extends SQLObjectImpl implements SQLSelectQuery
             return null;
         }
 
-        long hash = FnvHash.hashCode64(columnName);
+        long hash = FnvHashUtils.hashCode64(columnName);
         return from.findColumn(hash);
     }
 
@@ -1342,7 +1343,7 @@ public class SQLSelectQueryBlock extends SQLObjectImpl implements SQLSelectQuery
 
     public List<SQLCommentHint> getHints() {
         if (hints == null) {
-            hints = new ArrayList<SQLCommentHint>(2);
+            hints = new ArrayList<>(2);
         }
         return hints;
     }
@@ -1375,7 +1376,7 @@ public class SQLSelectQueryBlock extends SQLObjectImpl implements SQLSelectQuery
 
     public List<SQLSelectOrderByItem> getClusterBy() {
         if (clusterBy == null) {
-            clusterBy = new ArrayList<SQLSelectOrderByItem>();
+            clusterBy = new ArrayList<>();
         }
 
         return clusterBy;
@@ -1387,7 +1388,7 @@ public class SQLSelectQueryBlock extends SQLObjectImpl implements SQLSelectQuery
 
     public void addClusterBy(SQLSelectOrderByItem item) {
         if (clusterBy == null) {
-            clusterBy = new ArrayList<SQLSelectOrderByItem>();
+            clusterBy = new ArrayList<>();
         }
         if (item != null) {
             item.setParent(this);
@@ -1396,7 +1397,7 @@ public class SQLSelectQueryBlock extends SQLObjectImpl implements SQLSelectQuery
     }
 
     public List<String> computeSelecteListAlias() {
-        List<String> aliasList = new ArrayList<String>();
+        List<String> aliasList = new ArrayList<>();
 
         for (SQLSelectItem item : this.selectList) {
             aliasList.add(item.computeAlias());
@@ -1422,7 +1423,7 @@ public class SQLSelectQueryBlock extends SQLObjectImpl implements SQLSelectQuery
                             SQLIdentifierExpr tablename = (SQLIdentifierExpr) arg;
                             SQLTableSource tableSource = findTableSource(tablename.getName());
                             if (tableSources == null) {
-                                tableSources = new ArrayList<SQLTableSource>(2);
+                                tableSources = new ArrayList<>(2);
                             }
                             tableSources.add(tableSource);
                         }

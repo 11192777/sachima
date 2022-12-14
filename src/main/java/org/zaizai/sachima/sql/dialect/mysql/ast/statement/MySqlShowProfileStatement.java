@@ -24,7 +24,7 @@ import java.util.List;
 
 public class MySqlShowProfileStatement extends MySqlStatementImpl implements MySqlShowStatement {
 
-    private List<Type> types = new ArrayList<Type>();
+    private List<Type> types = new ArrayList<>();
 
     private SQLExpr    forQuery;
 

@@ -36,8 +36,8 @@ public class SQLCharacterDataType extends SQLDataTypeImpl {
 
     public List<SQLCommentHint> hints;
 
-    public final static String CHAR_TYPE_BYTE = "BYTE";
-    public final static String CHAR_TYPE_CHAR = "CHAR";
+    public static final String CHAR_TYPE_BYTE = "BYTE";
+    public static final String CHAR_TYPE_CHAR = "CHAR";
 
     public SQLCharacterDataType(String name){
         super(name);

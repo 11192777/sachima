@@ -29,7 +29,7 @@ import java.util.List;
 public class SQLUpdateStatement extends SQLStatementImpl implements SQLReplaceable {
     protected SQLWithSubqueryClause with; // for pg
 
-    protected final List<SQLUpdateSetItem> items = new ArrayList<SQLUpdateSetItem>();
+    protected final List<SQLUpdateSetItem> items = new ArrayList<>();
     protected SQLExpr                      where;
     protected SQLTableSource               from;
 
@@ -142,7 +142,7 @@ public class SQLUpdateStatement extends SQLStatementImpl implements SQLReplaceab
 
     public List<SQLExpr> getReturning() {
         if (returning == null) {
-            returning = new ArrayList<SQLExpr>(2);
+            returning = new ArrayList<>(2);
         }
 
         return returning;
@@ -198,7 +198,7 @@ public class SQLUpdateStatement extends SQLStatementImpl implements SQLReplaceab
     }
 
     public List<SQLObject> getChildren() {
-        List<SQLObject> children = new ArrayList<SQLObject>();
+        List<SQLObject> children = new ArrayList<>();
         if (tableSource != null) {
             children.add(tableSource);
         }

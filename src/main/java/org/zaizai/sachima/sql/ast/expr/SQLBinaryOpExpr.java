@@ -289,25 +289,25 @@ public class SQLBinaryOpExpr extends SQLExprImpl implements SQLReplaceable, Seri
         if (x instanceof SQLBinaryOpExprGroup) {
             SQLBinaryOpExprGroup group = (SQLBinaryOpExprGroup) x;
             if (group.getOperator() == op) {
-                return new ArrayList<SQLExpr>(group.getItems());
+                return new ArrayList<>(group.getItems());
             }
         } else if (x instanceof SQLBinaryOpExpr) {
             return split((SQLBinaryOpExpr) x, op);
         }
 
-        List<SQLExpr> list = new ArrayList<SQLExpr>(1);
+        List<SQLExpr> list = new ArrayList<>(1);
         list.add(x);
         return list;
     }
 
     public static List<SQLExpr> split(SQLBinaryOpExpr x, SQLBinaryOperator op) {
         if (x.getOperator() != op) {
-            List<SQLExpr> groupList = new ArrayList<SQLExpr>(1);
+            List<SQLExpr> groupList = new ArrayList<>(1);
             groupList.add(x);
             return groupList;
         }
 
-        List<SQLExpr> groupList = new ArrayList<SQLExpr>();
+        List<SQLExpr> groupList = new ArrayList<>();
         split(groupList, x, op);
         return groupList;
     }
@@ -329,7 +329,7 @@ public class SQLBinaryOpExpr extends SQLExprImpl implements SQLReplaceable, Seri
             return;
         }
 
-        List<SQLExpr> rightList = new ArrayList<SQLExpr>();
+        List<SQLExpr> rightList = new ArrayList<>();
         rightList.add(binaryExpr.getRight());
         for (SQLExpr left = binaryExpr.getLeft();;) {
             if (left instanceof SQLBinaryOpExpr) {
@@ -481,8 +481,8 @@ public class SQLBinaryOpExpr extends SQLExprImpl implements SQLReplaceable, Seri
             return a;
         }
 
-        List<SQLExpr> groupListA = new ArrayList<SQLExpr>();
-        List<SQLExpr> groupListB = new ArrayList<SQLExpr>();
+        List<SQLExpr> groupListA = new ArrayList<>();
+        List<SQLExpr> groupListB = new ArrayList<>();
         split(groupListA, a, SQLBinaryOperator.BooleanAnd);
         split(groupListB, b, SQLBinaryOperator.BooleanAnd);
 
@@ -770,7 +770,7 @@ public class SQLBinaryOpExpr extends SQLExprImpl implements SQLReplaceable, Seri
      */
     private void addMergedItem(SQLBinaryOpExpr item) {
         if (mergedList == null) {
-            mergedList = new ArrayList<SQLObject>();
+            mergedList = new ArrayList<>();
         }
         mergedList.add(item);
     }

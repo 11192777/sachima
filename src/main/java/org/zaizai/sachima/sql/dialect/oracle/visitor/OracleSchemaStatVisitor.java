@@ -44,7 +44,7 @@ import java.util.List;
 public class OracleSchemaStatVisitor extends SchemaStatVisitor implements OracleASTVisitor {
 
     public OracleSchemaStatVisitor(){
-        this(new ArrayList<Object>());
+        this(new ArrayList<>());
     }
 
     public OracleSchemaStatVisitor(SchemaRepository repository) {

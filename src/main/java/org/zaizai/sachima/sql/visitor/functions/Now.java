@@ -22,7 +22,7 @@ import java.util.Date;
 
 
 public class Now implements Function {
-    public final static Now instance = new Now();
+    public static final Now instance = new Now();
     
     public Object eval(SQLEvalVisitor visitor, SQLMethodInvokeExpr x) {
         return new Date();

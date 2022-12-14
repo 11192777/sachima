@@ -26,7 +26,7 @@ public class PartitionExtensionClause extends OracleSQLObjectImpl {
 
     private boolean             subPartition;
     private SQLName             partition;
-    private final List<SQLName> target = new ArrayList<SQLName>();
+    private final List<SQLName> target = new ArrayList<>();
 
     public boolean isSubPartition() {
         return subPartition;

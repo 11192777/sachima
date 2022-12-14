@@ -72,7 +72,7 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
     }
 
     public boolean visit(OracleAnalytic x) {
-        print0(ucase ? "(" : "(");
+        print0("(");
         
         boolean space = false;
         if (x.getPartitionBy().size() > 0) {
@@ -1867,7 +1867,7 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
 
     @Override
     public boolean visit(OracleGotoStatement x) {
-        print0(ucase ? "GOTO " : "GOTO ");
+        print0("GOTO ");
         x.getLabel().accept(this);
         return false;
     }

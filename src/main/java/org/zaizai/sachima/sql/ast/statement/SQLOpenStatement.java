@@ -33,11 +33,11 @@ public class SQLOpenStatement extends SQLStatementImpl{
 	//cursor name
 	private SQLName cursorName;
 
-	private final List<SQLName> columns = new ArrayList<SQLName>();
+	private final List<SQLName> columns = new ArrayList<>();
 
 	private SQLExpr forExpr;
 
-	private final List<SQLExpr> using = new ArrayList<SQLExpr>();
+	private final List<SQLExpr> using = new ArrayList<>();
 
 	public SQLOpenStatement() {
 

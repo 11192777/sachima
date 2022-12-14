@@ -15,6 +15,7 @@
  */
 package org.zaizai.sachima.sql.repository;
 
+import org.zaizai.sachima.util.FnvHashUtils;
 import org.zaizai.sachima.util.SQLUtils;
 import org.zaizai.sachima.sql.ast.SQLExpr;
 import org.zaizai.sachima.sql.ast.SQLName;
@@ -91,7 +92,7 @@ public class Schema {
     }
 
     public SchemaObject findTable(String tableName) {
-        long hashCode64 = FnvHash.hashCode64(tableName);
+        long hashCode64 = FnvHashUtils.hashCode64(tableName);
         return findTable(hashCode64);
     }
 
@@ -106,7 +107,7 @@ public class Schema {
     }
 
     public SchemaObject findView(String viewName) {
-        long hashCode64 = FnvHash.hashCode64(viewName);
+        long hashCode64 = FnvHashUtils.hashCode64(viewName);
         return findView(hashCode64);
     }
 
@@ -121,7 +122,7 @@ public class Schema {
     }
 
     public SchemaObject findTableOrView(String tableName) {
-        long hashCode64 = FnvHash.hashCode64(tableName);
+        long hashCode64 = FnvHashUtils.hashCode64(tableName);
         return findTableOrView(hashCode64);
     }
 
@@ -147,7 +148,7 @@ public class Schema {
     }
 
     public boolean isSequence(String name) {
-        long nameHashCode64 = FnvHash.hashCode64(name);
+        long nameHashCode64 = FnvHashUtils.hashCode64(name);
         SchemaObject object = objects.get(nameHashCode64);
         return object != null
                 && object.getType() == SchemaObjectType.Sequence;
@@ -351,7 +352,7 @@ public class Schema {
     }
 
     public List<String> showTables() {
-        List<String> tables = new ArrayList<String>(objects.size());
+        List<String> tables = new ArrayList<>(objects.size());
         for (SchemaObject object : objects.values()) {
             if (object.getType() == SchemaObjectType.Table) {
                 tables.add(object.getName());

@@ -15,6 +15,7 @@
  */
 package org.zaizai.sachima.sql.ast.statement;
 
+import org.zaizai.sachima.util.FnvHashUtils;
 import org.zaizai.sachima.util.SQLUtils;
 import org.zaizai.sachima.sql.ast.*;
 import org.zaizai.sachima.sql.ast.expr.SQLIdentifierExpr;
@@ -80,7 +81,7 @@ public abstract class SQLTableSourceImpl extends SQLObjectImpl implements SQLTab
 
     public List<SQLHint> getHints() {
         if (hints == null) {
-            hints = new ArrayList<SQLHint>(2);
+            hints = new ArrayList<>(2);
         }
         return hints;
     }
@@ -119,7 +120,7 @@ public abstract class SQLTableSourceImpl extends SQLObjectImpl implements SQLTab
     public long aliasHashCode64() {
         if (aliasHashCode64 == 0
                 && alias != null) {
-            aliasHashCode64 = FnvHash.hashCode64(alias);
+            aliasHashCode64 = FnvHashUtils.hashCode64(alias);
         }
         return aliasHashCode64;
     }
@@ -129,7 +130,7 @@ public abstract class SQLTableSourceImpl extends SQLObjectImpl implements SQLTab
             return null;
         }
 
-        long hash = FnvHash.hashCode64(columnName);
+        long hash = FnvHashUtils.hashCode64(columnName);
         return findColumn(hash);
     }
 
@@ -146,7 +147,7 @@ public abstract class SQLTableSourceImpl extends SQLObjectImpl implements SQLTab
             return null;
         }
 
-        long hash = FnvHash.hashCode64(columnName);
+        long hash = FnvHashUtils.hashCode64(columnName);
         return findTableSourceWithColumn(hash, columnName, 0);
     }
 
@@ -175,7 +176,7 @@ public abstract class SQLTableSourceImpl extends SQLObjectImpl implements SQLTab
     }
 
     public SQLTableSource findTableSource(String alias) {
-        long hash = FnvHash.hashCode64(alias);
+        long hash = FnvHashUtils.hashCode64(alias);
         return findTableSource(hash);
     }
 

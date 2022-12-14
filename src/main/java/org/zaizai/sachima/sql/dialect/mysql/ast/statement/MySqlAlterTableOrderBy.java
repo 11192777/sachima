@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class MySqlAlterTableOrderBy extends MySqlObjectImpl implements SQLAlterTableItem {
 
-    private List<SQLSelectOrderByItem> columns = new ArrayList<SQLSelectOrderByItem>();
+    private List<SQLSelectOrderByItem> columns = new ArrayList<>();
 
     @Override
     public void accept0(MySqlASTVisitor visitor) {

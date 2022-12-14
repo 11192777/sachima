@@ -23,7 +23,7 @@ import java.util.List;
 
 public class SQLMatchAgainstExpr extends SQLExprImpl implements SQLReplaceable {
 
-    private List<SQLExpr>  columns = new ArrayList<SQLExpr>();
+    private List<SQLExpr>  columns = new ArrayList<>();
     private SQLExpr        against;
     private SearchModifier searchModifier;
 

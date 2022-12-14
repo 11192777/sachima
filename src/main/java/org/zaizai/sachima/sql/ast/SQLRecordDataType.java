@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SQLRecordDataType extends SQLDataTypeImpl implements SQLDataType {
-    private final List<SQLColumnDefinition> columns = new ArrayList<SQLColumnDefinition>();
+    private final List<SQLColumnDefinition> columns = new ArrayList<>();
 
     public List<SQLColumnDefinition> getColumns() {
         return columns;

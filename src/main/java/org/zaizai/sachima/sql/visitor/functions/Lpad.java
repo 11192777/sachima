@@ -25,7 +25,7 @@ import static org.zaizai.sachima.sql.visitor.SQLEvalVisitor.EVAL_VALUE;
 
 public class Lpad implements Function {
 
-    public final static Lpad instance = new Lpad();
+    public static final Lpad instance = new Lpad();
 
     public Object eval(SQLEvalVisitor visitor, SQLMethodInvokeExpr x) {
         List<SQLExpr> params = x.getArguments();

@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SQLAlterTableSetOption extends SQLObjectImpl implements SQLAlterTableItem {
-    private List<SQLAssignItem> options = new ArrayList<SQLAssignItem>();
+    private List<SQLAssignItem> options = new ArrayList<>();
     private SQLName on;
 
     public SQLAlterTableSetOption() {

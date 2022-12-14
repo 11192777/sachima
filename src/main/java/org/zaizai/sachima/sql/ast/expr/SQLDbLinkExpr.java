@@ -19,6 +19,7 @@ import org.zaizai.sachima.sql.ast.*;
 import org.zaizai.sachima.sql.ast.statement.SQLColumnDefinition;
 import org.zaizai.sachima.sql.visitor.SQLASTVisitor;
 import org.zaizai.sachima.util.FnvHash;
+import org.zaizai.sachima.util.FnvHashUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -112,7 +113,7 @@ public class SQLDbLinkExpr extends SQLExprImpl implements SQLName, SQLExpr, SQLR
     public long nameHashCode64() {
         if (dbLinkHashCode64 == 0
                 && dbLink != null) {
-            dbLinkHashCode64 = FnvHash.hashCode64(dbLink);
+            dbLinkHashCode64 = FnvHashUtils.hashCode64(dbLink);
         }
         return dbLinkHashCode64;
     }
@@ -134,7 +135,7 @@ public class SQLDbLinkExpr extends SQLExprImpl implements SQLName, SQLExpr, SQLR
                 hash ^= '@';
                 hash *= FnvHash.PRIME;
             }
-            hash = FnvHash.hashCode64(hash, dbLink);
+            hash = FnvHashUtils.hashCode64(hash, dbLink);
             hashCode64 = hash;
         }
 

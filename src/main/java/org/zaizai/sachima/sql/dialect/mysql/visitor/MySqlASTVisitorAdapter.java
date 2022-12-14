@@ -15,17 +15,6 @@
  */
 package org.zaizai.sachima.sql.dialect.mysql.visitor;
 
-import org.zaizai.sachima.sql.ast.expr.SQLIntervalExpr;
-import org.zaizai.sachima.sql.ast.statement.SQLAlterCharacter;
-import org.zaizai.sachima.sql.ast.statement.SQLShowColumnsStatement;
-import org.zaizai.sachima.sql.ast.statement.SQLShowCreateTableStatement;
-import org.zaizai.sachima.sql.dialect.mysql.ast.*;
-import org.zaizai.sachima.sql.dialect.mysql.ast.clause.*;
-import org.zaizai.sachima.sql.dialect.mysql.ast.clause.MySqlCaseStatement.MySqlWhenStatement;
-import org.zaizai.sachima.sql.dialect.mysql.ast.expr.*;
-import org.zaizai.sachima.sql.dialect.mysql.ast.statement.*;
-import org.zaizai.sachima.sql.dialect.mysql.ast.statement.MySqlCreateTableStatement.TableSpaceOption;
-import org.zaizai.sachima.sql.dialect.mysql.ast.statement.MySqlCreateUserStatement.UserSpecification;
 import org.zaizai.sachima.sql.visitor.SQLASTVisitorAdapter;
 
 public class MySqlASTVisitorAdapter extends SQLASTVisitorAdapter implements MySqlASTVisitor {

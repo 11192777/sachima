@@ -45,7 +45,7 @@ public class MySqlExportParameterVisitor extends MySqlOutputVisitor implements E
     }
 
     public MySqlExportParameterVisitor() {
-        this(new ArrayList<Object>());
+        this(new ArrayList<>());
     }
 
     public MySqlExportParameterVisitor(List<Object> parameters) {
@@ -53,7 +53,7 @@ public class MySqlExportParameterVisitor extends MySqlOutputVisitor implements E
     }
 
     public MySqlExportParameterVisitor(final Appendable appender) {
-        this(new ArrayList<Object>(),appender, true);
+        this(new ArrayList<>(),appender, true);
     }
 
     public List<Object> getParameters() {

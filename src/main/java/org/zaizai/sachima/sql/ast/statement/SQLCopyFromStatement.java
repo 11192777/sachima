@@ -10,12 +10,12 @@ import java.util.List;
 
 public class SQLCopyFromStatement extends SQLStatementImpl {
     private SQLExprTableSource table;
-    private final List<SQLName> columns = new ArrayList<SQLName>();
+    private final List<SQLName> columns = new ArrayList<>();
     private SQLExpr from;
     private SQLExpr accessKeyId;
     private SQLExpr accessKeySecret;
-    private final List<SQLAssignItem> options = new ArrayList<SQLAssignItem>();
-    private final List<SQLAssignItem> partitions = new ArrayList<SQLAssignItem>();
+    private final List<SQLAssignItem> options = new ArrayList<>();
+    private final List<SQLAssignItem> partitions = new ArrayList<>();
 
     @Override
     protected void accept0(SQLASTVisitor v) {

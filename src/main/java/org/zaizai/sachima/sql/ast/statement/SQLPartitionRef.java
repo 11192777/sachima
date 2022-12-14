@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SQLPartitionRef extends SQLObjectImpl {
-    private List<Item> items = new ArrayList<Item>();
+    private List<Item> items = new ArrayList<>();
 
     @Override
     protected void accept0(SQLASTVisitor v) {

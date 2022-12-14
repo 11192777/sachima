@@ -36,8 +36,8 @@ import java.util.List;
 import java.util.Map;
 
 public class MySqlCreateTableStatement extends SQLCreateTableStatement implements MySqlStatement {
-    private List<SQLCommentHint>   hints        = new ArrayList<SQLCommentHint>();
-    private List<SQLCommentHint>   optionHints  = new ArrayList<SQLCommentHint>();
+    private List<SQLCommentHint>   hints        = new ArrayList<>();
+    private List<SQLCommentHint>   optionHints  = new ArrayList<>();
     private SQLName                tableGroup;
     protected SQLExpr              dbPartitionBy;//for drds
     protected SQLExpr              dbPartitions;//for drds
@@ -46,7 +46,7 @@ public class MySqlCreateTableStatement extends SQLCreateTableStatement implement
     protected MySqlExtPartition    exPartition; //for drds
     protected SQLName              storedBy; // for ads
     protected SQLName              distributeByType; // for ads
-    protected List<SQLName>        distributeBy = new ArrayList<SQLName>();
+    protected List<SQLName>        distributeBy = new ArrayList<>();
     protected boolean              isBroadCast;
     protected Map<String, SQLName> with = new HashMap<String, SQLName>(3); // for ads
 
@@ -242,7 +242,7 @@ public class MySqlCreateTableStatement extends SQLCreateTableStatement implement
     }
 
     public List<MySqlKey> getMysqlKeys() {
-        List<MySqlKey> mySqlKeys = new ArrayList<MySqlKey>();
+        List<MySqlKey> mySqlKeys = new ArrayList<>();
         for (SQLTableElement element : this.getTableElementList()) {
             if (element instanceof MySqlKey) {
                 mySqlKeys.add((MySqlKey)element);
@@ -252,7 +252,7 @@ public class MySqlCreateTableStatement extends SQLCreateTableStatement implement
     }
 
     public List<MySqlTableIndex> getMysqlIndexes() {
-        List<MySqlTableIndex> indexList = new ArrayList<MySqlTableIndex>();
+        List<MySqlTableIndex> indexList = new ArrayList<>();
         for (SQLTableElement element : this.getTableElementList()) {
             if (element instanceof MySqlTableIndex) {
                 indexList.add((MySqlTableIndex)element);

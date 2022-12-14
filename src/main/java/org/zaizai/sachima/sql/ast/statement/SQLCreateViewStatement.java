@@ -41,7 +41,7 @@ public class SQLCreateViewStatement extends SQLStatementImpl implements SQLCreat
 
     protected SQLExprTableSource tableSource;
 
-    protected final List<SQLTableElement> columns = new ArrayList<SQLTableElement>();
+    protected final List<SQLTableElement> columns = new ArrayList<>();
 
     private boolean withCheckOption;
     private boolean withCascaded;
@@ -254,7 +254,7 @@ public class SQLCreateViewStatement extends SQLStatementImpl implements SQLCreat
     }
 
     public List<SQLObject> getChildren() {
-        List<SQLObject> children = new ArrayList<SQLObject>();
+        List<SQLObject> children = new ArrayList<>();
         if (tableSource != null) {
             children.add(tableSource);
         }

@@ -24,7 +24,7 @@ import java.util.List;
 public class SQLColumnReference extends SQLConstraintImpl implements SQLColumnConstraint {
 
     private SQLName       table;
-    private List<SQLName> columns = new ArrayList<SQLName>();
+    private List<SQLName> columns = new ArrayList<>();
 
     private SQLForeignKeyImpl.Match referenceMatch;
     protected SQLForeignKeyImpl.Option onUpdate;

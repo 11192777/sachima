@@ -28,7 +28,7 @@ import static org.zaizai.sachima.sql.visitor.SQLEvalVisitor.EVAL_VALUE;
 
 public class DateAdd implements Function {
 
-    public final static DateAdd instance = new DateAdd();
+    public static final DateAdd instance = new DateAdd();
 
     public Object eval(SQLEvalVisitor visitor, SQLMethodInvokeExpr x) {
         final List<SQLExpr> arguments = x.getArguments();

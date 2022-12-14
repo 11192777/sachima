@@ -31,7 +31,7 @@ public class SQLDeclareItem extends SQLObjectImpl implements SQLObjectWithDataTy
 
     protected SQLExpr               value;
 
-    protected List<SQLTableElement> tableElementList = new ArrayList<SQLTableElement>();
+    protected List<SQLTableElement> tableElementList = new ArrayList<>();
 
     protected transient SQLObject             resolvedObject;
 

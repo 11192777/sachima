@@ -31,7 +31,7 @@ public class MySqlFlushStatement extends MySqlStatementImpl {
     private boolean noWriteToBinlog = false;
     private boolean local = false;
 
-    private final List<SQLExprTableSource> tables = new ArrayList<SQLExprTableSource>();
+    private final List<SQLExprTableSource> tables = new ArrayList<>();
 
     private boolean withReadLock = false;
     private boolean forExport;

@@ -23,7 +23,7 @@ import static org.zaizai.sachima.sql.visitor.SQLEvalVisitor.EVAL_VALUE;
 
 
 public class Instr implements Function {
-    public final static Instr instance = new Instr();
+    public static final Instr instance = new Instr();
     
     public Object eval(SQLEvalVisitor visitor, SQLMethodInvokeExpr x) {
         if (x.getArguments().size() != 2) {

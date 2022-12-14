@@ -28,7 +28,7 @@ import java.util.List;
  */
 public class OracleSupplementalLogGrp extends OracleSQLObjectImpl implements SQLTableElement {
     private SQLName group;
-    private List<SQLName> columns = new ArrayList<SQLName>();
+    private List<SQLName> columns = new ArrayList<>();
     private boolean always = false;
 
     @Override

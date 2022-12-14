@@ -15,7 +15,7 @@ import java.util.List;
 public class DrdsBaselineStatement extends MySqlStatementImpl implements SQLStatement {
 
     private String operation;
-    private List<Long> baselineIds = new ArrayList<Long>();
+    private List<Long> baselineIds = new ArrayList<>();
 
     private SQLSelect select;
 

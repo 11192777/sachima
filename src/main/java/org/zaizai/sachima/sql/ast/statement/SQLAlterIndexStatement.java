@@ -35,7 +35,7 @@ public class SQLAlterIndexStatement extends SQLStatementImpl implements SQLAlter
     private Boolean monitoringUsage;
     private Rebuild rebuild;
     private SQLExpr parallel;
-    private List<SQLAssignItem> partitions = new ArrayList<SQLAssignItem>();
+    private List<SQLAssignItem> partitions = new ArrayList<>();
     protected SQLPartitionBy    dbPartitionBy;
 
     @Override

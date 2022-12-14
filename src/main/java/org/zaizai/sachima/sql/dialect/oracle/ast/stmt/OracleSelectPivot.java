@@ -25,9 +25,9 @@ import java.util.List;
 public class OracleSelectPivot extends OracleSelectPivotBase {
 
     private boolean xml;
-    private final List<Item> items = new ArrayList<Item>();
-    private final List<SQLExpr> pivotFor = new ArrayList<SQLExpr>();
-    private final List<Item> pivotIn = new ArrayList<Item>();
+    private final List<Item> items = new ArrayList<>();
+    private final List<SQLExpr> pivotFor = new ArrayList<>();
+    private final List<Item> pivotIn = new ArrayList<>();
 
     public OracleSelectPivot() {
 

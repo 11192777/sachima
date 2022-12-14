@@ -83,7 +83,7 @@ public class SQLSelectStatement extends SQLStatementImpl {
                 SQLCommentHint h2 = h.clone();
                 h2.setParent(x);
                 if (x.headHints == null) {
-                    x.headHints = new ArrayList<SQLCommentHint>(headHints.size());
+                    x.headHints = new ArrayList<>(headHints.size());
                 }
                 x.headHints.add(h2);
             }

@@ -17,6 +17,7 @@ package org.zaizai.sachima.sql.ast.statement;
 
 import org.zaizai.sachima.exception.FastsqlColumnAmbiguousException;
 import org.zaizai.sachima.exception.FastsqlException;
+import org.zaizai.sachima.util.FnvHashUtils;
 import org.zaizai.sachima.util.SQLUtils;
 import org.zaizai.sachima.sql.ast.*;
 import org.zaizai.sachima.sql.ast.expr.*;
@@ -34,7 +35,7 @@ public class SQLJoinTableSource extends SQLTableSourceImpl implements SQLReplace
     protected JoinType            joinType;
     protected SQLTableSource      right;
     protected SQLExpr             condition;
-    protected final List<SQLExpr> using = new ArrayList<SQLExpr>();
+    protected final List<SQLExpr> using = new ArrayList<>();
     protected boolean             natural = false;
     protected UDJ                 udj; // for maxcompute
     protected boolean             asof; // for clickhouse
@@ -501,7 +502,7 @@ public class SQLJoinTableSource extends SQLTableSourceImpl implements SQLReplace
     }
 
     public SQLColumnDefinition findColumn(String columnName) {
-        long hash = FnvHash.hashCode64(columnName);
+        long hash = FnvHashUtils.hashCode64(columnName);
         return findColumn(hash);
     }
 
@@ -531,7 +532,7 @@ public class SQLJoinTableSource extends SQLTableSourceImpl implements SQLReplace
 
     @Override
     public SQLTableSource findTableSourceWithColumn(String columnName) {
-        long hash = FnvHash.hashCode64(columnName);
+        long hash = FnvHashUtils.hashCode64(columnName);
         return findTableSourceWithColumn(hash, columnName, 0);
     }
 
@@ -695,9 +696,9 @@ public class SQLJoinTableSource extends SQLTableSourceImpl implements SQLReplace
 
     public static class UDJ extends SQLObjectImpl {
         protected String function;
-        protected final List<SQLExpr> arguments = new ArrayList<SQLExpr>();
+        protected final List<SQLExpr> arguments = new ArrayList<>();
         protected String alias;
-        protected final List<SQLName> columns = new ArrayList<SQLName>();
+        protected final List<SQLName> columns = new ArrayList<>();
 
         public UDJ() {
 

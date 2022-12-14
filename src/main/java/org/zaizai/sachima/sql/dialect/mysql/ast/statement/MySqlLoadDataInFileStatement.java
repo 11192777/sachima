@@ -49,9 +49,9 @@ public class MySqlLoadDataInFileStatement extends MySqlStatementImpl {
 
     private SQLExpr             ignoreLinesNumber;
 
-    private List<SQLExpr>  setList                   = new ArrayList<SQLExpr>();
+    private List<SQLExpr>  setList                   = new ArrayList<>();
 
-    private List<SQLExpr>  columns                   = new ArrayList<SQLExpr>();
+    private List<SQLExpr>  columns                   = new ArrayList<>();
 
     public boolean isLowPriority() {
         return lowPriority;
@@ -194,7 +194,7 @@ public class MySqlLoadDataInFileStatement extends MySqlStatementImpl {
 
     @Override
     public List<SQLObject> getChildren() {
-        List<SQLObject> children = new ArrayList<SQLObject>();
+        List<SQLObject> children = new ArrayList<>();
         if (fileName != null) {
             children.add(fileName);
         }

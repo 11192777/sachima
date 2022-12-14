@@ -34,7 +34,7 @@ public class SQLCallStatement extends SQLStatementImpl {
 
     private SQLName             procedureName;
 
-    private final List<SQLExpr> parameters = new ArrayList<SQLExpr>();
+    private final List<SQLExpr> parameters = new ArrayList<>();
     
     public SQLCallStatement() {
         
@@ -83,7 +83,7 @@ public class SQLCallStatement extends SQLStatementImpl {
 
     @Override
     public List<SQLObject> getChildren() {
-        List<SQLObject> children = new ArrayList<SQLObject>();
+        List<SQLObject> children = new ArrayList<>();
         children.add(outParameter);
         children.add(procedureName);
         children.addAll(parameters);

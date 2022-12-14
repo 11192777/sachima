@@ -24,8 +24,8 @@ import java.util.List;
 
 public class SQLAlterTableDropSubpartition extends SQLObjectImpl implements SQLAlterTableItem {
 
-    private List<SQLIntegerExpr> partitionIds = new ArrayList<SQLIntegerExpr>();
-    private List<SQLIntegerExpr> subpartitionIds = new ArrayList<SQLIntegerExpr>();
+    private List<SQLIntegerExpr> partitionIds = new ArrayList<>();
+    private List<SQLIntegerExpr> subpartitionIds = new ArrayList<>();
 
     public SQLAlterTableDropSubpartition(){
 

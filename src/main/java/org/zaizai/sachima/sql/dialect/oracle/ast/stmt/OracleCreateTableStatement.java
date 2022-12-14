@@ -61,7 +61,7 @@ public class OracleCreateTableStatement extends SQLCreateTableStatement implemen
 
     private Boolean                   enableRowMovement;
 
-    private List<SQLName>             clusterColumns = new ArrayList<SQLName>();
+    private List<SQLName>             clusterColumns = new ArrayList<>();
     private SQLName                   cluster;
 
     private Organization              organization;
@@ -69,7 +69,7 @@ public class OracleCreateTableStatement extends SQLCreateTableStatement implemen
     private SQLName                   of;
     private OIDIndex                  oidIndex;
     private boolean                   monitoring;
-    private List<SQLName>             including = new ArrayList<SQLName>();
+    private List<SQLName>             including = new ArrayList<>();
     private OracleXmlColumnProperties xmlTypeColumnProperties;
 
     public void simplify() {
@@ -327,7 +327,7 @@ public class OracleCreateTableStatement extends SQLCreateTableStatement implemen
         private SQLName externalType;
         private SQLExpr externalDirectory;
         private SQLExternalRecordFormat externalDirectoryRecordFormat;
-        private List<SQLExpr> externalDirectoryLocation = new ArrayList<SQLExpr>();
+        private List<SQLExpr> externalDirectoryLocation = new ArrayList<>();
         private SQLExpr externalRejectLimit;
 
         protected void accept0(SQLASTVisitor visitor) {

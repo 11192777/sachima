@@ -24,7 +24,7 @@ import java.util.List;
 
 public class SQLAlterTableRecoverPartitions extends SQLObjectImpl implements SQLAlterTableItem {
 
-    private final List<SQLName> partitions = new ArrayList<SQLName>(4);
+    private final List<SQLName> partitions = new ArrayList<>(4);
 
     public List<SQLName> getPartitions() {
         return partitions;

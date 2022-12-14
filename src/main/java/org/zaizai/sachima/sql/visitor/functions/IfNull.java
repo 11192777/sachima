@@ -27,7 +27,7 @@ import static org.zaizai.sachima.sql.visitor.SQLEvalVisitor.EVAL_VALUE;
 
 public class IfNull implements Function {
 
-    public final static IfNull instance = new IfNull();
+    public static final IfNull instance = new IfNull();
 
     public Object eval(SQLEvalVisitor visitor, SQLMethodInvokeExpr x) {
         final List<SQLExpr> arguments = x.getArguments();

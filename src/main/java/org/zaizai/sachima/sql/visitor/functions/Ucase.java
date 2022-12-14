@@ -26,7 +26,7 @@ import static org.zaizai.sachima.sql.visitor.SQLEvalVisitor.EVAL_VALUE;
 
 
 public class Ucase implements Function {
-    public final static Ucase instance = new Ucase();
+    public static final Ucase instance = new Ucase();
     
     public Object eval(SQLEvalVisitor visitor, SQLMethodInvokeExpr x) {
         if (x.getArguments().size() != 1) {

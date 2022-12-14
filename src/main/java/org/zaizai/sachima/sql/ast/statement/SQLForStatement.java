@@ -13,7 +13,7 @@ public class SQLForStatement extends SQLStatementImpl {
     protected SQLName index;
     protected SQLExpr range;
 
-    protected List<SQLStatement> statements = new ArrayList<SQLStatement>();
+    protected List<SQLStatement> statements = new ArrayList<>();
 
     public SQLForStatement() {
 

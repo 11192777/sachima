@@ -27,9 +27,9 @@ import java.util.List;
 
 public class ModelClause extends OracleSQLObjectImpl {
 
-    private final List<CellReferenceOption>  cellReferenceOptions  = new ArrayList<CellReferenceOption>();
+    private final List<CellReferenceOption>  cellReferenceOptions  = new ArrayList<>();
     private ReturnRowsClause                 returnRowsClause;
-    private final List<ReferenceModelClause> referenceModelClauses = new ArrayList<ReferenceModelClause>();
+    private final List<ReferenceModelClause> referenceModelClauses = new ArrayList<>();
     private MainModelClause                  mainModel;
 
     @Override
@@ -111,7 +111,7 @@ public class ModelClause extends OracleSQLObjectImpl {
 
         private SQLExpr                         name;
         private SQLSelect                       subQuery;
-        private final List<CellReferenceOption> cellReferenceOptions = new ArrayList<CellReferenceOption>();
+        private final List<CellReferenceOption> cellReferenceOptions = new ArrayList<>();
 
         public List<CellReferenceOption> getCellReferenceOptions() {
             return cellReferenceOptions;
@@ -143,8 +143,8 @@ public class ModelClause extends OracleSQLObjectImpl {
 
         private QueryPartitionClause    queryPartitionClause;
         private String                  alias;
-        private final List<ModelColumn> dimensionByColumns = new ArrayList<ModelColumn>();
-        private final List<ModelColumn> measuresColumns    = new ArrayList<ModelColumn>();
+        private final List<ModelColumn> dimensionByColumns = new ArrayList<>();
+        private final List<ModelColumn> measuresColumns    = new ArrayList<>();
 
         public List<ModelColumn> getDimensionByColumns() {
             return dimensionByColumns;
@@ -215,7 +215,7 @@ public class ModelClause extends OracleSQLObjectImpl {
 
     public static class QueryPartitionClause extends OracleSQLObjectImpl {
 
-        private List<SQLExpr> exprList = new ArrayList<SQLExpr>();
+        private List<SQLExpr> exprList = new ArrayList<>();
 
         public List<SQLExpr> getExprList() {
             return exprList;
@@ -239,7 +239,7 @@ public class ModelClause extends OracleSQLObjectImpl {
         private SQLExpr                         mainModelName;
         private ModelColumnClause               modelColumnClause;
 
-        private final List<CellReferenceOption> cellReferenceOptions = new ArrayList<CellReferenceOption>();
+        private final List<CellReferenceOption> cellReferenceOptions = new ArrayList<>();
         private ModelRulesClause                modelRulesClause;
 
         public ModelRulesClause getModelRulesClause() {
@@ -284,10 +284,10 @@ public class ModelClause extends OracleSQLObjectImpl {
 
     public static class ModelRulesClause extends OracleSQLObjectImpl {
 
-        private final List<ModelRuleOption>    options             = new ArrayList<ModelRuleOption>();
+        private final List<ModelRuleOption>    options             = new ArrayList<>();
         private SQLExpr                        iterate;
         private SQLExpr                        until;
-        private final List<CellAssignmentItem> cellAssignmentItems = new ArrayList<CellAssignmentItem>();
+        private final List<CellAssignmentItem> cellAssignmentItems = new ArrayList<>();
 
         public SQLExpr getUntil() {
             return until;
@@ -395,7 +395,7 @@ public class ModelClause extends OracleSQLObjectImpl {
     public static class CellAssignment extends SQLExprImpl implements OracleExpr, SQLReplaceable {
 
         private SQLExpr             measureColumn;
-        private final List<SQLExpr> conditions = new ArrayList<SQLExpr>();
+        private final List<SQLExpr> conditions = new ArrayList<>();
 
         public List<SQLExpr> getConditions() {
             return conditions;

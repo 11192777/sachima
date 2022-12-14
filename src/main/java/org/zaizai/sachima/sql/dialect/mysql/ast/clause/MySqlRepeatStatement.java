@@ -31,7 +31,7 @@ public class MySqlRepeatStatement extends MySqlStatementImpl {
 	
 	private String labelName;
 
-	private List<SQLStatement> statements = new ArrayList<SQLStatement>();
+	private List<SQLStatement> statements = new ArrayList<>();
 	
 	private SQLExpr            condition;
 	

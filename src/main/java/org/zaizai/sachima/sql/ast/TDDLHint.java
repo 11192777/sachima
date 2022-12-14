@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TDDLHint extends SQLCommentHint {
-    private List<Function> functions = new ArrayList<Function>();
+    private List<Function> functions = new ArrayList<>();
     private String json;
     private Type type = Type.Unknown;
 
@@ -282,7 +282,7 @@ public class TDDLHint extends SQLCommentHint {
 
     public static class Function {
         private final String         name;
-        private final List<Argument> arguments = new ArrayList<Argument>();
+        private final List<Argument> arguments = new ArrayList<>();
 
         public Function(String name) {
             this.name = name;

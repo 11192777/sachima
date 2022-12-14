@@ -24,7 +24,7 @@ import java.util.List;
 
 public class OracleFileSpecification extends OracleSQLObjectImpl {
 
-    private List<SQLExpr> fileNames     = new ArrayList<SQLExpr>();
+    private List<SQLExpr> fileNames     = new ArrayList<>();
 
     private SQLExpr       size;
 

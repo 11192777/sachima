@@ -24,8 +24,8 @@ import java.util.List;
 public class SQLIfStatement extends SQLStatementImpl implements SQLReplaceable {
 
     private SQLExpr            condition;
-    private List<SQLStatement> statements = new ArrayList<SQLStatement>();
-    private List<ElseIf>       elseIfList = new ArrayList<ElseIf>();
+    private List<SQLStatement> statements = new ArrayList<>();
+    private List<ElseIf>       elseIfList = new ArrayList<>();
     private Else               elseItem;
 
     public SQLIfStatement clone() {
@@ -121,7 +121,7 @@ public class SQLIfStatement extends SQLStatementImpl implements SQLReplaceable {
 
     public static class ElseIf extends SQLObjectImpl implements SQLReplaceable {
         private SQLExpr            condition;
-        private List<SQLStatement> statements = new ArrayList<SQLStatement>();
+        private List<SQLStatement> statements = new ArrayList<>();
 
         @Override
         public void accept0(SQLASTVisitor visitor) {
@@ -179,7 +179,7 @@ public class SQLIfStatement extends SQLStatementImpl implements SQLReplaceable {
 
     public static class Else extends SQLObjectImpl {
 
-        private List<SQLStatement> statements = new ArrayList<SQLStatement>();
+        private List<SQLStatement> statements = new ArrayList<>();
 
         @Override
         public void accept0(SQLASTVisitor visitor) {

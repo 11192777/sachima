@@ -13,7 +13,9 @@ import org.zaizai.sachima.sql.parser.Token;
 import org.zaizai.sachima.util.CollectionUtils;
 import org.zaizai.sachima.util.StringUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Objects;
 
 /**
  * <H1>Simple MySQL to Oracle</H1>

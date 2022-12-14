@@ -32,7 +32,7 @@ public class SQLCreateFunctionStatement extends SQLStatementImpl implements SQLC
     protected boolean            orReplace;
     protected SQLName            name;
     protected SQLStatement       block;
-    protected List<SQLParameter> parameters = new ArrayList<SQLParameter>();
+    protected List<SQLParameter> parameters = new ArrayList<>();
 
     // for oracle
     private String             javaCallSpec;

@@ -15,7 +15,7 @@ public class DrdsRemoveDDLJob extends MySqlStatementImpl implements SQLStatement
 
     private boolean allCompleted = false;
     private boolean allPending = false;
-    private List<Long> jobIds = new ArrayList<Long>();
+    private List<Long> jobIds = new ArrayList<>();
 
     public void accept0(MySqlASTVisitor visitor) {
         visitor.visit(this);

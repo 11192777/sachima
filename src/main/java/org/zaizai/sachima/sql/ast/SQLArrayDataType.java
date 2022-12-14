@@ -14,7 +14,7 @@ public class SQLArrayDataType extends SQLObjectImpl implements SQLDataType {
 
     private DbType        dbType;
     private SQLDataType   componentType;
-    private List<SQLExpr> arguments = new ArrayList<SQLExpr>();
+    private List<SQLExpr> arguments = new ArrayList<>();
 
     public SQLArrayDataType(SQLDataType componentType) {
         setComponentType(componentType);

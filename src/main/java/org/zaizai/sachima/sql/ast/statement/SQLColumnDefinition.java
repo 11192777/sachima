@@ -33,7 +33,7 @@ public class SQLColumnDefinition extends SQLObjectImpl implements SQLTableElemen
     protected SQLName                         name;
     protected SQLDataType                     dataType;
     protected SQLExpr                         defaultExpr;
-    protected final List<SQLColumnConstraint> constraints   = new ArrayList<SQLColumnConstraint>(0);
+    protected final List<SQLColumnConstraint> constraints   = new ArrayList<>(0);
     protected SQLExpr                         comment;
 
     protected Boolean                         enable;
@@ -568,7 +568,7 @@ public class SQLColumnDefinition extends SQLObjectImpl implements SQLTableElemen
                 SQLAssignItem item2 = item.clone();
                 item2.setParent(this);
                 if (x.mappedBy == null) {
-                    x.mappedBy = new ArrayList<SQLAssignItem>();
+                    x.mappedBy = new ArrayList<>();
                 }
                 x.mappedBy.add(item2);
             }
@@ -579,7 +579,7 @@ public class SQLColumnDefinition extends SQLObjectImpl implements SQLTableElemen
                 SQLAssignItem item2 = item.clone();
                 item2.setParent(this);
                 if (x.colProperties == null) {
-                    x.colProperties = new ArrayList<SQLAssignItem>();
+                    x.colProperties = new ArrayList<>();
                 }
                 x.colProperties.add(item2);
             }
@@ -773,7 +773,7 @@ public class SQLColumnDefinition extends SQLObjectImpl implements SQLTableElemen
 
     public List<SQLAssignItem> getMappedBy() {
         if (mappedBy == null) {
-            mappedBy = new ArrayList<SQLAssignItem>();
+            mappedBy = new ArrayList<>();
         }
         return mappedBy;
     }
@@ -784,7 +784,7 @@ public class SQLColumnDefinition extends SQLObjectImpl implements SQLTableElemen
 
     public List<SQLAssignItem> getColProperties() {
         if (colProperties == null) {
-            colProperties = new ArrayList<SQLAssignItem>();
+            colProperties = new ArrayList<>();
         }
         return colProperties;
     }

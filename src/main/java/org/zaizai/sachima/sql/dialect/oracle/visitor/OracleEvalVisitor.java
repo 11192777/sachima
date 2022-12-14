@@ -28,14 +28,14 @@ import java.util.Map;
 public class OracleEvalVisitor extends OracleASTVisitorAdapter implements SQLEvalVisitor {
 
     private Map<String, Function> functions        = new HashMap<String, Function>();
-    private List<Object>          parameters       = new ArrayList<Object>();
+    private List<Object>          parameters       = new ArrayList<>();
 
     private int                   variantIndex     = -1;
 
     private boolean               markVariantIndex = true;
 
     public OracleEvalVisitor(){
-        this(new ArrayList<Object>(1));
+        this(new ArrayList<>(1));
     }
 
     public OracleEvalVisitor(List<Object> parameters){

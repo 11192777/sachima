@@ -23,7 +23,7 @@ import java.util.List;
 
 public class SQLMergeStatement extends SQLStatementImpl {
 
-    private final List<SQLHint>      hints = new ArrayList<SQLHint>();
+    private final List<SQLHint>      hints = new ArrayList<>();
 
     private SQLTableSource           into;
     private String                   alias;
@@ -110,7 +110,7 @@ public class SQLMergeStatement extends SQLStatementImpl {
 
     public static class MergeUpdateClause extends SQLObjectImpl {
 
-        private List<SQLUpdateSetItem> items = new ArrayList<SQLUpdateSetItem>();
+        private List<SQLUpdateSetItem> items = new ArrayList<>();
         private SQLExpr                where;
         private SQLExpr                deleteWhere;
 
@@ -158,8 +158,8 @@ public class SQLMergeStatement extends SQLStatementImpl {
 
     public static class MergeInsertClause extends SQLObjectImpl {
 
-        private List<SQLExpr> columns = new ArrayList<SQLExpr>();
-        private List<SQLExpr> values  = new ArrayList<SQLExpr>();
+        private List<SQLExpr> columns = new ArrayList<>();
+        private List<SQLExpr> values  = new ArrayList<>();
         private SQLExpr       where;
 
         @Override

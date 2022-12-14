@@ -12,7 +12,7 @@ import java.util.List;
 
 public class SQLStructDataType extends SQLObjectImpl implements SQLDataType {
     private DbType dbType;
-    private List<Field> fields = new ArrayList<Field>();
+    private List<Field> fields = new ArrayList<>();
 
     public SQLStructDataType() {
 

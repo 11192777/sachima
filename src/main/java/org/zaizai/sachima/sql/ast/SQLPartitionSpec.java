@@ -6,7 +6,7 @@ import java.util.List;
 import org.zaizai.sachima.sql.visitor.SQLASTVisitor;
 
 public class SQLPartitionSpec extends SQLObjectImpl implements Cloneable {
-    private List<Item> items = new ArrayList<Item>();
+    private List<Item> items = new ArrayList<>();
 
     @Override
     protected void accept0(SQLASTVisitor v) {

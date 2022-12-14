@@ -26,7 +26,7 @@ public class MySqlOptimizeStatement extends MySqlStatementImpl {
     private boolean                          noWriteToBinlog = false;
     private boolean                          local           = false;
 
-    protected final List<SQLExprTableSource> tableSources    = new ArrayList<SQLExprTableSource>();
+    protected final List<SQLExprTableSource> tableSources    = new ArrayList<>();
 
     public void accept0(MySqlASTVisitor visitor) {
         if (visitor.visit(this)) {

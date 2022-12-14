@@ -69,7 +69,7 @@ public class OracleExitStatement extends OracleStatementImpl {
         }
 
         if (this.headHints != null) {
-            List<SQLCommentHint> headHintsClone = new ArrayList<SQLCommentHint>(this.headHints.size());
+            List<SQLCommentHint> headHintsClone = new ArrayList<>(this.headHints.size());
             for (SQLCommentHint hint : headHints) {
                 SQLCommentHint h2 = hint.clone();
                 h2.setParent(x);

@@ -30,7 +30,7 @@ public class SQLLateralViewTableSource extends SQLTableSourceImpl {
 
     private SQLMethodInvokeExpr method;
 
-    private List<SQLName> columns = new ArrayList<SQLName>(2);
+    private List<SQLName> columns = new ArrayList<>(2);
 
     @Override
     protected void accept0(SQLASTVisitor visitor) {

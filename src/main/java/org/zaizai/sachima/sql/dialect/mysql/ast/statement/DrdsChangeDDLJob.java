@@ -16,7 +16,7 @@ public class DrdsChangeDDLJob extends MySqlStatementImpl implements SQLStatement
     private long jobId = 0;
     private boolean skip = false;
     private boolean add = false;
-    private List<String> groupAndTableNameList = new ArrayList<String>();
+    private List<String> groupAndTableNameList = new ArrayList<>();
 
     public void accept0(MySqlASTVisitor visitor) {
         visitor.visit(this);
