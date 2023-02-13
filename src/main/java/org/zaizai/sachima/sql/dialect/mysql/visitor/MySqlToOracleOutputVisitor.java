@@ -9,8 +9,8 @@ import org.zaizai.sachima.sql.ast.expr.*;
 import org.zaizai.sachima.sql.ast.statement.*;
 import org.zaizai.sachima.sql.dialect.mysql.ast.MySqlObjectImpl;
 import org.zaizai.sachima.sql.dialect.mysql.ast.statement.MySqlAlterTableModifyColumn;
+import org.zaizai.sachima.sql.dialect.mysql.ast.statement.MySqlUpdateStatement;
 import org.zaizai.sachima.sql.dialect.mysql.visitor.handler.ColumnTypeHandler;
-import org.zaizai.sachima.sql.dialect.mysql.visitor.handler.DataTypeHandler;
 import org.zaizai.sachima.sql.dialect.mysql.visitor.handler.PrimaryKeyHandler;
 import org.zaizai.sachima.sql.dialect.oracle.constant.FunctionConstant;
 import org.zaizai.sachima.sql.dialect.oracle.parser.OracleLexer;
@@ -19,7 +19,6 @@ import org.zaizai.sachima.sql.parser.Token;
 import org.zaizai.sachima.util.CollectionUtils;
 import org.zaizai.sachima.util.StringUtils;
 
-import java.time.DateTimeException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -450,6 +449,96 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
             }
         }
         return appender.toString();
+    }
+
+    /**
+     * <H2>MySQL JOIN update adapt.</H2>
+     *
+     * @param x MySQL update statement.
+     * @return  {@link boolean}
+     * @author Qingyu.Meng
+     * @since 2023/2/13
+     */
+    @Override
+    public boolean visit(SQLUpdateStatement x) {
+        if (x instanceof MySqlUpdateStatement && x.getTableSource() instanceof SQLJoinTableSource) {
+            print0(ucase ? "UPDATE " : "update ");
+            print0("(\n");
+            print0(ucase ? "SELECT " : "select ");
+            boolean sepFlag = false;
+            for (SQLExpr expr : this.getSQLUpdatePropertyItems(x.getItems())) {
+                if (!(expr instanceof SQLPropertyExpr) && !(expr instanceof SQLIdentifierExpr)) {
+                    continue;
+                }
+                if (sepFlag) {
+                    print0(", ");
+                }
+                sepFlag = true;
+                if (expr instanceof SQLPropertyExpr) {
+                    printExpr(expr);
+                    print0(" ");
+                    print0(((SQLPropertyExpr) expr).getFullName().replace(".", "__"));
+                } else {
+                    printExpr(expr);
+                    print0(" ");
+                }
+            }
+            println();
+            print0(ucase ? "FROM " : "from ");
+            printTableSource(x.getTableSource());
+            println();
+            SQLExpr where = x.getWhere();
+            if (Objects.nonNull(where)) {
+                indentCount++;
+                print0(ucase ? "WHERE " : "where");
+                printExpr(where, parameterized);
+                indentCount--;
+            }
+            print0("\n)\n");
+            print0(ucase ? "SET " : "set ");
+            for (int i = 0; i < x.getItems().size(); i++) {
+                if (i != 0) {
+                    print0(", ");
+                }
+                SQLUpdateSetItem sqlUpdateSetItem = x.getItems().get(i);
+                this.visitUpdateTableAlias(sqlUpdateSetItem);
+            }
+            println();
+            print0(ucase ? "WHERE 1=1" : "where 1=1");
+            return false;
+        } else {
+            return super.visit(x);
+        }
+    }
+
+    /**
+     * MySQL JOIN update adapt.
+     * @param x SQL update items.
+     */
+    public void visitUpdateTableAlias(SQLUpdateSetItem x) {
+        if (x.getColumn() instanceof SQLPropertyExpr) {
+            print0(((SQLPropertyExpr) x.getColumn()).getFullName().replace(".", "__"));
+        } else {
+            printExpr(x.getColumn(), parameterized);
+        }
+        print0(" = ");
+        if (x.getValue() instanceof SQLPropertyExpr) {
+            print0(((SQLPropertyExpr) x.getValue()).getFullName().replace(".", "__"));
+        } else {
+            printExpr(x.getValue(), parameterized);
+        }
+    }
+
+    /**
+     * get update properties.
+     */
+    private List<SQLExpr> getSQLUpdatePropertyItems(List<SQLUpdateSetItem> items) {
+        List<SQLExpr> targets = new ArrayList<>(items.size() * 2);
+        for (SQLUpdateSetItem item : items) {
+            targets.add(item.getColumn());
+            targets.add(item.getValue());
+        }
+        return targets;
     }
 
 
