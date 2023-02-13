@@ -1,6 +1,6 @@
 package org.zaizai.sachima.sql.ast;
 
-import org.zaizai.sachima.util.FnvHash;
+import org.zaizai.sachima.constant.TokenFnvConstants;
 import org.zaizai.sachima.sql.ast.expr.SQLCharExpr;
 import org.zaizai.sachima.sql.ast.expr.SQLIdentifierExpr;
 import org.zaizai.sachima.sql.ast.expr.SQLPropertyExpr;
@@ -30,7 +30,7 @@ public class TDDLHint extends SQLCommentHint {
             lexer.nextToken();
         }
 
-        if (!lexer.identifierEquals(FnvHash.Constants.TDDL)) {
+        if (!lexer.identifierEquals(TokenFnvConstants.TDDL)) {
             // error tddl hint
             return;
         }
@@ -53,7 +53,7 @@ public class TDDLHint extends SQLCommentHint {
                 return;
         }
 
-        for(;;) {
+        while(true) {
             if (lexer.token() == Token.AND) {
                 lexer.nextToken();
             }
@@ -61,7 +61,7 @@ public class TDDLHint extends SQLCommentHint {
             String name = lexer.stringVal();
             long hash = lexer.hash_lower();
 
-            if (lexer.identifierEquals(FnvHash.Constants.NODE)) {
+            if (lexer.identifierEquals(TokenFnvConstants.NODE)) {
                 lexer.nextToken();
                 if (lexer.token() == Token.IN) {
                     lexer.nextToken();
@@ -81,7 +81,7 @@ public class TDDLHint extends SQLCommentHint {
 
                     continue;
                 }
-            } else if (hash == FnvHash.Constants.SCAN || hash == FnvHash.Constants.DEFER) {
+            } else if (hash == TokenFnvConstants.SCAN || hash == TokenFnvConstants.DEFER) {
                 lexer.nextToken();
 
                 if (lexer.token() == Token.EQ) {
@@ -102,10 +102,10 @@ public class TDDLHint extends SQLCommentHint {
                     functions.add(function);
                     break;
                 }
-            } else if (hash == FnvHash.Constants.SQL_DELAY_CUTOFF
-                    || hash == FnvHash.Constants.SOCKET_TIMEOUT
-                    || hash == FnvHash.Constants.UNDO_LOG_LIMIT
-                    || hash == FnvHash.Constants.FORBID_EXECUTE_DML_ALL) {
+            } else if (hash == TokenFnvConstants.SQL_DELAY_CUTOFF
+                    || hash == TokenFnvConstants.SOCKET_TIMEOUT
+                    || hash == TokenFnvConstants.UNDO_LOG_LIMIT
+                    || hash == TokenFnvConstants.FORBID_EXECUTE_DML_ALL) {
                 lexer.nextToken();
 
                 if (lexer.token() == Token.EQ) {
@@ -178,7 +178,7 @@ public class TDDLHint extends SQLCommentHint {
 
             functions.add(function);
 
-            if (hash == FnvHash.Constants.MASTER) {
+            if (hash == TokenFnvConstants.MASTER) {
                 if (lexer.token() == Token.EOF) {
                     break;
                 } else if (lexer.token() == Token.BAR) {
@@ -187,7 +187,7 @@ public class TDDLHint extends SQLCommentHint {
                 }
             }
 
-            if (hash == FnvHash.Constants.SLAVE) {
+            if (hash == TokenFnvConstants.SLAVE) {
                 if (lexer.token() == Token.EOF) {
                     break;
                 } else if (lexer.token() == Token.AND) {
@@ -203,7 +203,7 @@ public class TDDLHint extends SQLCommentHint {
             hintParser.accept(Token.LPAREN);
 
             if (lexer.token() != Token.RPAREN) {
-                for (; ; ) {
+                while(true) {
                     Lexer.SavePoint mark = lexer.mark();
 
                     SQLExpr value = null;
@@ -258,7 +258,7 @@ public class TDDLHint extends SQLCommentHint {
                 continue;
             }
 
-            if (hash == FnvHash.Constants.MASTER && lexer.token() == Token.BAR) {
+            if (hash == TokenFnvConstants.MASTER && lexer.token() == Token.BAR) {
                 lexer.nextToken();
             }
 
@@ -267,7 +267,7 @@ public class TDDLHint extends SQLCommentHint {
             }
         }
 
-        if (functions.size() > 0) {
+        if (!functions.isEmpty()) {
             type = Type.Function;
         }
     }

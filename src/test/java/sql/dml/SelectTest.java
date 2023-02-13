@@ -1,4 +1,4 @@
-package sql;
+package sql.dml;
 
 import custom.TestHelper;
 import org.junit.Test;
@@ -86,6 +86,18 @@ public class SelectTest extends TestHelper {
     public void case7() {
         String sql = "select * from user as u inner join dog as d on u.id = d.user_id and d.id in (1, 2, 3, 4) where u.id in (?, ?, ?)";
         eq(toOracleLimit3(sql), "select * from \"USER\" u inner join dog d on u.id = d.user_id and (1, d.id) in ((1, 1), (1, 2), (1, 3), (1, 4)) where (1, u.id) in ((1, ?), (1, ?), (1, ?))");
+    }
+
+    @Test
+    public void case8() {
+        String sql = "SELECT etsj.* FROM ea_tenant_syn_job AS etsj WHERE etsj.form_code IS not NULL;";
+        System.out.println(mysqlToOracle(sql));
+    }
+
+    @Test
+    public void case9() {
+        String sql = "select * from ea_form_field WHERE widget_type_property LIKE ?;";
+        System.out.println(mysqlToOracle(sql));
     }
 
 }

@@ -36,25 +36,25 @@ import java.util.List;
 import java.util.Map;
 
 public class MySqlCreateTableStatement extends SQLCreateTableStatement implements MySqlStatement {
-    private List<SQLCommentHint>   hints        = new ArrayList<>();
-    private List<SQLCommentHint>   optionHints  = new ArrayList<>();
-    private SQLName                tableGroup;
-    protected SQLExpr              dbPartitionBy;//for drds
-    protected SQLExpr              dbPartitions;//for drds
-    protected SQLExpr              tablePartitionBy;//for drds
-    protected SQLExpr              tablePartitions;//for drds
-    protected MySqlExtPartition    exPartition; //for drds
-    protected SQLName              storedBy; // for ads
-    protected SQLName              distributeByType; // for ads
-    protected List<SQLName>        distributeBy = new ArrayList<>();
-    protected boolean              isBroadCast;
-    protected Map<String, SQLName> with = new HashMap<String, SQLName>(3); // for ads
+    private List<SQLCommentHint> hints = new ArrayList<>();
+    private List<SQLCommentHint> optionHints = new ArrayList<>();
+    private SQLName tableGroup;
+    protected SQLExpr dbPartitionBy;//for drds
+    protected SQLExpr dbPartitions;//for drds
+    protected SQLExpr tablePartitionBy;//for drds
+    protected SQLExpr tablePartitions;//for drds
+    protected MySqlExtPartition exPartition; //for drds
+    protected SQLName storedBy; // for ads
+    protected SQLName distributeByType; // for ads
+    protected List<SQLName> distributeBy = new ArrayList<>();
+    protected boolean isBroadCast;
+    protected Map<String, SQLName> with = new HashMap<>(3); // for ads
 
     protected SQLName archiveBy; // adb
     protected Boolean withData;
 
-    public MySqlCreateTableStatement(){
-        super (DbType.mysql);
+    public MySqlCreateTableStatement() {
+        super(DbType.mysql);
     }
 
     public List<SQLCommentHint> getHints() {
@@ -213,7 +213,7 @@ public class MySqlCreateTableStatement extends SQLCreateTableStatement implement
         this.optionHints = optionHints;
     }
 
-    
+
     public SQLName getTableGroup() {
         return tableGroup;
     }
@@ -245,7 +245,7 @@ public class MySqlCreateTableStatement extends SQLCreateTableStatement implement
         List<MySqlKey> mySqlKeys = new ArrayList<>();
         for (SQLTableElement element : this.getTableElementList()) {
             if (element instanceof MySqlKey) {
-                mySqlKeys.add((MySqlKey)element);
+                mySqlKeys.add((MySqlKey) element);
             }
         }
         return mySqlKeys;
@@ -255,7 +255,7 @@ public class MySqlCreateTableStatement extends SQLCreateTableStatement implement
         List<MySqlTableIndex> indexList = new ArrayList<>();
         for (SQLTableElement element : this.getTableElementList()) {
             if (element instanceof MySqlTableIndex) {
-                indexList.add((MySqlTableIndex)element);
+                indexList.add((MySqlTableIndex) element);
             }
         }
         return indexList;
@@ -408,7 +408,7 @@ public class MySqlCreateTableStatement extends SQLCreateTableStatement implement
 
         for (int i = 0; i < tableElementList.size(); i++) {
             SQLTableElement e = tableElementList.get(i);
-            if(e instanceof MySqlTableIndex) {
+            if (e instanceof MySqlTableIndex) {
                 ((MySqlTableIndex) e).applyColumnRename(columnName, column);
             } else if (e instanceof SQLUnique) {
                 SQLUnique unique = (SQLUnique) e;
@@ -460,7 +460,7 @@ public class MySqlCreateTableStatement extends SQLCreateTableStatement implement
         // Just old name -> old name.
         for (int i = 0; i < tableElementList.size(); i++) {
             SQLTableElement e = tableElementList.get(i);
-            if(e instanceof MySqlTableIndex) {
+            if (e instanceof MySqlTableIndex) {
                 ((MySqlTableIndex) e).applyColumnRename(columnName, column);
             } else if (e instanceof SQLUnique) {
                 SQLUnique unique = (SQLUnique) e;

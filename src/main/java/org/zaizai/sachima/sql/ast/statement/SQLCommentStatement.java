@@ -26,7 +26,7 @@ import java.util.List;
 
 public class SQLCommentStatement extends SQLStatementImpl {
 
-    public static enum Type {
+    public enum Type {
         TABLE, COLUMN
     }
 

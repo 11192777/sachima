@@ -20,7 +20,6 @@ import org.zaizai.sachima.sql.ast.statement.SQLColumnDefinition;
 import org.zaizai.sachima.sql.ast.statement.SQLCreateTableStatement;
 import org.zaizai.sachima.sql.ast.statement.SQLTableElement;
 import org.zaizai.sachima.sql.ast.statement.SQLUniqueConstraint;
-import org.zaizai.sachima.util.FnvHash;
 import org.zaizai.sachima.util.FnvHashUtils;
 
 /**

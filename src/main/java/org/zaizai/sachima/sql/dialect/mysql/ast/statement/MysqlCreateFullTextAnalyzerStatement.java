@@ -1,14 +1,7 @@
 package org.zaizai.sachima.sql.dialect.mysql.ast.statement;
 
-import org.zaizai.sachima.sql.ast.SQLExpr;
 import org.zaizai.sachima.sql.ast.SQLName;
-import org.zaizai.sachima.sql.ast.expr.SQLIdentifierExpr;
-import org.zaizai.sachima.sql.ast.expr.SQLTextLiteralExpr;
-import org.zaizai.sachima.sql.ast.expr.SQLValuableExpr;
-import org.zaizai.sachima.sql.ast.statement.SQLAssignItem;
-import org.zaizai.sachima.sql.dialect.mysql.ast.FullTextType;
 import org.zaizai.sachima.sql.dialect.mysql.visitor.MySqlASTVisitor;
-import org.zaizai.sachima.util.FnvHash;
 
 import java.util.ArrayList;
 import java.util.List;

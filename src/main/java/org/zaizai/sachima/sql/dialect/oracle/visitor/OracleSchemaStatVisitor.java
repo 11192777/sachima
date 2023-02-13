@@ -15,7 +15,7 @@
  */
 package org.zaizai.sachima.sql.dialect.oracle.visitor;
 
-import org.zaizai.sachima.util.FnvHash;
+import org.zaizai.sachima.constant.TokenFnvConstants;
 import org.zaizai.sachima.enums.DbType;
 import org.zaizai.sachima.util.SQLUtils;
 import org.zaizai.sachima.sql.ast.SQLExpr;
@@ -68,7 +68,7 @@ public class OracleSchemaStatVisitor extends SchemaStatVisitor implements Oracle
         TableStat stat = getTableStat(x);
 
         if (expr instanceof SQLName) {
-            if (((SQLName) expr).nameHashCode64() == FnvHash.Constants.DUAL) {
+            if (((SQLName) expr).nameHashCode64() == TokenFnvConstants.DUAL) {
                 return false;
             }
 
@@ -174,14 +174,14 @@ public class OracleSchemaStatVisitor extends SchemaStatVisitor implements Oracle
 
         long hashCode64 = x.hashCode64();
 
-        if (hashCode64 == FnvHash.Constants.ROWNUM
-                || hashCode64 == FnvHash.Constants.SYSDATE
-                || hashCode64 == FnvHash.Constants.LEVEL
-                || hashCode64 == FnvHash.Constants.SQLCODE) {
+        if (hashCode64 == TokenFnvConstants.ROWNUM
+                || hashCode64 == TokenFnvConstants.SYSDATE
+                || hashCode64 == TokenFnvConstants.LEVEL
+                || hashCode64 == TokenFnvConstants.SQLCODE) {
             return false;
         }
 
-        if (hashCode64 == FnvHash.Constants.ISOPEN
+        if (hashCode64 == TokenFnvConstants.ISOPEN
                 && x.getParent() instanceof SQLBinaryOpExpr
                 && ((SQLBinaryOpExpr) x.getParent()).getOperator() == SQLBinaryOperator.Modulus) {
             return false;

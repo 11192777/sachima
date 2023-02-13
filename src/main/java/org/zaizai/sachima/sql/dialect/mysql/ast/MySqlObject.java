@@ -17,6 +17,7 @@ package org.zaizai.sachima.sql.dialect.mysql.ast;
 
 import org.zaizai.sachima.sql.ast.SQLObject;
 import org.zaizai.sachima.sql.dialect.mysql.visitor.MySqlASTVisitor;
+import org.zaizai.sachima.sql.dialect.oracle.visitor.OracleASTVisitor;
 
 
 public interface MySqlObject extends SQLObject {

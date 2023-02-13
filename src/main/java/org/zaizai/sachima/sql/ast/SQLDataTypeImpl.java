@@ -15,13 +15,12 @@
  */
 package org.zaizai.sachima.sql.ast;
 
-import org.zaizai.sachima.util.FnvHash;
+import org.zaizai.sachima.constant.TokenFnvConstants;
 import org.zaizai.sachima.enums.DbType;
 import org.zaizai.sachima.util.FnvHashUtils;
 import org.zaizai.sachima.util.SQLUtils;
 import org.zaizai.sachima.sql.ast.expr.SQLIntegerExpr;
 import org.zaizai.sachima.sql.visitor.SQLASTVisitor;
-import org.zaizai.sachima.util.FnvHash;
 
 import java.sql.Types;
 import java.util.ArrayList;
@@ -152,217 +151,217 @@ public class SQLDataTypeImpl extends SQLObjectImpl implements SQLDataType, SQLDb
     public int jdbcType() {
         long nameNash = nameHashCode64();
 
-        if (nameNash == FnvHash.Constants.TINYINT) {
+        if (nameNash == TokenFnvConstants.TINYINT) {
             return Types.TINYINT;
         }
 
-        if (nameNash == FnvHash.Constants.SMALLINT) {
+        if (nameNash == TokenFnvConstants.SMALLINT) {
             return Types.SMALLINT;
         }
 
-        if (nameNash == FnvHash.Constants.INT || nameNash == FnvHash.Constants.INTEGER) {
+        if (nameNash == TokenFnvConstants.INT || nameNash == TokenFnvConstants.INTEGER) {
             return Types.INTEGER;
         }
 
-        if (nameNash == FnvHash.Constants.BIGINT) {
+        if (nameNash == TokenFnvConstants.BIGINT) {
             return Types.BIGINT;
         }
 
-        if (nameNash == FnvHash.Constants.DECIMAL) {
+        if (nameNash == TokenFnvConstants.DECIMAL) {
             return Types.DECIMAL;
         }
 
-        if (nameNash == FnvHash.Constants.FLOAT) {
+        if (nameNash == TokenFnvConstants.FLOAT) {
             return Types.FLOAT;
         }
 
-        if (nameNash == FnvHash.Constants.REAL) {
+        if (nameNash == TokenFnvConstants.REAL) {
             return Types.REAL;
         }
 
-        if (nameNash == FnvHash.Constants.DOUBLE) {
+        if (nameNash == TokenFnvConstants.DOUBLE) {
             return Types.DOUBLE;
         }
 
-        if (nameNash == FnvHash.Constants.NUMBER || nameNash == FnvHash.Constants.NUMERIC) {
+        if (nameNash == TokenFnvConstants.NUMBER || nameNash == TokenFnvConstants.NUMERIC) {
             return Types.NUMERIC;
         }
 
-        if (nameNash == FnvHash.Constants.BOOLEAN) {
+        if (nameNash == TokenFnvConstants.BOOLEAN) {
             return Types.BOOLEAN;
         }
 
-        if (nameNash == FnvHash.Constants.DATE || nameNash == FnvHash.Constants.NEWDATE) {
+        if (nameNash == TokenFnvConstants.DATE || nameNash == TokenFnvConstants.NEWDATE) {
             return Types.DATE;
         }
 
-        if (nameNash == FnvHash.Constants.DATETIME || nameNash == FnvHash.Constants.TIMESTAMP) {
+        if (nameNash == TokenFnvConstants.DATETIME || nameNash == TokenFnvConstants.TIMESTAMP) {
             return Types.TIMESTAMP;
         }
 
-        if (nameNash == FnvHash.Constants.TIME) {
+        if (nameNash == TokenFnvConstants.TIME) {
             return Types.TIME;
         }
 
-        if (nameNash == FnvHash.Constants.BLOB) {
+        if (nameNash == TokenFnvConstants.BLOB) {
             return Types.BLOB;
         }
 
-        if (nameNash == FnvHash.Constants.ROWID) {
+        if (nameNash == TokenFnvConstants.ROWID) {
             return Types.ROWID;
         }
 
-        if (nameNash == FnvHash.Constants.REF) {
+        if (nameNash == TokenFnvConstants.REF) {
             return Types.REF;
         }
 
-        if (nameNash == FnvHash.Constants.TINYINT || nameNash == FnvHash.Constants.TINY) {
+        if (nameNash == TokenFnvConstants.TINYINT || nameNash == TokenFnvConstants.TINY) {
             return Types.TINYINT;
         }
 
-        if (nameNash == FnvHash.Constants.SMALLINT || nameNash == FnvHash.Constants.SHORT) {
+        if (nameNash == TokenFnvConstants.SMALLINT || nameNash == TokenFnvConstants.SHORT) {
             return Types.SMALLINT;
         }
 
-        if (nameNash == FnvHash.Constants.INT
-                || nameNash == FnvHash.Constants.INT24
-                || nameNash == FnvHash.Constants.INTEGER) {
+        if (nameNash == TokenFnvConstants.INT
+                || nameNash == TokenFnvConstants.INT24
+                || nameNash == TokenFnvConstants.INTEGER) {
             return Types.INTEGER;
         }
 
-        if (nameNash == FnvHash.Constants.NUMBER || nameNash == FnvHash.Constants.NUMERIC) {
+        if (nameNash == TokenFnvConstants.NUMBER || nameNash == TokenFnvConstants.NUMERIC) {
             return Types.NUMERIC;
         }
 
-        if (nameNash == FnvHash.Constants.BOOLEAN) {
+        if (nameNash == TokenFnvConstants.BOOLEAN) {
             return Types.BOOLEAN;
         }
 
-        if (nameNash == FnvHash.Constants.DATE
-                || nameNash == FnvHash.Constants.YEAR
-                || nameNash == FnvHash.Constants.NEWDATE) {
+        if (nameNash == TokenFnvConstants.DATE
+                || nameNash == TokenFnvConstants.YEAR
+                || nameNash == TokenFnvConstants.NEWDATE) {
             return Types.DATE;
         }
 
-        if (nameNash == FnvHash.Constants.DATETIME || nameNash == FnvHash.Constants.TIMESTAMP) {
+        if (nameNash == TokenFnvConstants.DATETIME || nameNash == TokenFnvConstants.TIMESTAMP) {
             return Types.TIMESTAMP;
         }
 
-        if (nameNash == FnvHash.Constants.TIME) {
+        if (nameNash == TokenFnvConstants.TIME) {
             return Types.TIME;
         }
 
-        if (nameNash == FnvHash.Constants.TINYBLOB) {
+        if (nameNash == TokenFnvConstants.TINYBLOB) {
             return Types.VARBINARY;
         }
 
-        if (nameNash == FnvHash.Constants.BLOB) {
+        if (nameNash == TokenFnvConstants.BLOB) {
             return Types.BLOB;
         }
 
-        if (nameNash == FnvHash.Constants.LONGBLOB) {
+        if (nameNash == TokenFnvConstants.LONGBLOB) {
             return Types.LONGVARBINARY;
         }
 
-        if (nameNash == FnvHash.Constants.ROWID) {
+        if (nameNash == TokenFnvConstants.ROWID) {
             return Types.ROWID;
         }
 
-        if (nameNash == FnvHash.Constants.REF) {
+        if (nameNash == TokenFnvConstants.REF) {
             return Types.REF;
         }
 
-        if (nameNash == FnvHash.Constants.BINARY || nameNash == FnvHash.Constants.GEOMETRY) {
+        if (nameNash == TokenFnvConstants.BINARY || nameNash == TokenFnvConstants.GEOMETRY) {
             return Types.BINARY;
         }
 
-        if (nameNash == FnvHash.Constants.SQLXML) {
+        if (nameNash == TokenFnvConstants.SQLXML) {
             return Types.SQLXML;
         }
 
-        if (nameNash == FnvHash.Constants.BIT) {
+        if (nameNash == TokenFnvConstants.BIT) {
             return Types.BIT;
         }
 
-        if (nameNash == FnvHash.Constants.NCHAR) {
+        if (nameNash == TokenFnvConstants.NCHAR) {
             return Types.NCHAR;
         }
 
-        if (nameNash == FnvHash.Constants.CHAR
-                || nameNash == FnvHash.Constants.ENUM
-                || nameNash == FnvHash.Constants.SET
-                || nameNash == FnvHash.Constants.JSON) {
+        if (nameNash == TokenFnvConstants.CHAR
+                || nameNash == TokenFnvConstants.ENUM
+                || nameNash == TokenFnvConstants.SET
+                || nameNash == TokenFnvConstants.JSON) {
             return Types.CHAR;
         }
 
-        if (nameNash == FnvHash.Constants.VARCHAR
-                || nameNash == FnvHash.Constants.VARCHAR2
-                || nameNash == FnvHash.Constants.STRING) {
+        if (nameNash == TokenFnvConstants.VARCHAR
+                || nameNash == TokenFnvConstants.VARCHAR2
+                || nameNash == TokenFnvConstants.STRING) {
             return Types.VARCHAR;
         }
 
-        if (nameNash == FnvHash.Constants.NVARCHAR || nameNash == FnvHash.Constants.NVARCHAR2) {
+        if (nameNash == TokenFnvConstants.NVARCHAR || nameNash == TokenFnvConstants.NVARCHAR2) {
             return Types.NVARCHAR;
         }
 
-        if (nameNash == FnvHash.Constants.CLOB
-                || nameNash == FnvHash.Constants.TEXT
-                || nameNash == FnvHash.Constants.TINYTEXT
-                || nameNash == FnvHash.Constants.MEDIUMTEXT
-                || nameNash == FnvHash.Constants.LONGTEXT) {
+        if (nameNash == TokenFnvConstants.CLOB
+                || nameNash == TokenFnvConstants.TEXT
+                || nameNash == TokenFnvConstants.TINYTEXT
+                || nameNash == TokenFnvConstants.MEDIUMTEXT
+                || nameNash == TokenFnvConstants.LONGTEXT) {
             return Types.CLOB;
         }
 
-        if (nameNash == FnvHash.Constants.NCLOB) {
+        if (nameNash == TokenFnvConstants.NCLOB) {
             return Types.NCLOB;
         }
 
 
-        if (nameNash == FnvHash.Constants.TINYBLOB) {
+        if (nameNash == TokenFnvConstants.TINYBLOB) {
             return Types.VARBINARY;
         }
 
-        if (nameNash == FnvHash.Constants.LONGBLOB) {
+        if (nameNash == TokenFnvConstants.LONGBLOB) {
             return Types.LONGVARBINARY;
         }
 
-        if (nameNash == FnvHash.Constants.BINARY || nameNash == FnvHash.Constants.GEOMETRY) {
+        if (nameNash == TokenFnvConstants.BINARY || nameNash == TokenFnvConstants.GEOMETRY) {
             return Types.BINARY;
         }
 
-        if (nameNash == FnvHash.Constants.SQLXML) {
+        if (nameNash == TokenFnvConstants.SQLXML) {
             return Types.SQLXML;
         }
 
         //
 
-        if (nameNash == FnvHash.Constants.NCHAR) {
+        if (nameNash == TokenFnvConstants.NCHAR) {
             return Types.NCHAR;
         }
 
-        if (nameNash == FnvHash.Constants.CHAR || nameNash == FnvHash.Constants.JSON) {
+        if (nameNash == TokenFnvConstants.CHAR || nameNash == TokenFnvConstants.JSON) {
             return Types.CHAR;
         }
 
-        if (nameNash == FnvHash.Constants.VARCHAR
-                || nameNash == FnvHash.Constants.VARCHAR2
-                || nameNash == FnvHash.Constants.STRING) {
+        if (nameNash == TokenFnvConstants.VARCHAR
+                || nameNash == TokenFnvConstants.VARCHAR2
+                || nameNash == TokenFnvConstants.STRING) {
             return Types.VARCHAR;
         }
 
-        if (nameNash == FnvHash.Constants.NVARCHAR || nameNash == FnvHash.Constants.NVARCHAR2) {
+        if (nameNash == TokenFnvConstants.NVARCHAR || nameNash == TokenFnvConstants.NVARCHAR2) {
             return Types.NVARCHAR;
         }
 
-        if (nameNash == FnvHash.Constants.CLOB
-                || nameNash == FnvHash.Constants.TEXT
-                || nameNash == FnvHash.Constants.TINYTEXT
-                || nameNash == FnvHash.Constants.MEDIUMTEXT
-                || nameNash == FnvHash.Constants.LONGTEXT) {
+        if (nameNash == TokenFnvConstants.CLOB
+                || nameNash == TokenFnvConstants.TEXT
+                || nameNash == TokenFnvConstants.TINYTEXT
+                || nameNash == TokenFnvConstants.MEDIUMTEXT
+                || nameNash == TokenFnvConstants.LONGTEXT) {
             return Types.CLOB;
         }
 
-        if (nameNash == FnvHash.Constants.NCLOB) {
+        if (nameNash == TokenFnvConstants.NCLOB) {
             return Types.NCLOB;
         }
 
@@ -434,67 +433,67 @@ public class SQLDataTypeImpl extends SQLObjectImpl implements SQLDataType, SQLDb
     public boolean isInt() {
         long hashCode64 = nameHashCode64();
 
-        return hashCode64 == FnvHash.Constants.BIGINT
-                || hashCode64 == FnvHash.Constants.INT
-                || hashCode64 == FnvHash.Constants.INT4
-                || hashCode64 == FnvHash.Constants.INT24
-                || hashCode64 == FnvHash.Constants.SMALLINT
-                || hashCode64 == FnvHash.Constants.TINYINT
-                || hashCode64 == FnvHash.Constants.INTEGER;
+        return hashCode64 == TokenFnvConstants.BIGINT
+                || hashCode64 == TokenFnvConstants.INT
+                || hashCode64 == TokenFnvConstants.INT4
+                || hashCode64 == TokenFnvConstants.INT24
+                || hashCode64 == TokenFnvConstants.SMALLINT
+                || hashCode64 == TokenFnvConstants.TINYINT
+                || hashCode64 == TokenFnvConstants.INTEGER;
     }
 
     public boolean isNumberic() {
         long hashCode64 = nameHashCode64();
 
-        return hashCode64 == FnvHash.Constants.REAL
-                || hashCode64 == FnvHash.Constants.FLOAT
-                || hashCode64 == FnvHash.Constants.DOUBLE
-                || hashCode64 == FnvHash.Constants.DOUBLE_PRECISION
-                || hashCode64 == FnvHash.Constants.NUMBER
-                || hashCode64 == FnvHash.Constants.DECIMAL;
+        return hashCode64 == TokenFnvConstants.REAL
+                || hashCode64 == TokenFnvConstants.FLOAT
+                || hashCode64 == TokenFnvConstants.DOUBLE
+                || hashCode64 == TokenFnvConstants.DOUBLE_PRECISION
+                || hashCode64 == TokenFnvConstants.NUMBER
+                || hashCode64 == TokenFnvConstants.DECIMAL;
     }
 
     public boolean isString() {
         long hashCode64 = nameHashCode64();
 
-        return hashCode64 == FnvHash.Constants.VARCHAR
-                || hashCode64 == FnvHash.Constants.VARCHAR2
-                || hashCode64 == FnvHash.Constants.CHAR
-                || hashCode64 == FnvHash.Constants.NCHAR
-                || hashCode64 == FnvHash.Constants.NVARCHAR
-                || hashCode64 == FnvHash.Constants.NVARCHAR2
-                || hashCode64 == FnvHash.Constants.TEXT
-                || hashCode64 == FnvHash.Constants.TINYTEXT
-                || hashCode64 == FnvHash.Constants.MEDIUMTEXT
-                || hashCode64 == FnvHash.Constants.LONGTEXT
-                || hashCode64 == FnvHash.Constants.CLOB
-                || hashCode64 == FnvHash.Constants.NCLOB
-                || hashCode64 == FnvHash.Constants.MULTIVALUE
-                || hashCode64 == FnvHash.Constants.STRING;
+        return hashCode64 == TokenFnvConstants.VARCHAR
+                || hashCode64 == TokenFnvConstants.VARCHAR2
+                || hashCode64 == TokenFnvConstants.CHAR
+                || hashCode64 == TokenFnvConstants.NCHAR
+                || hashCode64 == TokenFnvConstants.NVARCHAR
+                || hashCode64 == TokenFnvConstants.NVARCHAR2
+                || hashCode64 == TokenFnvConstants.TEXT
+                || hashCode64 == TokenFnvConstants.TINYTEXT
+                || hashCode64 == TokenFnvConstants.MEDIUMTEXT
+                || hashCode64 == TokenFnvConstants.LONGTEXT
+                || hashCode64 == TokenFnvConstants.CLOB
+                || hashCode64 == TokenFnvConstants.NCLOB
+                || hashCode64 == TokenFnvConstants.MULTIVALUE
+                || hashCode64 == TokenFnvConstants.STRING;
     }
 
     @Override
     public boolean hasKeyLength() {
         long hashCode64 = nameHashCode64();
 
-        return hashCode64 == FnvHash.Constants.VARCHAR
-                || hashCode64 == FnvHash.Constants.VARCHAR2
-                || hashCode64 == FnvHash.Constants.CHAR
-                || hashCode64 == FnvHash.Constants.NCHAR
-                || hashCode64 == FnvHash.Constants.NVARCHAR
-                || hashCode64 == FnvHash.Constants.NVARCHAR2
-                || hashCode64 == FnvHash.Constants.TEXT
-                || hashCode64 == FnvHash.Constants.TINYTEXT
-                || hashCode64 == FnvHash.Constants.MEDIUMTEXT
-                || hashCode64 == FnvHash.Constants.LONGTEXT
-                || hashCode64 == FnvHash.Constants.CLOB
-                || hashCode64 == FnvHash.Constants.NCLOB
-                || hashCode64 == FnvHash.Constants.MULTIVALUE
-                || hashCode64 == FnvHash.Constants.STRING
-                || hashCode64 == FnvHash.Constants.BLOB
-                || hashCode64 == FnvHash.Constants.TINYBLOB
-                || hashCode64 == FnvHash.Constants.LONGBLOB
-                || hashCode64 == FnvHash.Constants.BINARY
-                || hashCode64 == FnvHash.Constants.VARBINARY;
+        return hashCode64 == TokenFnvConstants.VARCHAR
+                || hashCode64 == TokenFnvConstants.VARCHAR2
+                || hashCode64 == TokenFnvConstants.CHAR
+                || hashCode64 == TokenFnvConstants.NCHAR
+                || hashCode64 == TokenFnvConstants.NVARCHAR
+                || hashCode64 == TokenFnvConstants.NVARCHAR2
+                || hashCode64 == TokenFnvConstants.TEXT
+                || hashCode64 == TokenFnvConstants.TINYTEXT
+                || hashCode64 == TokenFnvConstants.MEDIUMTEXT
+                || hashCode64 == TokenFnvConstants.LONGTEXT
+                || hashCode64 == TokenFnvConstants.CLOB
+                || hashCode64 == TokenFnvConstants.NCLOB
+                || hashCode64 == TokenFnvConstants.MULTIVALUE
+                || hashCode64 == TokenFnvConstants.STRING
+                || hashCode64 == TokenFnvConstants.BLOB
+                || hashCode64 == TokenFnvConstants.TINYBLOB
+                || hashCode64 == TokenFnvConstants.LONGBLOB
+                || hashCode64 == TokenFnvConstants.BINARY
+                || hashCode64 == TokenFnvConstants.VARBINARY;
     }
 }

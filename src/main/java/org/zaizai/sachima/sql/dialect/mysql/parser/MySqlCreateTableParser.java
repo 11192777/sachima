@@ -15,7 +15,7 @@
  */
 package org.zaizai.sachima.sql.dialect.mysql.parser;
 
-import org.zaizai.sachima.util.FnvHash;
+import org.zaizai.sachima.constant.TokenFnvConstants;
 import org.zaizai.sachima.sql.ast.*;
 import org.zaizai.sachima.sql.ast.expr.*;
 import org.zaizai.sachima.sql.ast.statement.*;
@@ -64,7 +64,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
             stmt.setType(SQLCreateTableStatement.Type.SHADOW);
         }
 
-        if (lexer.identifierEquals(FnvHash.Constants.DIMENSION)) {
+        if (lexer.identifierEquals(TokenFnvConstants.DIMENSION)) {
             lexer.nextToken();
             stmt.setDimension(true);
         }
@@ -73,7 +73,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
             this.exprParser.parseHints(stmt.getHints());
         }
 
-        if (lexer.identifierEquals(FnvHash.Constants.EXTERNAL)) {
+        if (lexer.identifierEquals(TokenFnvConstants.EXTERNAL)) {
             lexer.nextToken();
             stmt.setExternal(true);
         }
@@ -110,7 +110,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                     SQLColumnDefinition column = null;
 
                     boolean global = false;
-                    if (lexer.identifierEquals(FnvHash.Constants.GLOBAL)) {
+                    if (lexer.identifierEquals(TokenFnvConstants.GLOBAL)) {
                         final Lexer.SavePoint mark = lexer.mark();
                         lexer.nextToken();
                         if (lexer.token() == Token.INDEX || lexer.token() == Token.UNIQUE) {
@@ -171,7 +171,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                             }
                         }
 
-                    } else if (lexer.identifierEquals(FnvHash.Constants.SPATIAL)) {
+                    } else if (lexer.identifierEquals(TokenFnvConstants.SPATIAL)) {
                         Lexer.SavePoint mark = lexer.mark();
                         lexer.nextToken();
                         if (lexer.token() == Token.INDEX || lexer.token() == Token.KEY ||
@@ -193,7 +193,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                         }
                     }
 
-                    if (lexer.identifierEquals(FnvHash.Constants.ANN)) {
+                    if (lexer.identifierEquals(TokenFnvConstants.ANN)) {
                         Lexer.SavePoint mark = lexer.mark();
                         lexer.nextToken();
                         if (lexer.token() == Token.INDEX || lexer.token() == Token.KEY) {
@@ -213,7 +213,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                             lexer.reset(mark);
                         }
                     }
-                    if (lexer.identifierEquals(FnvHash.Constants.CLUSTERED)) {
+                    if (lexer.identifierEquals(TokenFnvConstants.CLUSTERED)) {
                         lexer.nextToken();
                         if (lexer.token() == Token.KEY) {
                             MySqlKey clsKey = new MySqlKey();
@@ -240,7 +240,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                                 continue;
                             }
                         }
-                    } else if (lexer.identifierEquals(FnvHash.Constants.CLUSTERING)) {
+                    } else if (lexer.identifierEquals(TokenFnvConstants.CLUSTERING)) {
                         lexer.nextToken();
                         if (lexer.token() == Token.KEY) {
                             MySqlKey clsKey = new MySqlKey();
@@ -303,7 +303,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                         lexer.nextToken();
 
                         boolean isColumn = false;
-                        if (lexer.identifierEquals(FnvHash.Constants.VARCHAR)) {
+                        if (lexer.identifierEquals(TokenFnvConstants.VARCHAR)) {
                             isColumn = true;
                         }
                         lexer.reset(savePoint);
@@ -328,11 +328,11 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                         tableLike.setParent(stmt);
                         stmt.getTableElementList().add(tableLike);
 
-                        if (lexer.identifierEquals(FnvHash.Constants.INCLUDING)) {
+                        if (lexer.identifierEquals(TokenFnvConstants.INCLUDING)) {
                             lexer.nextToken();
                             acceptIdentifier("PROPERTIES");
                             tableLike.setIncludeProperties(true);
-                        } else if (lexer.identifierEquals(FnvHash.Constants.EXCLUDING)) {
+                        } else if (lexer.identifierEquals(TokenFnvConstants.EXCLUDING)) {
                             lexer.nextToken();
                             acceptIdentifier("PROPERTIES");
                             tableLike.setExcludeProperties(true);
@@ -373,7 +373,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                 lexer.nextToken();
             }
 
-            if (lexer.identifierEquals(FnvHash.Constants.ENGINE)) {
+            if (lexer.identifierEquals(TokenFnvConstants.ENGINE)) {
                 lexer.nextToken();
                 if (lexer.token() == Token.EQ) {
                     lexer.nextToken();
@@ -390,7 +390,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                 continue;
             }
 
-            if (lexer.identifierEquals(FnvHash.Constants.BLOCK_SIZE)) {
+            if (lexer.identifierEquals(TokenFnvConstants.BLOCK_SIZE)) {
                 lexer.nextToken();
                 if (lexer.token() == Token.EQ) {
                     lexer.nextToken();
@@ -418,7 +418,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                 continue;
             }
 
-            if (lexer.identifierEquals(FnvHash.Constants.REPLICA_NUM)) {
+            if (lexer.identifierEquals(TokenFnvConstants.REPLICA_NUM)) {
                 lexer.nextToken();
                 if (lexer.token() == Token.EQ) {
                     lexer.nextToken();
@@ -429,7 +429,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                 continue;
             }
 
-            if (lexer.identifierEquals(FnvHash.Constants.TABLET_SIZE)) {
+            if (lexer.identifierEquals(TokenFnvConstants.TABLET_SIZE)) {
                 lexer.nextToken();
                 if (lexer.token() == Token.EQ) {
                     lexer.nextToken();
@@ -440,7 +440,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                 continue;
             }
 
-            if (lexer.identifierEquals(FnvHash.Constants.PCTFREE)) {
+            if (lexer.identifierEquals(TokenFnvConstants.PCTFREE)) {
                 lexer.nextToken();
                 if (lexer.token() == Token.EQ) {
                     lexer.nextToken();
@@ -451,7 +451,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                 continue;
             }
 
-            if (lexer.identifierEquals(FnvHash.Constants.USE_BLOOM_FILTER)) {
+            if (lexer.identifierEquals(TokenFnvConstants.USE_BLOOM_FILTER)) {
                 lexer.nextToken();
                 if (lexer.token() == Token.EQ) {
                     lexer.nextToken();
@@ -462,7 +462,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                 continue;
             }
 
-            if (lexer.identifierEquals(FnvHash.Constants.AUTO_INCREMENT)) {
+            if (lexer.identifierEquals(TokenFnvConstants.AUTO_INCREMENT)) {
                 lexer.nextToken();
                 if (lexer.token() == Token.EQ) {
                     lexer.nextToken();
@@ -470,6 +470,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                 stmt.addOption("AUTO_INCREMENT", this.exprParser.expr());
                 continue;
             }
+
 
             if (lexer.identifierEquals("AVG_ROW_LENGTH")) {
                 lexer.nextToken();
@@ -490,7 +491,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                 continue;
             }
 
-            if (lexer.identifierEquals(FnvHash.Constants.CHECKSUM)) {
+            if (lexer.identifierEquals(TokenFnvConstants.CHECKSUM)) {
                 lexer.nextToken();
                 if (lexer.token() == Token.EQ) {
                     lexer.nextToken();
@@ -508,7 +509,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                 continue;
             }
 
-            if (lexer.identifierEquals(FnvHash.Constants.CONNECTION)) {
+            if (lexer.identifierEquals(TokenFnvConstants.CONNECTION)) {
                 lexer.nextToken();
                 if (lexer.token() == Token.EQ) {
                     lexer.nextToken();
@@ -517,7 +518,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                 continue;
             }
 
-            if (lexer.identifierEquals(FnvHash.Constants.DATA)) {
+            if (lexer.identifierEquals(TokenFnvConstants.DATA)) {
                 lexer.nextToken();
                 acceptIdentifier("DIRECTORY");
                 if (lexer.token() == Token.EQ) {
@@ -573,7 +574,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                 continue;
             }
 
-            if (lexer.identifierEquals(FnvHash.Constants.MAX_ROWS)) {
+            if (lexer.identifierEquals(TokenFnvConstants.MAX_ROWS)) {
                 lexer.nextToken();
                 if (lexer.token() == Token.EQ) {
                     lexer.nextToken();
@@ -582,7 +583,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                 continue;
             }
 
-            if (lexer.identifierEquals(FnvHash.Constants.MIN_ROWS)) {
+            if (lexer.identifierEquals(TokenFnvConstants.MIN_ROWS)) {
                 lexer.nextToken();
                 if (lexer.token() == Token.EQ) {
                     lexer.nextToken();
@@ -591,7 +592,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                 continue;
             }
 
-            if (lexer.identifierEquals(FnvHash.Constants.PACK_KEYS)) {
+            if (lexer.identifierEquals(TokenFnvConstants.PACK_KEYS)) {
                 lexer.nextToken();
                 if (lexer.token() == Token.EQ) {
                     lexer.nextToken();
@@ -600,7 +601,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                 continue;
             }
 
-            if (lexer.identifierEquals(FnvHash.Constants.PASSWORD)) {
+            if (lexer.identifierEquals(TokenFnvConstants.PASSWORD)) {
                 lexer.nextToken();
                 if (lexer.token() == Token.EQ) {
                     lexer.nextToken();
@@ -678,7 +679,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                 continue;
             }
 
-            if (lexer.identifierEquals(FnvHash.Constants.TABLEGROUP)) {
+            if (lexer.identifierEquals(TokenFnvConstants.TABLEGROUP)) {
                 lexer.nextToken();
 
                 SQLName tableGroup = this.exprParser.name();
@@ -686,7 +687,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                 continue;
             }
 
-            if (lexer.identifierEquals(FnvHash.Constants.TYPE)) {
+            if (lexer.identifierEquals(TokenFnvConstants.TYPE)) {
                 lexer.nextToken();
                 accept(Token.EQ);
                 stmt.addOption("TYPE", this.exprParser.expr());
@@ -728,7 +729,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
 
                 continue;
             }
-            if (lexer.identifierEquals(FnvHash.Constants.ARCHIVE)) {
+            if (lexer.identifierEquals(TokenFnvConstants.ARCHIVE)) {
                 lexer.nextToken();
                 accept(Token.BY);
                 acceptIdentifier("OSS");
@@ -768,14 +769,14 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                 continue;
             }
 
-            if (lexer.identifierEquals(FnvHash.Constants.ENCRYPTION)) {
+            if (lexer.identifierEquals(TokenFnvConstants.ENCRYPTION)) {
                 lexer.nextToken();
                 if (lexer.token() == Token.EQ) {
                     lexer.nextToken();
                 }
                 stmt.addOption("ENCRYPTION", this.exprParser.expr());
                 continue;
-            } else if (lexer.identifierEquals(FnvHash.Constants.COMPRESSION)) {
+            } else if (lexer.identifierEquals(TokenFnvConstants.COMPRESSION)) {
                 lexer.nextToken();
                 if (lexer.token() == Token.EQ) {
                     lexer.nextToken();
@@ -784,11 +785,11 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                 continue;
             }
 
-            if (lexer.identifierEquals(FnvHash.Constants.CLUSTERED)) {
+            if (lexer.identifierEquals(TokenFnvConstants.CLUSTERED)) {
                 lexer.nextToken();
                 accept(Token.BY);
                 accept(Token.LPAREN);
-                for (; ; ) {
+                while(true) {
                     SQLSelectOrderByItem item = this.exprParser.parseSelectOrderByItem();
                     stmt.addClusteredByItem(item);
                     if (lexer.token() == Token.COMMA) {
@@ -807,19 +808,19 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                 continue;
             }
 
-            if (lexer.identifierEquals(FnvHash.Constants.BROADCAST)) {
+            if (lexer.identifierEquals(TokenFnvConstants.BROADCAST)) {
                 lexer.nextToken();
                 stmt.setBroadCast(true);
                 continue;
             }
 
-            if (lexer.identifierEquals(FnvHash.Constants.DISTRIBUTE) || lexer.identifierEquals(FnvHash.Constants.DISTRIBUTED)) {
+            if (lexer.identifierEquals(TokenFnvConstants.DISTRIBUTE) || lexer.identifierEquals(TokenFnvConstants.DISTRIBUTED)) {
                 lexer.nextToken();
                 accept(Token.BY);
-                if (lexer.identifierEquals(FnvHash.Constants.HASH)) {
+                if (lexer.identifierEquals(TokenFnvConstants.HASH)) {
                     lexer.nextToken();
                     accept(Token.LPAREN);
-                    for (; ; ) {
+                    while(true) {
                         SQLName name = this.exprParser.name();
                         stmt.getDistributeBy().add(name);
                         if (lexer.token() == Token.COMMA) {
@@ -830,14 +831,14 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                     }
                     accept(Token.RPAREN);
                     stmt.setDistributeByType(new SQLIdentifierExpr("HASH"));
-                } else if (lexer.identifierEquals(FnvHash.Constants.BROADCAST)) {
+                } else if (lexer.identifierEquals(TokenFnvConstants.BROADCAST)) {
                     lexer.nextToken();
                     stmt.setDistributeByType(new SQLIdentifierExpr("BROADCAST"));
                 }
                 continue;
             }
 
-            if (lexer.identifierEquals(FnvHash.Constants.DBPARTITION)) {
+            if (lexer.identifierEquals(TokenFnvConstants.DBPARTITION)) {
                 lexer.nextToken();
                 accept(Token.BY);
                 SQLExpr dbPartitoinBy = this.exprParser.primary();
@@ -845,18 +846,18 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                 continue;
             }
 
-            if (lexer.identifierEquals(FnvHash.Constants.DBPARTITIONS)) {
+            if (lexer.identifierEquals(TokenFnvConstants.DBPARTITIONS)) {
                 lexer.nextToken();
                 SQLExpr dbPartitoins = this.exprParser.primary();
                 stmt.setDbPartitions(dbPartitoins);
                 continue;
             }
 
-            if (lexer.identifierEquals(FnvHash.Constants.TBPARTITION)) {
+            if (lexer.identifierEquals(TokenFnvConstants.TBPARTITION)) {
                 lexer.nextToken();
                 accept(Token.BY);
                 SQLExpr expr = this.exprParser.expr();
-                if (lexer.identifierEquals(FnvHash.Constants.STARTWITH)) {
+                if (lexer.identifierEquals(TokenFnvConstants.STARTWITH)) {
                     lexer.nextToken();
                     SQLExpr start = this.exprParser.primary();
                     acceptIdentifier("ENDWITH");
@@ -867,14 +868,14 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                 continue;
             }
 
-            if (lexer.identifierEquals(FnvHash.Constants.TBPARTITIONS)) {
+            if (lexer.identifierEquals(TokenFnvConstants.TBPARTITIONS)) {
                 lexer.nextToken();
                 SQLExpr tbPartitions = this.exprParser.primary();
                 stmt.setTablePartitions(tbPartitions);
                 continue;
             }
 
-            if (lexer.identifierEquals(FnvHash.Constants.EXTPARTITION)) {
+            if (lexer.identifierEquals(TokenFnvConstants.EXTPARTITION)) {
                 lexer.nextToken();
                 accept(Token.LPAREN);
 
@@ -883,7 +884,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                 while(true) {
                     MySqlExtPartition.Item item = new MySqlExtPartition.Item();
 
-                    if (lexer.identifierEquals(FnvHash.Constants.DBPARTITION)) {
+                    if (lexer.identifierEquals(TokenFnvConstants.DBPARTITION)) {
                         lexer.nextToken();
                         SQLName name = this.exprParser.name();
                         item.setDbPartition(name);
@@ -892,7 +893,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                         item.setDbPartitionBy(value);
                     }
 
-                    if (lexer.identifierEquals(FnvHash.Constants.TBPARTITION)) {
+                    if (lexer.identifierEquals(TokenFnvConstants.TBPARTITION)) {
                         lexer.nextToken();
                         SQLName name = this.exprParser.name();
                         item.setTbPartition(name);
@@ -916,7 +917,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                 continue;
             }
 
-            if (lexer.identifierEquals(FnvHash.Constants.OPTIONS)) {
+            if (lexer.identifierEquals(TokenFnvConstants.OPTIONS)) {
                 lexer.nextToken();
                 accept(Token.LPAREN);
 
@@ -938,7 +939,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                 continue;
             }
 
-            if (lexer.identifierEquals(FnvHash.Constants.STORED)) {
+            if (lexer.identifierEquals(TokenFnvConstants.STORED)) {
                 lexer.nextToken();
                 accept(Token.BY);
                 SQLName name = this.exprParser.name();
@@ -1011,7 +1012,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
 
             if (lexer.token() == Token.WITH) {
                 lexer.nextToken();
-                if (lexer.identifierEquals(FnvHash.Constants.NO)) {
+                if (lexer.identifierEquals(TokenFnvConstants.NO)) {
                     lexer.nextToken();
                     acceptIdentifier("DATA");
                     stmt.setWithData(false);
@@ -1036,7 +1037,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
         SQLPartitionBy partitionClause;
 
         boolean linera = false;
-        if (lexer.identifierEquals(FnvHash.Constants.LINEAR)) {
+        if (lexer.identifierEquals(TokenFnvConstants.LINEAR)) {
             lexer.nextToken();
             linera = true;
         }
@@ -1049,7 +1050,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                 clause.setLinear(true);
             }
 
-            if (lexer.identifierEquals(FnvHash.Constants.ALGORITHM)) {
+            if (lexer.identifierEquals(TokenFnvConstants.ALGORITHM)) {
                 lexer.nextToken();
                 accept(Token.EQ);
                 clause.setAlgorithm(lexer.integerValue().shortValue());
@@ -1138,7 +1139,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
             throw new ParserException("TODO. " + lexer.info());
         }
 
-        if (lexer.identifierEquals(FnvHash.Constants.LIFECYCLE)) {
+        if (lexer.identifierEquals(TokenFnvConstants.LIFECYCLE)) {
             lexer.nextToken();
             partitionClause.setLifecycle((SQLIntegerExpr) exprParser.expr());
         }
@@ -1185,7 +1186,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
 
     protected SQLPartitionByValue partitionByValue() {
         SQLPartitionByValue clause = new SQLPartitionByValue();
-        if (lexer.identifierEquals(FnvHash.Constants.VALUE)) {
+        if (lexer.identifierEquals(TokenFnvConstants.VALUE)) {
             lexer.nextToken();
 
             if (lexer.token() == Token.LPAREN) {
@@ -1199,7 +1200,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
 
     protected SQLPartitionByRange partitionByRange() {
         SQLPartitionByRange clause = new SQLPartitionByRange();
-        if (lexer.identifierEquals(FnvHash.Constants.RANGE)) {
+        if (lexer.identifierEquals(TokenFnvConstants.RANGE)) {
             lexer.nextToken();
 
             if (lexer.token() == Token.LPAREN) {
@@ -1221,7 +1222,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
             }
         } else {
             SQLExpr expr = this.exprParser.expr();
-            if (lexer.identifierEquals(FnvHash.Constants.STARTWITH)) {
+            if (lexer.identifierEquals(TokenFnvConstants.STARTWITH)) {
                 lexer.nextToken();
                 SQLExpr start = this.exprParser.primary();
                 acceptIdentifier("ENDWITH");
@@ -1235,9 +1236,9 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
     }
 
     protected void partitionClauseRest(SQLPartitionBy clause) {
-        if (lexer.identifierEquals(FnvHash.Constants.PARTITIONS)
-                || lexer.identifierEquals(FnvHash.Constants.TBPARTITIONS)
-                || lexer.identifierEquals(FnvHash.Constants.DBPARTITIONS)) {
+        if (lexer.identifierEquals(TokenFnvConstants.PARTITIONS)
+                || lexer.identifierEquals(TokenFnvConstants.TBPARTITIONS)
+                || lexer.identifierEquals(TokenFnvConstants.DBPARTITIONS)) {
             lexer.nextToken();
             SQLIntegerExpr countExpr = this.exprParser.integerExpr();
             clause.setPartitionsCount(countExpr);
@@ -1255,12 +1256,12 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
             clause.putAttribute("ads.partition", Boolean.TRUE);
         }
 
-        if (lexer.identifierEquals(FnvHash.Constants.LIFECYCLE)) {
+        if (lexer.identifierEquals(TokenFnvConstants.LIFECYCLE)) {
             lexer.nextToken();
             clause.setLifecycle((SQLIntegerExpr) exprParser.expr());
         }
 
-        if (lexer.identifierEquals(FnvHash.Constants.SUBPARTITION)) {
+        if (lexer.identifierEquals(TokenFnvConstants.SUBPARTITION)) {
             lexer.nextToken();
             accept(Token.BY);
 
@@ -1280,7 +1281,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                     clause.setLinear(true);
                 }
 
-                if (lexer.identifierEquals(FnvHash.Constants.ALGORITHM)) {
+                if (lexer.identifierEquals(TokenFnvConstants.ALGORITHM)) {
                     lexer.nextToken();
                     accept(Token.EQ);
                     subPartitionKey.setAlgorithm(lexer.integerValue().shortValue());
@@ -1302,7 +1303,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                 MySqlSubPartitionByValue subPartitionByValue = new MySqlSubPartitionByValue();
                 lexer.nextToken();
                 accept(Token.LPAREN);
-                for (; ; ) {
+                while(true) {
                     subPartitionByValue.addColumn(this.exprParser.expr());
                     if (lexer.token() == Token.COMMA) {
                         lexer.nextToken();
@@ -1401,7 +1402,7 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                     accept(Token.RPAREN);
                 }
                 subPartitionByClause = subPartitionList;
-            } else if (lexer.identifierEquals(FnvHash.Constants.RANGE)) {
+            } else if (lexer.identifierEquals(TokenFnvConstants.RANGE)) {
                 lexer.nextToken();
                 SQLSubPartitionByRange range = new SQLSubPartitionByRange();
 
@@ -1411,25 +1412,25 @@ public class MySqlCreateTableParser extends SQLCreateTableParser {
                 subPartitionByClause = range;
             }
 
-            if (lexer.identifierEquals(FnvHash.Constants.SUBPARTITION)) {
+            if (lexer.identifierEquals(TokenFnvConstants.SUBPARTITION)) {
                 lexer.nextToken();
                 acceptIdentifier("OPTIONS");
                 this.exprParser.parseAssignItem(subPartitionByClause.getOptions(), subPartitionByClause);
             }
 
-            if (lexer.identifierEquals(FnvHash.Constants.SUBPARTITIONS)) {
+            if (lexer.identifierEquals(TokenFnvConstants.SUBPARTITIONS)) {
                 lexer.nextToken();
                 Number intValue = lexer.integerValue();
                 SQLNumberExpr numExpr = new SQLNumberExpr(intValue);
                 subPartitionByClause.setSubPartitionsCount(numExpr);
                 lexer.nextToken();
-            } else if (lexer.identifierEquals(FnvHash.Constants.PARTITIONS)) { // ADB
+            } else if (lexer.identifierEquals(TokenFnvConstants.PARTITIONS)) { // ADB
                 lexer.nextToken();
                 subPartitionByClause.setSubPartitionsCount((SQLIntegerExpr)exprParser.expr());
                 subPartitionByClause.getAttributes().put("adb.partitons", true);
             }
 
-            if (lexer.identifierEquals(FnvHash.Constants.LIFECYCLE)) {
+            if (lexer.identifierEquals(TokenFnvConstants.LIFECYCLE)) {
                 lexer.nextToken();
                 subPartitionByClause.setLifecycle((SQLIntegerExpr) exprParser.expr());
             }

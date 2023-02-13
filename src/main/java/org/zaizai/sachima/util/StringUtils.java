@@ -35,6 +35,10 @@ public class StringUtils implements StrPool {
         return str == null || str.length() == 0;
     }
 
+    public static boolean isNotEmpty(CharSequence str) {
+        return !isEmpty(str);
+    }
+
     public static boolean isNumber(char[] chars) {
         if (chars == null || chars.length == 0) {
             return false;

@@ -15,7 +15,7 @@
  */
 package org.zaizai.sachima.sql.ast.expr;
 
-import org.zaizai.sachima.util.FnvHash;
+import org.zaizai.sachima.constant.TokenFnvConstants;
 import org.zaizai.sachima.exception.FastsqlException;
 import org.zaizai.sachima.util.FnvHashUtils;
 import org.zaizai.sachima.util.SQLUtils;
@@ -369,41 +369,41 @@ public class SQLMethodInvokeExpr extends SQLExprImpl implements SQLReplaceable, 
         }
 
         long nameHash = this.methodNameHashCode64();
-        if (nameHash == FnvHash.Constants.TO_DATE
-                || nameHash == FnvHash.Constants.ADD_MONTHS
+        if (nameHash == TokenFnvConstants.TO_DATE
+                || nameHash == TokenFnvConstants.ADD_MONTHS
         ) {
             return resolvedReturnDataType = SQLDateExpr.DATA_TYPE;
         }
-        if (nameHash == FnvHash.Constants.DATE_PARSE) {
+        if (nameHash == TokenFnvConstants.DATE_PARSE) {
             return resolvedReturnDataType = SQLTimestampExpr.DATA_TYPE;
         }
-        if (nameHash == FnvHash.Constants.CURRENT_TIME
-                || nameHash == FnvHash.Constants.CURTIME) {
+        if (nameHash == TokenFnvConstants.CURRENT_TIME
+                || nameHash == TokenFnvConstants.CURTIME) {
             return resolvedReturnDataType = SQLTimeExpr.DATA_TYPE;
         }
 
-        if (nameHash == FnvHash.Constants.BIT_COUNT
-                || nameHash == FnvHash.Constants.ROW_NUMBER) {
+        if (nameHash == TokenFnvConstants.BIT_COUNT
+                || nameHash == TokenFnvConstants.ROW_NUMBER) {
             return resolvedReturnDataType = new SQLDataTypeImpl("BIGINT");
         }
 
         if (arguments.size() == 1) {
-            if (nameHash == FnvHash.Constants.TRUNC) {
+            if (nameHash == TokenFnvConstants.TRUNC) {
                 return resolvedReturnDataType = arguments.get(0).computeDataType();
             }
         } else if (arguments.size() == 2) {
             SQLExpr param0 = arguments.get(0);
             SQLExpr param1 = arguments.get(1);
 
-            if (nameHash == FnvHash.Constants.ROUND) {
+            if (nameHash == TokenFnvConstants.ROUND) {
                 SQLDataType dataType = param0.computeDataType();
                 if (dataType != null) {
                     return dataType;
                 }
-            } else if (nameHash == FnvHash.Constants.NVL
-                    || nameHash == FnvHash.Constants.IFNULL
-                    || nameHash == FnvHash.Constants.ISNULL
-                    || nameHash == FnvHash.Constants.COALESCE) {
+            } else if (nameHash == TokenFnvConstants.NVL
+                    || nameHash == TokenFnvConstants.IFNULL
+                    || nameHash == TokenFnvConstants.ISNULL
+                    || nameHash == TokenFnvConstants.COALESCE) {
                 SQLDataType dataType = param0.computeDataType();
                 if (dataType != null) {
                     return dataType;
@@ -412,63 +412,63 @@ public class SQLMethodInvokeExpr extends SQLExprImpl implements SQLReplaceable, 
                 return param1.computeDataType();
             }
 
-            if (nameHash == FnvHash.Constants.MOD) {
+            if (nameHash == TokenFnvConstants.MOD) {
                 return resolvedReturnDataType = SQLIntegerExpr.DATA_TYPE;
             }
         }
 
-        if (nameHash == FnvHash.Constants.STDDEV_SAMP) {
+        if (nameHash == TokenFnvConstants.STDDEV_SAMP) {
             return resolvedReturnDataType = SQLNumberExpr.DATA_TYPE_DOUBLE;
         }
 
-        if (nameHash == FnvHash.Constants.CONCAT
-                || nameHash == FnvHash.Constants.SUBSTR
-                || nameHash == FnvHash.Constants.SUBSTRING) {
+        if (nameHash == TokenFnvConstants.CONCAT
+                || nameHash == TokenFnvConstants.SUBSTR
+                || nameHash == TokenFnvConstants.SUBSTRING) {
             return resolvedReturnDataType = SQLCharExpr.DATA_TYPE;
         }
 
-        if (nameHash == FnvHash.Constants.YEAR
-                || nameHash == FnvHash.Constants.MONTH
-                || nameHash == FnvHash.Constants.DAY
-                || nameHash == FnvHash.Constants.HOUR
-                || nameHash == FnvHash.Constants.MINUTE
-                || nameHash == FnvHash.Constants.SECOND
-                || nameHash == FnvHash.Constants.PERIOD_ADD
-                || nameHash == FnvHash.Constants.PERIOD_DIFF
+        if (nameHash == TokenFnvConstants.YEAR
+                || nameHash == TokenFnvConstants.MONTH
+                || nameHash == TokenFnvConstants.DAY
+                || nameHash == TokenFnvConstants.HOUR
+                || nameHash == TokenFnvConstants.MINUTE
+                || nameHash == TokenFnvConstants.SECOND
+                || nameHash == TokenFnvConstants.PERIOD_ADD
+                || nameHash == TokenFnvConstants.PERIOD_DIFF
         ) {
             return resolvedReturnDataType = new SQLDataTypeImpl("INT");
         }
 
-        if (nameHash == FnvHash.Constants.GROUPING) {
+        if (nameHash == TokenFnvConstants.GROUPING) {
             return resolvedReturnDataType = new SQLDataTypeImpl("INT");
         }
 
-        if (nameHash == FnvHash.Constants.JSON_EXTRACT_SCALAR
-                || nameHash == FnvHash.Constants.FORMAT_DATETIME
-                || nameHash == FnvHash.Constants.DATE_FORMAT
+        if (nameHash == TokenFnvConstants.JSON_EXTRACT_SCALAR
+                || nameHash == TokenFnvConstants.FORMAT_DATETIME
+                || nameHash == TokenFnvConstants.DATE_FORMAT
         ) {
             return resolvedReturnDataType = SQLCharExpr.DATA_TYPE;
         }
 
-        if (nameHash == FnvHash.Constants.DATE_ADD
-                || nameHash == FnvHash.Constants.DATE_SUB
-                || nameHash == FnvHash.Constants.DATE
-                || nameHash == FnvHash.Constants.STR_TO_DATE
-                || nameHash == FnvHash.Constants.CURRENT_DATE) {
+        if (nameHash == TokenFnvConstants.DATE_ADD
+                || nameHash == TokenFnvConstants.DATE_SUB
+                || nameHash == TokenFnvConstants.DATE
+                || nameHash == TokenFnvConstants.STR_TO_DATE
+                || nameHash == TokenFnvConstants.CURRENT_DATE) {
             return resolvedReturnDataType = SQLDateExpr.DATA_TYPE;
         }
 
-        if (nameHash == FnvHash.Constants.UNIX_TIMESTAMP) {
+        if (nameHash == TokenFnvConstants.UNIX_TIMESTAMP) {
             return resolvedReturnDataType = SQLIntegerExpr.DATA_TYPE;
         }
 
-        if (nameHash == FnvHash.Constants.TIME) {
+        if (nameHash == TokenFnvConstants.TIME) {
             return resolvedReturnDataType = new SQLDataTypeImpl("VARCHAR");
         }
 
-        if (nameHash == FnvHash.Constants.SYSDATE
-                || nameHash == FnvHash.Constants.CURRENT_TIMESTAMP
-                || nameHash == FnvHash.Constants.SYSTIMESTAMP) {
+        if (nameHash == TokenFnvConstants.SYSDATE
+                || nameHash == TokenFnvConstants.CURRENT_TIMESTAMP
+                || nameHash == TokenFnvConstants.SYSTIMESTAMP) {
             return resolvedReturnDataType = SQLTimestampExpr.DATA_TYPE;
         }
 

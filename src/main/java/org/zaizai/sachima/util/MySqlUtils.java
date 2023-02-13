@@ -1474,7 +1474,7 @@ public class MySqlUtils {
     static {
         long[] codes = new long[parseFormats.length];
         for (int i = 0; i < parseFormats.length; i++) {
-            codes[i] = FnvHash.fnv1a64(parseFormats[i]);
+            codes[i] = FnvHashUtils.fnv1a64(parseFormats[i]);
         }
         Arrays.sort(codes);
         parseFormatCodes = codes;
@@ -1484,7 +1484,7 @@ public class MySqlUtils {
         if (str == null) {
             return false;
         }
-        return Arrays.binarySearch(parseFormatCodes, FnvHash.fnv1a64(str)) >= 0;
+        return Arrays.binarySearch(parseFormatCodes, FnvHashUtils.fnv1a64(str)) >= 0;
     }
 
     public static TimeZone parseTimeZone(String str) {

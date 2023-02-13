@@ -50,7 +50,7 @@ public class Least implements Function {
     public Object eval(SQLMethodInvokeExpr x) {
         List<SQLExpr> arguments = x.getArguments();
 
-        if (arguments.size() > 0) {
+        if (!arguments.isEmpty()) {
             SQLExpr p0 = arguments.get(0);
             if (p0 instanceof SQLIntegerExpr && ((SQLIntegerExpr) p0).getNumber() instanceof Integer) {
                 int val = ((SQLIntegerExpr) p0).getNumber().intValue();

@@ -24,7 +24,6 @@ import org.zaizai.sachima.sql.ast.expr.SQLAllColumnExpr;
 import org.zaizai.sachima.sql.ast.expr.SQLIdentifierExpr;
 import org.zaizai.sachima.sql.ast.expr.SQLPropertyExpr;
 import org.zaizai.sachima.sql.ast.statement.*;
-import org.zaizai.sachima.util.FnvHash;
 import org.zaizai.sachima.util.StringUtils;
 
 import java.util.*;

@@ -4,10 +4,7 @@ import org.zaizai.sachima.util.FnvHashUtils;
 import org.zaizai.sachima.util.MapUtils;
 import org.zaizai.sachima.util.StringUtils;
 
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -19,7 +16,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class NclobTypeHandler {
 
-    long[] tableColumnHashArray;
+    private final long[] tableColumnHashArray;
 
     public NclobTypeHandler(Map<String, Set<String>> tableColumnMap) {
         if (MapUtils.isEmpty(tableColumnMap)) {
@@ -32,6 +29,9 @@ public class NclobTypeHandler {
         }
     }
 
+    /**
+     * to lower hash with ([tableName],[columnName])
+     */
     private long getIndexHash(String tableName, String columnName) {
         return FnvHashUtils.fnv1a64lower(tableName + "," + columnName);
     }

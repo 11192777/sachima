@@ -1,6 +1,6 @@
 package org.zaizai.sachima.sql.ast;
 
-import org.zaizai.sachima.util.FnvHash;
+import org.zaizai.sachima.constant.TokenFnvConstants;
 import org.zaizai.sachima.enums.DbType;
 import org.zaizai.sachima.sql.visitor.SQLASTVisitor;
 
@@ -29,7 +29,7 @@ public class SQLStructDataType extends SQLObjectImpl implements SQLDataType {
 
     @Override
     public long nameHashCode64() {
-        return FnvHash.Constants.STRUCT;
+        return TokenFnvConstants.STRUCT;
     }
 
     @Override

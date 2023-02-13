@@ -15,7 +15,7 @@
  */
 package org.zaizai.sachima.sql.dialect.mysql.parser;
 
-import org.zaizai.sachima.util.FnvHash;
+import org.zaizai.sachima.constant.TokenFnvConstants;
 import org.zaizai.sachima.sql.ast.SQLExpr;
 import org.zaizai.sachima.sql.ast.SQLObject;
 import org.zaizai.sachima.sql.ast.SQLSetQuantifier;
@@ -293,7 +293,7 @@ public class MySqlSelectIntoParser extends SQLSelectParser {
             parseIndexHintList(tableSource);
         }
 
-        if (lexer.identifierEquals(FnvHash.Constants.FORCE)) {
+        if (lexer.identifierEquals(TokenFnvConstants.FORCE)) {
             lexer.nextToken();
             MySqlForceIndexHint hint = new MySqlForceIndexHint();
             parseIndexHint(hint);

@@ -15,7 +15,7 @@
  */
 package org.zaizai.sachima.sql.ast.expr;
 
-import org.zaizai.sachima.util.FnvHash;
+import org.zaizai.sachima.constant.TokenFnvConstants;
 import org.zaizai.sachima.enums.DbType;
 import org.zaizai.sachima.util.SQLUtils;
 import org.zaizai.sachima.sql.ast.*;
@@ -619,24 +619,24 @@ public class SQLBinaryOpExpr extends SQLExprImpl implements SQLReplaceable, Seri
             case Multiply:
                 if (leftDataType != null) {
                     if (rightDataType != null) {
-                        if (leftDataType.nameHashCode64() == FnvHash.Constants.BIGINT
-                                && rightDataType.nameHashCode64() == FnvHash.Constants.NUMBER) {
+                        if (leftDataType.nameHashCode64() == TokenFnvConstants.BIGINT
+                                && rightDataType.nameHashCode64() == TokenFnvConstants.NUMBER) {
                             return rightDataType;
                         }
 
                         if (leftDataType.isInt()
-                                && rightDataType.nameHashCode64() == FnvHash.Constants.INTERVAL)
+                                && rightDataType.nameHashCode64() == TokenFnvConstants.INTERVAL)
                         {
                             return rightDataType;
                         }
 
-                        if ((leftDataType.nameHashCode64() == FnvHash.Constants.DATE
-                                || leftDataType.nameHashCode64() == FnvHash.Constants.DATETIME
-                                || leftDataType.nameHashCode64() == FnvHash.Constants.TIMESTAMP)
+                        if ((leftDataType.nameHashCode64() == TokenFnvConstants.DATE
+                                || leftDataType.nameHashCode64() == TokenFnvConstants.DATETIME
+                                || leftDataType.nameHashCode64() == TokenFnvConstants.TIMESTAMP)
                                 && (
-                                rightDataType.nameHashCode64() == FnvHash.Constants.DATE
-                                        || rightDataType.nameHashCode64() == FnvHash.Constants.DATETIME
-                                        || rightDataType.nameHashCode64() == FnvHash.Constants.TIMESTAMP
+                                rightDataType.nameHashCode64() == TokenFnvConstants.DATE
+                                        || rightDataType.nameHashCode64() == TokenFnvConstants.DATETIME
+                                        || rightDataType.nameHashCode64() == TokenFnvConstants.TIMESTAMP
                         )) {
                             return new SQLDataTypeImpl("BIGING");
                         }

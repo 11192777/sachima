@@ -15,7 +15,7 @@
  */
 package org.zaizai.sachima.sql.dialect.oracle.parser;
 
-import org.zaizai.sachima.util.FnvHash;
+import org.zaizai.sachima.constant.TokenFnvConstants;
 import org.zaizai.sachima.sql.ast.*;
 import org.zaizai.sachima.sql.ast.expr.SQLIdentifierExpr;
 import org.zaizai.sachima.sql.ast.expr.SQLNumericLiteralExpr;
@@ -71,19 +71,19 @@ public class OracleCreateTableParser extends SQLCreateTableParser {
         while(true) {
             this.getExprParser().parseSegmentAttributes(stmt);
 
-            if (lexer.identifierEquals(FnvHash.Constants.IN_MEMORY_METADATA)) {
+            if (lexer.identifierEquals(TokenFnvConstants.IN_MEMORY_METADATA)) {
                 lexer.nextToken();
                 stmt.setInMemoryMetadata(true);
                 continue;
-            } else if (lexer.identifierEquals(FnvHash.Constants.CURSOR_SPECIFIC_SEGMENT)) {
+            } else if (lexer.identifierEquals(TokenFnvConstants.CURSOR_SPECIFIC_SEGMENT)) {
                 lexer.nextToken();
                 stmt.setCursorSpecificSegment(true);
                 continue;
-            } else if (lexer.identifierEquals(FnvHash.Constants.NOPARALLEL)) {
+            } else if (lexer.identifierEquals(TokenFnvConstants.NOPARALLEL)) {
                 lexer.nextToken();
                 stmt.setParallel(false);
                 continue;
-            } else if (lexer.identifierEquals(FnvHash.Constants.PARALLEL)) {
+            } else if (lexer.identifierEquals(TokenFnvConstants.PARALLEL)) {
                 lexer.nextToken();
                 stmt.setParallel(true);
 
@@ -142,7 +142,7 @@ public class OracleCreateTableParser extends SQLCreateTableParser {
             } else if (lexer.identifierEquals("ORGANIZATION")) {
                 parseOrganization(stmt);
                 continue;
-            } else if (lexer.identifierEquals(FnvHash.Constants.CLUSTER)) {
+            } else if (lexer.identifierEquals(TokenFnvConstants.CLUSTER)) {
                 lexer.nextToken();
                 SQLName cluster = this.exprParser.name();
                 stmt.setCluster(cluster);
@@ -158,7 +158,7 @@ public class OracleCreateTableParser extends SQLCreateTableParser {
                 lexer.nextToken();
                 stmt.setMonitoring(true);
                 continue;
-            } else if (lexer.identifierEquals(FnvHash.Constants.INCLUDING)) {
+            } else if (lexer.identifierEquals(TokenFnvConstants.INCLUDING)) {
                 lexer.nextToken();
                 this.exprParser.names(stmt.getIncluding(), stmt);
                 acceptIdentifier("OVERFLOW");
@@ -185,7 +185,7 @@ public class OracleCreateTableParser extends SQLCreateTableParser {
                     lexer.nextToken();
                 }
 
-                if (lexer.identifierEquals(FnvHash.Constants.SUBSTITUTABLE)) {
+                if (lexer.identifierEquals(TokenFnvConstants.SUBSTITUTABLE)) {
                     lexer.nextToken();
                     acceptIdentifier("AT");
                     accept(Token.ALL);
@@ -193,13 +193,13 @@ public class OracleCreateTableParser extends SQLCreateTableParser {
                 }
                 // skip
                 continue;
-            } else if (lexer.identifierEquals(FnvHash.Constants.VARRAY)) {
+            } else if (lexer.identifierEquals(TokenFnvConstants.VARRAY)) {
                 lexer.nextToken();
                 SQLName name = this.exprParser.name();
 
                 accept(Token.STORE);
                 accept(Token.AS);
-                if (lexer.identifierEquals(FnvHash.Constants.BASICFILE)) {
+                if (lexer.identifierEquals(TokenFnvConstants.BASICFILE)) {
                     lexer.nextToken();
                 }
                 this.getExprParser().parseLobStorage();
@@ -243,7 +243,7 @@ public class OracleCreateTableParser extends SQLCreateTableParser {
                 } else {
                     throw new ParserException("TODO : " + lexer.info());
                 }
-            } else if (lexer.identifierEquals(FnvHash.Constants.XMLTYPE)) {
+            } else if (lexer.identifierEquals(TokenFnvConstants.XMLTYPE)) {
                 lexer.nextToken();
                 if (lexer.token() == Token.COLUMN) {
                     lexer.nextToken();
@@ -326,7 +326,7 @@ public class OracleCreateTableParser extends SQLCreateTableParser {
                                     continue for_;
                                 case IDENTIFIER:
                                     long hash = lexer.hash_lower();
-                                    if (hash == FnvHash.Constants.PCTVERSION) {
+                                    if (hash == TokenFnvConstants.PCTVERSION) {
                                         lobParameters.setPctVersion(this.exprParser.primary());
                                         lexer.nextToken();
                                         continue for_;
@@ -344,7 +344,7 @@ public class OracleCreateTableParser extends SQLCreateTableParser {
                 }
 
                 while(true) {
-                    if (lexer.identifierEquals(FnvHash.Constants.ALLOW)) {
+                    if (lexer.identifierEquals(TokenFnvConstants.ALLOW)) {
                         lexer.nextToken();
                         if (lexer.identifierEquals("NONSCHEMA")) {
                             lexer.nextToken();
@@ -356,7 +356,7 @@ public class OracleCreateTableParser extends SQLCreateTableParser {
                             throw new ParserException("TODO : " + lexer.info());
                         }
                         continue;
-                    } else if (lexer.identifierEquals(FnvHash.Constants.DISALLOW)) {
+                    } else if (lexer.identifierEquals(TokenFnvConstants.DISALLOW)) {
                         lexer.nextToken();
                         if (lexer.identifierEquals("NONSCHEMA")) {
                             lexer.nextToken();
@@ -400,7 +400,7 @@ public class OracleCreateTableParser extends SQLCreateTableParser {
             this.getExprParser().parseSegmentAttributes(organization);
 
             // index_org_table_clause http://docs.oracle.com/cd/B19306_01/server.102/b14200/statements_7002.htm#i2129638
-            if (lexer.identifierEquals(FnvHash.Constants.PCTTHRESHOLD)) {
+            if (lexer.identifierEquals(TokenFnvConstants.PCTTHRESHOLD)) {
                 lexer.nextToken();
 
                 if (lexer.token() == Token.LITERAL_INT) {
@@ -451,12 +451,12 @@ public class OracleCreateTableParser extends SQLCreateTableParser {
                                 throw new ParserException("TODO " + lexer.info());
                             }
 
-                            if (lexer.identifierEquals(FnvHash.Constants.NOLOGFILE)) {
+                            if (lexer.identifierEquals(TokenFnvConstants.NOLOGFILE)) {
                                 lexer.nextToken();
                                 recordFormat.setLogfile(false);
                             }
 
-                            if (lexer.identifierEquals(FnvHash.Constants.NOBADFILE)) {
+                            if (lexer.identifierEquals(TokenFnvConstants.NOBADFILE)) {
                                 lexer.nextToken();
                                 recordFormat.setBadfile(false);
                             }
@@ -465,10 +465,10 @@ public class OracleCreateTableParser extends SQLCreateTableParser {
                         }
                     }
 
-                    if (lexer.identifierEquals(FnvHash.Constants.FIELDS)) {
+                    if (lexer.identifierEquals(TokenFnvConstants.FIELDS)) {
                         lexer.nextToken();
 
-                        if (lexer.identifierEquals(FnvHash.Constants.TERMINATED)) {
+                        if (lexer.identifierEquals(TokenFnvConstants.TERMINATED)) {
                             lexer.nextToken();
                             accept(Token.BY);
                             recordFormat.setTerminatedBy(this.exprParser.primary());
@@ -476,13 +476,13 @@ public class OracleCreateTableParser extends SQLCreateTableParser {
                             throw new ParserException("TODO " + lexer.info());
                         }
 
-                        if (lexer.identifierEquals(FnvHash.Constants.LTRIM)) {
+                        if (lexer.identifierEquals(TokenFnvConstants.LTRIM)) {
                             lexer.nextToken();
                             recordFormat.setLtrim(true);
                         }
                     }
 
-                    if (lexer.identifierEquals(FnvHash.Constants.MISSING)) {
+                    if (lexer.identifierEquals(TokenFnvConstants.MISSING)) {
                         lexer.nextToken();
                         acceptIdentifier("FIELD");
                         accept(Token.VALUES);
@@ -584,7 +584,7 @@ public class OracleCreateTableParser extends SQLCreateTableParser {
             }
 
             return logGrp;
-        } else if (lexer.identifierEquals(FnvHash.Constants.DATA)){
+        } else if (lexer.identifierEquals(TokenFnvConstants.DATA)){
             lexer.nextToken();
 
             OracleSupplementalIdKey idKey = new OracleSupplementalIdKey();

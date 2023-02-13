@@ -21,7 +21,6 @@ import org.zaizai.sachima.util.SQLUtils;
 import org.zaizai.sachima.sql.ast.SQLExpr;
 import org.zaizai.sachima.sql.ast.expr.SQLPropertyExpr;
 import org.zaizai.sachima.util.JSONUtils;
-import org.zaizai.sachima.util.FnvHash;
 
 import java.util.ArrayList;
 import java.util.HashMap;

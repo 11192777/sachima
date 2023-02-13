@@ -16,12 +16,11 @@
 package org.zaizai.sachima.sql.ast.expr;
 
 import org.zaizai.sachima.exception.FastsqlException;
-import org.zaizai.sachima.util.FnvHashUtils;
-import org.zaizai.sachima.util.SQLUtils;
 import org.zaizai.sachima.sql.ast.*;
 import org.zaizai.sachima.sql.ast.statement.*;
 import org.zaizai.sachima.sql.visitor.SQLASTVisitor;
-import org.zaizai.sachima.util.FnvHash;
+import org.zaizai.sachima.util.FnvHashUtils;
+import org.zaizai.sachima.util.SQLUtils;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -101,14 +100,14 @@ public final class SQLPropertyExpr extends SQLExprImpl implements SQLName, SQLRe
             hash = ((SQLName) owner).hashCode64();
 
             hash ^= '.';
-            hash *= FnvHash.PRIME;
+            hash *= FnvHashUtils.PRIME;
         } else if (owner == null) {
-            hash = FnvHash.BASIC;
+            hash = FnvHashUtils.BASIC;
         } else {
-            hash = FnvHash.fnv1a64lower(owner.toString());
+            hash = FnvHashUtils.fnv1a64lower(owner.toString());
 
             hash ^= '.';
-            hash *= FnvHash.PRIME;
+            hash *= FnvHashUtils.PRIME;
         }
         hash = FnvHashUtils.hashCode64(hash, name);
         hashCode64 = hash;

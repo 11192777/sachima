@@ -33,6 +33,8 @@ public interface FunctionConstant {
      */
     String ORACLE_CONCAT = "||";
 
+    String TO_DATE = "TO_DATE";
+
     /**
      * MySQL function.
      */
@@ -55,4 +57,9 @@ public interface FunctionConstant {
     String LEFT = "LEFT";
 
     String SUBSTR = "SUBSTR";
+
+    String YEAR = "YEAR";
+
+    String MONTH = "MONTH";
+
 }

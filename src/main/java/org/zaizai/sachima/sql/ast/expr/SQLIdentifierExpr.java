@@ -21,7 +21,6 @@ import org.zaizai.sachima.util.SQLUtils;
 import org.zaizai.sachima.sql.ast.*;
 import org.zaizai.sachima.sql.ast.statement.*;
 import org.zaizai.sachima.sql.visitor.SQLASTVisitor;
-import org.zaizai.sachima.util.FnvHash;
 
 import java.io.IOException;
 import java.util.Collections;

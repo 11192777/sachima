@@ -1,6 +1,6 @@
 package org.zaizai.sachima.sql.dialect.ads.parser;
 
-import org.zaizai.sachima.util.FnvHash;
+import org.zaizai.sachima.constant.TokenFnvConstants;
 import org.zaizai.sachima.sql.ast.SQLStatement;
 import org.zaizai.sachima.sql.ast.statement.*;
 import org.zaizai.sachima.sql.parser.*;
@@ -34,7 +34,7 @@ public class AdsStatementParser extends SQLStatementParser {
     public SQLStatement parseShow() {
         accept(Token.SHOW);
 
-        if (lexer.identifierEquals(FnvHash.Constants.DATABASES)) {
+        if (lexer.identifierEquals(TokenFnvConstants.DATABASES)) {
             lexer.nextToken();
 
             SQLShowDatabasesStatement stmt = parseShowDatabases(false);
@@ -42,7 +42,7 @@ public class AdsStatementParser extends SQLStatementParser {
             return stmt;
         }
 
-        if (lexer.identifierEquals(FnvHash.Constants.TABLES)) {
+        if (lexer.identifierEquals(TokenFnvConstants.TABLES)) {
             lexer.nextToken();
 
             SQLShowTablesStatement stmt = parseShowTables();
@@ -50,7 +50,7 @@ public class AdsStatementParser extends SQLStatementParser {
             return stmt;
         }
 
-        if (lexer.identifierEquals(FnvHash.Constants.COLUMNS)) {
+        if (lexer.identifierEquals(TokenFnvConstants.COLUMNS)) {
             lexer.nextToken();
 
             SQLShowColumnsStatement stmt = parseShowColumns();
@@ -58,7 +58,7 @@ public class AdsStatementParser extends SQLStatementParser {
             return stmt;
         }
 
-        if (lexer.identifierEquals(FnvHash.Constants.TABLEGROUPS)) {
+        if (lexer.identifierEquals(TokenFnvConstants.TABLEGROUPS)) {
             lexer.nextToken();
 
             SQLShowTableGroupsStatement stmt = parseShowTableGroups();
@@ -66,11 +66,11 @@ public class AdsStatementParser extends SQLStatementParser {
             return stmt;
         }
 
-        if (lexer.identifierEquals(FnvHash.Constants.PROCESSLIST)) {
+        if (lexer.identifierEquals(TokenFnvConstants.PROCESSLIST)) {
             lexer.nextToken();
 
             SQLShowProcessListStatement stmt = new SQLShowProcessListStatement();
-            if (lexer.identifierEquals(FnvHash.Constants.MPP)) {
+            if (lexer.identifierEquals(TokenFnvConstants.MPP)) {
                 lexer.nextToken();
                 stmt.setMpp(true);
             }

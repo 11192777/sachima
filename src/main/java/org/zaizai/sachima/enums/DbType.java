@@ -1,6 +1,5 @@
 package org.zaizai.sachima.enums;
 
-import org.zaizai.sachima.util.FnvHash;
 import org.zaizai.sachima.util.FnvHashUtils;
 
 public enum DbType {
@@ -10,6 +9,11 @@ public enum DbType {
     oceanbase(1 << 3),
     ali_oracle(1 << 4),
     oceanbase_oracle(1 << 5),
+
+    /**
+     * MySQL和
+     */
+    mysql_liquibase(1 << 6),
     ;
 
     public final long mask;

@@ -1072,13 +1072,13 @@ public class SQLCreateTableStatement extends SQLStatementImpl implements SQLDDLS
                 if (e instanceof SQLUnique) {
                     SQLUnique unique = (SQLUnique) e;
                     unique.applyDropColumn(column);
-                    if (unique.getColumns().size() == 0) {
+                    if (unique.getColumns().isEmpty()) {
                         tableElementList.remove(i);
                     }
                 } else if (e instanceof MySqlTableIndex) {
                     MySqlTableIndex index = (MySqlTableIndex) e;
                     index.applyDropColumn(column);
-                    if (index.getColumns().size() == 0) {
+                    if (index.getColumns().isEmpty()) {
                         tableElementList.remove(i);
                     }
                 }

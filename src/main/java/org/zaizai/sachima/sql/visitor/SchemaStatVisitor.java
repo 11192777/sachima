@@ -30,7 +30,7 @@ import org.zaizai.sachima.stat.TableStat.Column;
 import org.zaizai.sachima.stat.TableStat.Condition;
 import org.zaizai.sachima.stat.TableStat.Mode;
 import org.zaizai.sachima.stat.TableStat.Relationship;
-import org.zaizai.sachima.util.FnvHash;
+import org.zaizai.sachima.constant.TokenFnvConstants;
 import org.zaizai.sachima.util.FnvHashUtils;
 import org.zaizai.sachima.util.SQLUtils;
 
@@ -133,7 +133,7 @@ public class SchemaStatVisitor extends SQLASTVisitorAdapter {
 
         long hashCode64 = tableName.hashCode64();
 
-        if (hashCode64 == FnvHash.Constants.DUAL) {
+        if (hashCode64 == TokenFnvConstants.DUAL) {
             return null;
         }
 
@@ -173,7 +173,7 @@ public class SchemaStatVisitor extends SQLASTVisitorAdapter {
 
         long basic = tableHashCode64;
         basic ^= '.';
-        basic *= FnvHash.PRIME;
+        basic *= FnvHashUtils.PRIME;
         long columnHashCode64 = FnvHashUtils.hashCode64(basic, columnName);
 
         Column column = this.columns.get(columnHashCode64);
@@ -682,7 +682,7 @@ public class SchemaStatVisitor extends SQLASTVisitorAdapter {
             case Modulus:
                 if (right instanceof SQLIdentifierExpr) {
                     long hashCode64 = ((SQLIdentifierExpr) right).hashCode64();
-                    if (hashCode64 == FnvHash.Constants.ISOPEN) {
+                    if (hashCode64 == TokenFnvConstants.ISOPEN) {
                         left.accept(this);
                         return false;
                     }
@@ -727,7 +727,7 @@ public class SchemaStatVisitor extends SQLASTVisitorAdapter {
         } else if (expr instanceof SQLMethodInvokeExpr) {
             SQLMethodInvokeExpr func = (SQLMethodInvokeExpr) expr;
             List<SQLExpr> arguments = func.getArguments();
-            if (func.methodNameHashCode64() == FnvHash.Constants.COALESCE && arguments.size() > 0) {
+            if (func.methodNameHashCode64() == TokenFnvConstants.COALESCE && !arguments.isEmpty()) {
                 boolean allLiteral = true;
                 for (int i = 1; i < arguments.size(); ++i) {
                     SQLExpr arg = arguments.get(i);
@@ -863,14 +863,14 @@ public class SchemaStatVisitor extends SQLASTVisitorAdapter {
                             SQLColumnDefinition columnDef = schemaObject.findColumn(propertyExpr.nameHashCode64());
                             if (columnDef == null) {
                                 tableName = "UNKNOWN";
-                                tableHashCode64 = FnvHash.Constants.UNKNOWN;
+                                tableHashCode64 = TokenFnvConstants.UNKNOWN;
                             }
                         }
                     }
 
                     long basic = tableHashCode64;
                     basic ^= '.';
-                    basic *= FnvHash.PRIME;
+                    basic *= FnvHashUtils.PRIME;
                     long columnHashCode64 = FnvHashUtils.hashCode64(basic, column);
 
                     Column columnObj = this.columns.get(columnHashCode64);
@@ -922,7 +922,7 @@ public class SchemaStatVisitor extends SQLASTVisitorAdapter {
                 long tableHashCode64 = table.hashCode64();
                 long basic = tableHashCode64;
                 basic ^= '.';
-                basic *= FnvHash.PRIME;
+                basic *= FnvHashUtils.PRIME;
                 long columnHashCode64 = FnvHashUtils.hashCode64(basic, column);
 
                 final Column old = columns.get(columnHashCode64);
@@ -940,7 +940,7 @@ public class SchemaStatVisitor extends SQLASTVisitorAdapter {
             SQLMethodInvokeExpr methodInvokeExpr = (SQLMethodInvokeExpr) expr;
             List<SQLExpr> arguments = methodInvokeExpr.getArguments();
             long nameHash = methodInvokeExpr.methodNameHashCode64();
-            if (nameHash == FnvHash.Constants.DATE_FORMAT) {
+            if (nameHash == TokenFnvConstants.DATE_FORMAT) {
                 if (arguments.size() == 2 && arguments.get(0) instanceof SQLName && arguments.get(1) instanceof SQLCharExpr) {
                     return getColumn(arguments.get(0));
                 }
@@ -1209,7 +1209,7 @@ public class SchemaStatVisitor extends SQLASTVisitorAdapter {
         }
 
         List<SQLWindow> windows = x.getWindows();
-        if (windows != null && windows.size() > 0) {
+        if (windows != null && !windows.isEmpty()) {
             for (SQLWindow window : windows) {
                 window.accept(this);
             }
@@ -1268,7 +1268,7 @@ public class SchemaStatVisitor extends SQLASTVisitorAdapter {
             condition.accept(this);
         }
 
-        if (x.getUsing().size() > 0 && left instanceof SQLExprTableSource && right instanceof SQLExprTableSource) {
+        if (!x.getUsing().isEmpty() && left instanceof SQLExprTableSource && right instanceof SQLExprTableSource) {
             SQLExpr leftExpr = ((SQLExprTableSource) left).getExpr();
             SQLExpr rightExpr = ((SQLExprTableSource) right).getExpr();
 
@@ -1454,7 +1454,7 @@ public class SchemaStatVisitor extends SQLASTVisitorAdapter {
             return false;
         }
 
-        if ((hash == FnvHash.Constants.LEVEL || hash == FnvHash.Constants.CONNECT_BY_ISCYCLE || hash == FnvHash.Constants.ROWNUM) && x.getResolvedColumn() == null && tableSource == null) {
+        if ((hash == TokenFnvConstants.LEVEL || hash == TokenFnvConstants.CONNECT_BY_ISCYCLE || hash == TokenFnvConstants.ROWNUM) && x.getResolvedColumn() == null && tableSource == null) {
             return false;
         }
 
@@ -1466,7 +1466,7 @@ public class SchemaStatVisitor extends SQLASTVisitorAdapter {
 
             if (expr instanceof SQLMethodInvokeExpr) {
                 SQLMethodInvokeExpr func = (SQLMethodInvokeExpr) expr;
-                if (func.methodNameHashCode64() == FnvHash.Constants.ANN) {
+                if (func.methodNameHashCode64() == TokenFnvConstants.ANN) {
                     expr = func.getArguments().get(0);
                 }
             }
@@ -1531,7 +1531,7 @@ public class SchemaStatVisitor extends SQLASTVisitorAdapter {
                     break;
                 }
             }
-            if (x.getParent() instanceof SQLMethodInvokeExpr && ((SQLMethodInvokeExpr) x.getParent()).methodNameHashCode64() == FnvHash.Constants.ANN) {
+            if (x.getParent() instanceof SQLMethodInvokeExpr && ((SQLMethodInvokeExpr) x.getParent()).methodNameHashCode64() == TokenFnvConstants.ANN) {
                 skip = true;
             }
 
@@ -1676,7 +1676,7 @@ public class SchemaStatVisitor extends SQLASTVisitorAdapter {
             }
         }
 
-        if (createStmt != null && createStmt.getTableElementList().size() > 0) {
+        if (createStmt != null && !createStmt.getTableElementList().isEmpty()) {
             SQLName tableName = createStmt.getName();
             for (SQLTableElement e : createStmt.getTableElementList()) {
                 if (e instanceof SQLColumnDefinition) {
@@ -1742,25 +1742,12 @@ public class SchemaStatVisitor extends SQLASTVisitorAdapter {
 
     @Override
     public boolean visit(SQLWithSubqueryClause.Entry x) {
-        String alias = x.getAlias();
-        SQLWithSubqueryClause with = (SQLWithSubqueryClause) x.getParent();
-
-        if (Boolean.TRUE == with.getRecursive()) {
-            SQLSelect select = x.getSubQuery();
-            if (select != null) {
-                select.accept(this);
-            } else {
-                x.getReturningStatement().accept(this);
-            }
+        SQLSelect select = x.getSubQuery();
+        if (select != null) {
+            select.accept(this);
         } else {
-            SQLSelect select = x.getSubQuery();
-            if (select != null) {
-                select.accept(this);
-            } else {
-                x.getReturningStatement().accept(this);
-            }
+            x.getReturningStatement().accept(this);
         }
-
         return false;
     }
 
@@ -1785,7 +1772,7 @@ public class SchemaStatVisitor extends SQLASTVisitorAdapter {
         if (expr instanceof SQLIdentifierExpr) {
             SQLIdentifierExpr identifierExpr = (SQLIdentifierExpr) expr;
 
-            if (identifierExpr.nameHashCode64() == FnvHash.Constants.DUAL) {
+            if (identifierExpr.nameHashCode64() == TokenFnvConstants.DUAL) {
                 return null;
             }
 
@@ -1822,7 +1809,7 @@ public class SchemaStatVisitor extends SQLASTVisitorAdapter {
         SQLExpr expr = x.getExpr();
         if (expr instanceof SQLMethodInvokeExpr) {
             SQLMethodInvokeExpr func = (SQLMethodInvokeExpr) expr;
-            if (func.methodNameHashCode64() == FnvHash.Constants.ANN) {
+            if (func.methodNameHashCode64() == TokenFnvConstants.ANN) {
                 expr = func.getArguments().get(0);
             }
         }
@@ -2888,7 +2875,7 @@ public class SchemaStatVisitor extends SQLASTVisitorAdapter {
             List<SQLSelectQuery> rights = new ArrayList<>();
             rights.add(right);
 
-            for (; ; ) {
+            while(true) {
                 SQLSelectQuery leftLeft = leftUnion.getLeft();
                 SQLSelectQuery leftRight = leftUnion.getRight();
 

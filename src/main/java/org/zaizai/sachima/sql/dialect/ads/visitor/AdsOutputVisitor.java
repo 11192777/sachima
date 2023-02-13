@@ -28,7 +28,7 @@ public class AdsOutputVisitor extends SQLASTOutputVisitor implements AdsVisitor 
         printCreateTable(x, true);
 
         List<SQLAssignItem> options = x.getTableOptions();
-        if (options.size() > 0) {
+        if (!options.isEmpty()) {
             println();
             print0(ucase ? "OPTIONS (" : "options (");
             printAndAccept(options, ", ");

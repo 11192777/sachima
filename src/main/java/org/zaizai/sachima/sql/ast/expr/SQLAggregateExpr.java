@@ -15,7 +15,7 @@
  */
 package org.zaizai.sachima.sql.ast.expr;
 
-import org.zaizai.sachima.util.FnvHash;
+import org.zaizai.sachima.constant.TokenFnvConstants;
 import org.zaizai.sachima.util.SQLUtils;
 import org.zaizai.sachima.sql.ast.*;
 import org.zaizai.sachima.sql.visitor.SQLASTVisitor;
@@ -290,26 +290,26 @@ public class SQLAggregateExpr extends SQLMethodInvokeExpr implements Serializabl
 
         long hash = methodNameHashCode64();
 
-        if (hash == FnvHash.Constants.COUNT
-                || hash == FnvHash.Constants.ROW_NUMBER) {
+        if (hash == TokenFnvConstants.COUNT
+                || hash == TokenFnvConstants.ROW_NUMBER) {
             return SQLIntegerExpr.DATA_TYPE;
         }
 
-        if (arguments.size() > 0) {
+        if (!arguments.isEmpty()) {
             SQLDataType dataType = arguments.get(0)
                     .computeDataType();
             if (dataType != null
-                    && (dataType.nameHashCode64() != FnvHash.Constants.BOOLEAN)) {
+                    && (dataType.nameHashCode64() != TokenFnvConstants.BOOLEAN)) {
                 return dataType;
             }
         }
 
-        if (hash == FnvHash.Constants.SUM) {
+        if (hash == TokenFnvConstants.SUM) {
             return SQLNumberExpr.DATA_TYPE_DOUBLE;
         }
 
-        if (hash == FnvHash.Constants.WM_CONCAT
-                || hash == FnvHash.Constants.GROUP_CONCAT) {
+        if (hash == TokenFnvConstants.WM_CONCAT
+                || hash == TokenFnvConstants.GROUP_CONCAT) {
             return SQLCharExpr.DATA_TYPE;
         }
 

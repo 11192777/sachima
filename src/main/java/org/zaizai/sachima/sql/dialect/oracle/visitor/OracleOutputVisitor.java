@@ -39,32 +39,18 @@ import org.zaizai.sachima.sql.dialect.oracle.parser.OracleFunctionDataType;
 import org.zaizai.sachima.sql.dialect.oracle.parser.OracleProcedureDataType;
 import org.zaizai.sachima.sql.visitor.SQLASTOutputVisitor;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleASTVisitor {
 
-    private final boolean printPostSemi;
-    {
+    public OracleOutputVisitor(Appendable appender) {
+        super(appender);
         this.dbType = DbType.oracle;
     }
 
-    public OracleOutputVisitor(Appendable appender){
-        this(appender, true);
-    }
-
-    public OracleOutputVisitor(Appendable appender, boolean printPostSemi){
-        super(appender);
-        this.printPostSemi = printPostSemi;
-    }
-
-    public boolean isPrintPostSemi() {
-        return printPostSemi;
-    }
 
     private void printHints(List<SQLHint> hints) {
-        if (hints.size() > 0) {
+        if (!hints.isEmpty()) {
             print0("/*+ ");
             printAndAccept(hints, ", ");
             print0(" */");
@@ -73,9 +59,9 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
 
     public boolean visit(OracleAnalytic x) {
         print0("(");
-        
+
         boolean space = false;
-        if (x.getPartitionBy().size() > 0) {
+        if (!x.getPartitionBy().isEmpty()) {
             print0(ucase ? "PARTITION BY " : "partition by ");
             printAndAccept(x.getPartitionBy(), ", ");
 
@@ -104,7 +90,7 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
         }
 
         print(')');
-        
+
         return false;
     }
 
@@ -135,12 +121,10 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
     }
 
 
-
     public boolean visit(OracleDeleteStatement x) {
         print0(ucase ? "DELETE " : "delete ");
 
-        SQLTableSource tableSource = x.getTableSource();
-        if (x.getHints().size() > 0) {
+        if (!x.getHints().isEmpty()) {
             printAndAccept(x.getHints(), ", ");
             print(' ');
         }
@@ -295,7 +279,7 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
                 print(' ');
             }
 
-            if (x.getUsing().size() > 0) {
+            if (!x.getUsing().isEmpty()) {
                 print0(ucase ? " USING (" : " using (");
                 printAndAccept(x.getUsing(), ", ");
                 print(')');
@@ -338,10 +322,10 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
         print0(" (");
         printAndAccept(x.getItems(), ", ");
 
-        if (x.getPivotFor().size() > 0) {
+        if (!x.getPivotFor().isEmpty()) {
             print0(ucase ? " FOR " : " for ");
             if (x.getPivotFor().size() == 1) {
-                ((SQLExpr) x.getPivotFor().get(0)).accept(this);
+                (x.getPivotFor().get(0)).accept(this);
             } else {
                 print('(');
                 printAndAccept(x.getPivotFor(), ", ");
@@ -349,7 +333,7 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
             }
         }
 
-        if (x.getPivotIn().size() > 0) {
+        if (!x.getPivotIn().isEmpty()) {
             print0(ucase ? " IN (" : " in (");
             printAndAccept(x.getPivotIn(), ", ");
             print(')');
@@ -384,7 +368,7 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
 
         print0(ucase ? "SELECT " : "select ");
 
-        if (x.getHintsSize() > 0) {
+        if (!x.getHints().isEmpty()) {
             printAndAccept(x.getHints(), ", ");
             print(' ');
         }
@@ -442,7 +426,7 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
         if (x.isForUpdate()) {
             println();
             print0(ucase ? "FOR UPDATE" : "for update");
-            if (x.getForUpdateOfSize() > 0) {
+            if (!x.getForUpdateOf().isEmpty()) {
                 print('(');
                 printAndAccept(x.getForUpdateOf(), ", ");
                 print(')');
@@ -526,7 +510,7 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
             }
         }
 
-        if (x.getHints().size() > 0) {
+        if (!x.getHints().isEmpty()) {
             this.printHints(x.getHints());
         }
 
@@ -571,17 +555,17 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
 
         print0(" (");
         if (x.getItems().size() == 1) {
-            ((SQLExpr) x.getItems().get(0)).accept(this);
+            x.getItems().get(0).accept(this);
         } else {
             print0(" (");
             printAndAccept(x.getItems(), ", ");
             print(')');
         }
 
-        if (x.getPivotFor().size() > 0) {
+        if (!x.getPivotFor().isEmpty()) {
             print0(ucase ? " FOR " : " for ");
             if (x.getPivotFor().size() == 1) {
-                ((SQLExpr) x.getPivotFor().get(0)).accept(this);
+                x.getPivotFor().get(0).accept(this);
             } else {
                 print('(');
                 printAndAccept(x.getPivotFor(), ", ");
@@ -589,7 +573,7 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
             }
         }
 
-        if (x.getPivotIn().size() > 0) {
+        if (!x.getPivotIn().isEmpty()) {
             print0(ucase ? " IN (" : " in (");
             printAndAccept(x.getPivotIn(), ", ");
             print(')');
@@ -601,8 +585,8 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
 
     public boolean visit(OracleUpdateStatement x) {
         print0(ucase ? "UPDATE " : "update ");
-        
-        if (x.getHints().size() > 0) {
+
+        if (!x.getHints().isEmpty()) {
             printAndAccept(x.getHints(), ", ");
             print(' ');
         }
@@ -635,7 +619,7 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
             this.indentCount--;
         }
 
-        if (x.getReturning().size() > 0) {
+        if (!x.getReturning().isEmpty()) {
             println();
             print0(ucase ? "RETURNING " : "returning ");
             printAndAccept(x.getReturning(), ", ");
@@ -691,7 +675,7 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
     public boolean visit(OracleWithSubqueryEntry x) {
         print0(x.getAlias());
 
-        if (x.getColumns().size() > 0) {
+        if (!x.getColumns().isEmpty()) {
             print0(" (");
             printAndAccept(x.getColumns(), ", ");
             print(')');
@@ -864,7 +848,7 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
 
     @Override
     public boolean visit(ModelRulesClause x) {
-        if (x.getOptions().size() > 0) {
+        if (!x.getOptions().isEmpty()) {
             print0(ucase ? "RULES" : "rules");
             for (ModelRuleOption opt : x.getOptions()) {
                 print(' ');
@@ -933,16 +917,16 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
     @Override
     public boolean visit(OracleInsertStatement x) {
         //visit((SQLInsertStatement) x);
-        
+
         print0(ucase ? "INSERT " : "insert ");
-        
-        if (x.getHints().size() > 0) {
+
+        if (!x.getHints().isEmpty()) {
             printAndAccept(x.getHints(), ", ");
             print(' ');
         }
 
         print0(ucase ? "INTO " : "into ");
-        
+
         x.getTableSource().accept(this);
 
         printInsertColumns(x.getColumns());
@@ -977,7 +961,7 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
 
         x.getTableSource().accept(this);
 
-        if (x.getColumns().size() > 0) {
+        if (!x.getColumns().isEmpty()) {
             this.indentCount++;
             println();
             print('(');
@@ -1012,7 +996,7 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
     public boolean visit(OracleMultiInsertStatement x) {
         print0(ucase ? "INSERT " : "insert ");
 
-        if (x.getHints().size() > 0) {
+        if (!x.getHints().isEmpty()) {
             this.printHints(x.getHints());
         }
 
@@ -1136,8 +1120,7 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
         if (x.getStatements().size() > 1) {
             println();
         } else {
-            if (x.getStatements().size() == 1
-                    && x.getStatements().get(0) instanceof SQLIfStatement) {
+            if (x.getStatements().size() == 1 && x.getStatements().get(0) instanceof SQLIfStatement) {
                 println();
             } else {
                 print(' ');
@@ -1255,7 +1238,8 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
         }
 
         print0(ucase ? "ALTER TABLE " : "alter table ");
-        printTableSourceExpr(x.getName());
+        this.visit(x.getTableSource());
+        //printTableSourceExpr(x.getName());
         this.indentCount++;
         for (SQLAlterTableItem item : x.getItems()) {
             println();
@@ -1286,7 +1270,7 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
     @Override
     public boolean visit(UpdateIndexesClause x) {
         print0(ucase ? "UPDATE INDEXES" : "update indexes");
-        if (x.getItems().size() > 0) {
+        if (!x.getItems().isEmpty()) {
             print('(');
             printAndAccept(x.getItems(), ", ");
             print(')');
@@ -1299,7 +1283,7 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
         print0(ucase ? "SPLIT PARTITION " : "split partition ");
         x.getName().accept(this);
 
-        if (x.getAt().size() > 0) {
+        if (!x.getAt().isEmpty()) {
             this.indentCount++;
             println();
             print0(ucase ? "AT (" : "at (");
@@ -1308,7 +1292,7 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
             this.indentCount--;
         }
 
-        if (x.getInto().size() > 0) {
+        if (!x.getInto().isEmpty()) {
             println();
             this.indentCount++;
             print0(ucase ? "INTO (" : "into (");
@@ -1376,7 +1360,7 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
         x.getTable().accept(this);
 
         List<SQLSelectOrderByItem> items = x.getItems();
-        if (items.size() > 0) {
+        if (!items.isEmpty()) {
             print('(');
             printAndAccept(items, ", ");
             print(')');
@@ -1419,7 +1403,7 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
             }
         }
 
-        if (x.getLocalPartitions().size() > 0) {
+        if (!x.getLocalPartitions().isEmpty()) {
             println();
             print0(ucase ? "LOCAL (" : "local (");
             this.indentCount++;
@@ -1433,14 +1417,14 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
         }
 
         List<SQLName> localStoreIn = x.getLocalStoreIn();
-        if (localStoreIn.size() > 0) {
+        if (!localStoreIn.isEmpty()) {
             print0(ucase ? " STORE IN (" : " store in (");
             printAndAccept(localStoreIn, ", ");
             print(')');
         }
 
         List<SQLPartitionBy> globalPartitions = x.getGlobalPartitions();
-        if (globalPartitions.size() > 0) {
+        if (!globalPartitions.isEmpty()) {
             for (SQLPartitionBy globalPartition : globalPartitions) {
                 println();
                 print0(ucase ? "GLOBAL " : "global ");
@@ -1683,7 +1667,7 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
             this.indentCount--;
         }
 
-        if (x.getIncluding().size() > 0) {
+        if (!x.getIncluding().isEmpty()) {
             print0(ucase ? " INCLUDING " : " including ");
             printAndAccept(x.getIncluding(), ", ");
             print0(ucase ? " OVERFLOW " : " overflow ");
@@ -2132,7 +2116,7 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
             println();
             if (block instanceof SQLBlockStatement) {
                 SQLBlockStatement blockStatement = (SQLBlockStatement) block;
-                if (blockStatement.getParameters().size() > 0 || authid != null) {
+                if (!blockStatement.getParameters().isEmpty() || authid != null) {
                     println(ucase ? "AS" : "as");
                 }
             }
@@ -2225,7 +2209,7 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
     public boolean visit(SQLCharacterDataType x) {
         print0(x.getName());
         final List<SQLExpr> arguments = x.getArguments();
-        if (arguments.size() > 0) {
+        if (!arguments.isEmpty()) {
             print('(');
             SQLExpr arg0 = arguments.get(0);
             printExpr(arg0, false);
@@ -2241,7 +2225,7 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
     @Override
     public boolean visit(OracleDataTypeIntervalYear x) {
         print0(x.getName());
-        if (x.getArguments().size() > 0) {
+        if (!x.getArguments().isEmpty()) {
             print('(');
             x.getArguments().get(0).accept(this);
             print(')');
@@ -2255,7 +2239,7 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
     @Override
     public boolean visit(OracleDataTypeIntervalDay x) {
         print0(x.getName());
-        if (x.getArguments().size() > 0) {
+        if (!x.getArguments().isEmpty()) {
             print('(');
             x.getArguments().get(0).accept(this);
             print(')');
@@ -2263,7 +2247,7 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
 
         print0(ucase ? " TO SECOND" : " to second");
 
-        if (x.getFractionalSeconds().size() > 0) {
+        if (!x.getFractionalSeconds().isEmpty()) {
             print('(');
             x.getFractionalSeconds().get(0).accept(this);
             print(')');
@@ -2424,43 +2408,42 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
     public boolean visit(OracleSupplementalIdKey x) {
         print0(ucase ? "SUPPLEMENTAL LOG DATA (" : "supplemental log data (");
 
-        int count = 0;
+        boolean flag = false;
 
         if (x.isAll()) {
             print0(ucase ? "ALL" : "all");
-            count++;
+            flag = true;
         }
 
         if (x.isPrimaryKey()) {
-            if (count != 0) {
+            if (flag) {
                 print0(", ");
             }
             print0(ucase ? "PRIMARY KEY" : "primary key");
-            count++;
+            flag = true;
         }
 
         if (x.isUnique()) {
-            if (count != 0) {
+            if (flag) {
                 print0(", ");
             }
             print0(ucase ? "UNIQUE" : "unique");
-            count++;
+            flag = true;
         }
 
         if (x.isUniqueIndex()) {
-            if (count != 0) {
+            if (flag) {
                 print0(", ");
             }
             print0(ucase ? "UNIQUE INDEX" : "unique index");
-            count++;
+            flag = true;
         }
 
         if (x.isForeignKey()) {
-            if (count != 0) {
+            if (flag) {
                 print0(", ");
             }
             print0(ucase ? "FOREIGN KEY" : "foreign key");
-            count++;
         }
 
         print0(ucase ? ") COLUMNS" : ") columns");
@@ -2521,7 +2504,7 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
                 print(')');
             }
 
-            if (x.getExternalDirectoryLocation().size() > 0) {
+            if (!x.getExternalDirectoryLocation().isEmpty()) {
                 println();
                 print0(ucase ? "LOCATION (" : " location(");
                 printAndAccept(x.getExternalDirectoryLocation(), ", ");
@@ -2588,7 +2571,7 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
 
         this.indentCount--;
 
-        if (x.isBody() || statements.size() > 0) {
+        if (x.isBody() || !statements.isEmpty()) {
             println();
             print0(ucase ? "END " : "end ");
             x.getName().accept(this);
@@ -2612,19 +2595,19 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
         x.getDynamicSql().accept(this);
 
         List<SQLExpr> into = x.getInto();
-        if (into.size() > 0) {
+        if (!into.isEmpty()) {
             print0(ucase ? " INTO " : " into ");
             printAndAccept(into, ", ");
         }
 
         List<SQLArgument> using = x.getArguments();
-        if (using.size() > 0) {
+        if (!using.isEmpty()) {
             print0(ucase ? " USING " : " using ");
             printAndAccept(using, ", ");
         }
 
         List<SQLExpr> returnInto = x.getReturnInto();
-        if (returnInto.size() > 0) {
+        if (!returnInto.isEmpty()) {
             print0(ucase ? " RETURNNING INTO " : " returnning into ");
             printAndAccept(returnInto, ", ");
         }
@@ -2703,7 +2686,7 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
             print0(" AS OBJECT");
         }
 
-        if (parameters.size() > 0) {
+        if (!parameters.isEmpty()) {
             if (x.isParen()) {
                 print(" (");
             } else {
@@ -2719,12 +2702,10 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
                 SQLDataType dataType = param.getDataType();
 
                 if (i < parameters.size() - 1) {
-                    if (dataType instanceof OracleFunctionDataType
-                            && ((OracleFunctionDataType) dataType).getBlock() != null) {
+                    if (dataType instanceof OracleFunctionDataType && ((OracleFunctionDataType) dataType).getBlock() != null) {
                         // skip
                         println();
-                    } else  if (dataType instanceof OracleProcedureDataType
-                            && ((OracleProcedureDataType) dataType).getBlock() != null) {
+                    } else if (dataType instanceof OracleProcedureDataType && ((OracleProcedureDataType) dataType).getBlock() != null) {
                         // skip
                         println();
                     } else {
@@ -2863,6 +2844,110 @@ public class OracleOutputVisitor extends SQLASTOutputVisitor implements OracleAS
         incrementIndent();
         printOracleSegmentAttributes(x);
         decrementIndent();
+        return false;
+    }
+
+    @Override
+    public boolean visit(SQLColumnDefinition x) {
+        boolean parameterized = this.parameterized;
+        this.parameterized = false;
+
+        x.getName().accept(this);
+
+        final SQLDataType dataType = x.getDataType();
+        if (dataType != null) {
+            print(' ');
+            dataType.accept(this);
+        }
+
+        if (x.getDefaultExpr() != null) {
+            visitColumnDefault(x);
+        }
+
+        if (x.isAutoIncrement()) {
+            print0("GENERATED BY DEFAULT AS IDENTITY");
+        }
+
+        final AutoIncrementType sequenceType = x.getSequenceType();
+        if (sequenceType != null) {
+            print0(" ");
+            print0(ucase ? sequenceType.getKeyword() : sequenceType.getKeyword().toLowerCase());
+        }
+
+        for (SQLColumnConstraint item : x.getConstraints()) {
+            boolean newLine = item instanceof SQLForeignKeyConstraint || item instanceof SQLPrimaryKey || item instanceof SQLColumnCheck || item.getName() != null;
+            if (newLine) {
+                this.indentCount++;
+                println();
+            } else {
+                print(' ');
+            }
+
+            item.accept(this);
+
+            if (newLine) {
+                this.indentCount--;
+            }
+        }
+
+        SQLExpr generatedAlawsAs = x.getGeneratedAlawsAs();
+        if (generatedAlawsAs != null) {
+            print0(ucase ? " GENERATED ALWAYS AS " : " generated always as ");
+            printExpr(generatedAlawsAs, parameterized);
+        }
+
+        SQLColumnDefinition.Identity identity = x.getIdentity();
+        if (identity != null) {
+            print(' ');
+            identity.accept(this);
+        }
+
+        if (x.isVirtual()) {
+            print0(ucase ? " VIRTUAL" : " virtual");
+        }
+
+        if (x.isVisible()) {
+            print0(ucase ? " VISIBLE" : " visible");
+        }
+
+        Boolean enable = x.getEnable();
+        if (enable != null) {
+            if (enable.booleanValue()) {
+                print0(ucase ? " ENABLE" : " enable");
+            }
+        }
+
+        if (x.getComment() != null) {
+            print0(ucase ? " COMMENT " : " comment ");
+            x.getComment().accept(this);
+        }
+
+        List<SQLAssignItem> mappedBy = x.getMappedByDirect();
+        if (mappedBy != null && !mappedBy.isEmpty()) {
+            print0(ucase ? " MAPPED BY (" : " mapped by (");
+            printAndAccept(mappedBy, ", ");
+            print0(")");
+        }
+
+        List<SQLAssignItem> colProperties = x.getColPropertiesDirect();
+        if (colProperties != null && !colProperties.isEmpty()) {
+            print0(ucase ? " COLPROPERTIES (" : " colproperties (");
+            printAndAccept(colProperties, ", ");
+            print0(")");
+        }
+
+        if (x.getEncode() != null) {
+            print0(ucase ? " ENCODE=" : " encode=");
+            x.getEncode().accept(this);
+        }
+
+        if (x.getCompression() != null) {
+            print0(ucase ? " COMPRESSION=" : " compression=");
+            x.getCompression().accept(this);
+        }
+
+        this.parameterized = parameterized;
+
         return false;
     }
 }

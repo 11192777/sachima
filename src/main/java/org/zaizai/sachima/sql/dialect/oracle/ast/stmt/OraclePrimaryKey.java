@@ -15,6 +15,8 @@
  */
 package org.zaizai.sachima.sql.dialect.oracle.ast.stmt;
 
+import org.zaizai.sachima.enums.DbType;
+import org.zaizai.sachima.sql.ast.SQLIndexDefinition;
 import org.zaizai.sachima.sql.ast.SQLName;
 import org.zaizai.sachima.sql.ast.statement.SQLPrimaryKey;
 import org.zaizai.sachima.sql.ast.statement.SQLPrimaryKeyImpl;
@@ -30,6 +32,16 @@ public class OraclePrimaryKey extends SQLPrimaryKeyImpl implements OracleConstra
     private Boolean                enable;
     private Initially              initially;
     private Boolean                deferrable;
+
+    public OraclePrimaryKey() {
+        this.dbType = DbType.oracle;
+    }
+
+
+    public OraclePrimaryKey(SQLIndexDefinition indexDefinition) {
+        super(indexDefinition);
+        super.dbType = DbType.oracle;
+    }
 
     @Override
     protected void accept0(SQLASTVisitor visitor) {

@@ -15,7 +15,7 @@
  */
 package org.zaizai.sachima.sql.ast.statement;
 
-import org.zaizai.sachima.util.FnvHash;
+import org.zaizai.sachima.constant.TokenFnvConstants;
 import org.zaizai.sachima.enums.DbType;
 import org.zaizai.sachima.util.FnvHashUtils;
 import org.zaizai.sachima.util.SQLUtils;
@@ -23,7 +23,6 @@ import org.zaizai.sachima.sql.ast.*;
 import org.zaizai.sachima.sql.ast.expr.*;
 import org.zaizai.sachima.sql.visitor.SQLASTVisitor;
 import org.zaizai.sachima.sql.visitor.SQLASTVisitorAdapter;
-import org.zaizai.sachima.util.FnvHash;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -911,7 +910,7 @@ public class SQLSelectQueryBlock extends SQLObjectImpl implements SQLSelectQuery
         x.parenthesized = parenthesized;
         x.distionOption = distionOption;
 
-        if (x.selectList.size() > 0) {
+        if (!x.selectList.isEmpty()) {
             x.selectList.clear();
         }
 
@@ -1418,7 +1417,7 @@ public class SQLSelectQueryBlock extends SQLObjectImpl implements SQLSelectQuery
                 SQLExpr hintExpr = SQLUtils.toSQLExpr(text.substring(1), dbType);
                 if (hintExpr instanceof SQLMethodInvokeExpr) {
                     SQLMethodInvokeExpr func = (SQLMethodInvokeExpr) hintExpr;
-                    if (func.methodNameHashCode64() == FnvHash.Constants.MAPJOIN) {
+                    if (func.methodNameHashCode64() == TokenFnvConstants.MAPJOIN) {
                         for (SQLExpr arg : func.getArguments()) {
                             SQLIdentifierExpr tablename = (SQLIdentifierExpr) arg;
                             SQLTableSource tableSource = findTableSource(tablename.getName());
@@ -1452,7 +1451,7 @@ public class SQLSelectQueryBlock extends SQLObjectImpl implements SQLSelectQuery
                 SQLExpr hintExpr = SQLUtils.toSQLExpr(text.substring(1), dbType);
                 if (hintExpr instanceof SQLMethodInvokeExpr) {
                     SQLMethodInvokeExpr func = (SQLMethodInvokeExpr) hintExpr;
-                    if (func.methodNameHashCode64() == FnvHash.Constants.MAPJOIN) {
+                    if (func.methodNameHashCode64() == TokenFnvConstants.MAPJOIN) {
                         hints.remove(i);
                         removeCount++;
                     }

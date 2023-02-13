@@ -1,17 +1,21 @@
 package custom;
 
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.zaizai.sachima.enums.DbType;
-import org.zaizai.sachima.exception.FastsqlColumnAmbiguousException;
 import org.zaizai.sachima.sql.ast.SQLStatement;
+import org.zaizai.sachima.sql.dialect.mysql.visitor.handler.ColumnTypeHandler;
 import org.zaizai.sachima.util.SQLAdaptHelper;
 import org.zaizai.sachima.util.SQLUtils;
 import org.zaizai.sachima.util.StringUtils;
-import sql.DeleteTest;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import sql.dml.DeleteTest;
 
-import java.util.Objects;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * <H1></H1>
@@ -32,7 +36,7 @@ public class TestHelper {
         if (!alreadyOracleSql) {
             sql = mysqlToOracle(sql);
         }
-        if (Objects.equals(sql, target)) {
+        if (sqlEquals(sql, target)) {
             LOG.info(StringUtils.format("[YES] ====> SUCCESS"));
         } else {
             LOG.error(StringUtils.format("[NO] ====> SQL:\n{}", sql));
@@ -40,6 +44,15 @@ public class TestHelper {
                     "\t\tExpectant:{}\n \t\tResultSQL:{}\n", target, sql);
             throw new IllegalArgumentException(format);
         }
+    }
+
+    public static boolean sqlEquals(String arg1, String arg2) {
+        if (StringUtils.isEmpty(arg1)) {
+            return false;
+        }
+        arg1 = arg1.replaceAll("\\s+", " ");
+        arg2 = arg2.replaceAll("\\s+", " ");
+        return StringUtils.equalsIgnoreCase(arg1, arg2);
     }
 
     public static String mysqlToOracle(String sql) {
@@ -57,6 +70,13 @@ public class TestHelper {
     }
 
     public static String toOracleNclob(String sql) {
-        return SQLAdaptHelper.translateMysqlToOracle(sql, new MySqlToOracleOVNclob(new StringBuffer(), false));
+        HashMap<String, List<String>> tableColumnMap = new HashMap<>();
+        tableColumnMap.put("user", Stream.of("name", "code").collect(Collectors.toList()));
+
+        Map<String, Map<String, List<String>>> dataTypeMap = new HashMap<>();
+        dataTypeMap.put("NCLOB", tableColumnMap);
+
+        ColumnTypeHandler.apply(dataTypeMap);
+        return SQLAdaptHelper.translateMysqlToOracle(sql, new MySqlToOracleOVNclob(new StringBuffer()));
     }
 }

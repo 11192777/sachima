@@ -23,7 +23,6 @@ import org.zaizai.sachima.sql.ast.*;
 import org.zaizai.sachima.sql.ast.expr.*;
 import org.zaizai.sachima.sql.repository.SchemaResolveVisitor;
 import org.zaizai.sachima.sql.visitor.SQLASTVisitor;
-import org.zaizai.sachima.util.FnvHash;
 
 import java.io.IOException;
 import java.util.ArrayList;

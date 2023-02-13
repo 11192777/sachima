@@ -21,7 +21,6 @@ import org.zaizai.sachima.sql.ast.SQLName;
 import org.zaizai.sachima.sql.ast.SQLObject;
 import org.zaizai.sachima.sql.ast.statement.SQLColumnDefinition;
 import org.zaizai.sachima.sql.dialect.mysql.visitor.MySqlASTVisitor;
-import org.zaizai.sachima.util.FnvHash;
 
 import java.util.Collections;
 import java.util.List;

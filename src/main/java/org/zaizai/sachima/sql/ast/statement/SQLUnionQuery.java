@@ -252,7 +252,7 @@ public class SQLUnionQuery extends SQLObjectImpl implements SQLSelectQuery, SQLD
             ArrayList<SQLSelectQuery> rights = new ArrayList<>();
             rights.add(right);
 
-            for (; ; ) {
+            while(true) {
                 SQLSelectQuery leftLeft = leftUnion.getLeft();
                 SQLSelectQuery leftRight = leftUnion.getRight();
 

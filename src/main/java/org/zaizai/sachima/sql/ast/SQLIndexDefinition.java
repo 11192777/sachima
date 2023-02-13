@@ -5,7 +5,7 @@ import org.zaizai.sachima.sql.ast.statement.SQLAssignItem;
 import org.zaizai.sachima.sql.ast.statement.SQLSelectOrderByItem;
 import org.zaizai.sachima.sql.ast.statement.SQLTableSource;
 import org.zaizai.sachima.sql.visitor.SQLASTVisitor;
-import org.zaizai.sachima.util.FnvHash;
+import org.zaizai.sachima.constant.TokenFnvConstants;
 import org.zaizai.sachima.util.FnvHashUtils;
 
 import java.util.ArrayList;
@@ -433,9 +433,9 @@ public class SQLIndexDefinition extends SQLObjectImpl implements SQLIndex {
             return null;
         }
 
-        if (hash64 == FnvHash.Constants.KEY_BLOCK_SIZE) {
+        if (hash64 == TokenFnvConstants.KEY_BLOCK_SIZE) {
             return options.getKeyBlockSize();
-        } else if (hash64 == FnvHash.Constants.ALGORITHM) {
+        } else if (hash64 == TokenFnvConstants.ALGORITHM) {
             if (options.getAlgorithm() != null) {
                 return new SQLIdentifierExpr(options.getAlgorithm());
             }
@@ -460,7 +460,7 @@ public class SQLIndexDefinition extends SQLObjectImpl implements SQLIndex {
     }
 
     public String getDistanceMeasure() {
-        SQLExpr expr = getOption(FnvHash.Constants.DISTANCEMEASURE);
+        SQLExpr expr = getOption(TokenFnvConstants.DISTANCEMEASURE);
         if (expr == null) {
             return null;
         }
@@ -473,7 +473,7 @@ public class SQLIndexDefinition extends SQLObjectImpl implements SQLIndex {
             return options.getAlgorithm();
         }
 
-        SQLExpr expr = getOption(FnvHash.Constants.ALGORITHM);
+        SQLExpr expr = getOption(TokenFnvConstants.ALGORITHM);
         if (expr == null) {
             return null;
         }

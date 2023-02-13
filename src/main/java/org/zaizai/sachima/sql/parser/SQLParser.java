@@ -15,7 +15,7 @@
  */
 package org.zaizai.sachima.sql.parser;
 
-import org.zaizai.sachima.util.FnvHash;
+import org.zaizai.sachima.constant.TokenFnvConstants;
 import org.zaizai.sachima.enums.DbType;
 import org.zaizai.sachima.sql.ast.statement.SQLCreateTableStatement;
 import org.zaizai.sachima.util.StringUtils;
@@ -24,9 +24,9 @@ import java.util.TimeZone;
 
 public class SQLParser {
     protected final Lexer lexer;
-    protected DbType      dbType;
+    protected DbType dbType;
 
-    public SQLParser(String sql, DbType dbType, SQLParserFeature... features){
+    public SQLParser(String sql, DbType dbType, SQLParserFeature... features) {
         this(new Lexer(sql, null, dbType), dbType);
         for (SQLParserFeature feature : features) {
             config(feature, true);
@@ -35,18 +35,18 @@ public class SQLParser {
         this.lexer.nextToken();
     }
 
-    public SQLParser(String sql){
+    public SQLParser(String sql) {
         this(sql, null);
     }
 
-    public SQLParser(Lexer lexer){
+    public SQLParser(Lexer lexer) {
         this(lexer, null);
         if (dbType == null) {
             dbType = lexer.dbType;
         }
     }
 
-    public SQLParser(Lexer lexer, DbType dbType){
+    public SQLParser(Lexer lexer, DbType dbType) {
         this.lexer = lexer;
         this.dbType = dbType;
     }
@@ -96,12 +96,12 @@ public class SQLParser {
                 ident = StringUtils.removeNameQuotes(ident);
             }
 
-            if (hash == FnvHash.Constants.START
-                    || hash == FnvHash.Constants.CONNECT
-                    || hash == FnvHash.Constants.NATURAL
-                    || hash == FnvHash.Constants.CROSS
-                    || hash == FnvHash.Constants.OFFSET
-                    || hash == FnvHash.Constants.LIMIT) {
+            if (hash == TokenFnvConstants.START
+                    || hash == TokenFnvConstants.CONNECT
+                    || hash == TokenFnvConstants.NATURAL
+                    || hash == TokenFnvConstants.CROSS
+                    || hash == TokenFnvConstants.OFFSET
+                    || hash == TokenFnvConstants.LIMIT) {
                 if (must) {
                     throw new ParserException("illegal alias. " + lexer.info());
                 }
@@ -119,8 +119,8 @@ public class SQLParser {
                     case ON:
                         return ident;
                     case JOIN:
-                        if (hash != FnvHash.Constants.NATURAL
-                                && hash != FnvHash.Constants.CROSS) {
+                        if (hash != TokenFnvConstants.NATURAL
+                                && hash != TokenFnvConstants.CROSS) {
                             return ident;
                         }
                         lexer.reset(mark);
@@ -134,19 +134,19 @@ public class SQLParser {
             }
 
             if (!must) {
-                if (hash == FnvHash.Constants.MODEL) {
+                if (hash == TokenFnvConstants.MODEL) {
                     Lexer.SavePoint mark = lexer.mark();
                     lexer.nextToken();
                     if (lexer.token == Token.PARTITION
                             || lexer.token == Token.UNION
-                            || lexer.identifierEquals(FnvHash.Constants.DIMENSION)
-                            || lexer.identifierEquals(FnvHash.Constants.IGNORE)
-                            || lexer.identifierEquals(FnvHash.Constants.KEEP)) {
+                            || lexer.identifierEquals(TokenFnvConstants.DIMENSION)
+                            || lexer.identifierEquals(TokenFnvConstants.IGNORE)
+                            || lexer.identifierEquals(TokenFnvConstants.KEEP)) {
                         lexer.reset(mark);
                         return null;
                     }
                     return ident;
-                } else if (hash == FnvHash.Constants.WINDOW) {
+                } else if (hash == TokenFnvConstants.WINDOW) {
                     Lexer.SavePoint mark = lexer.mark();
                     lexer.nextToken();
                     if (lexer.token == Token.IDENTIFIER) {
@@ -154,10 +154,10 @@ public class SQLParser {
                         return null;
                     }
                     return ident;
-                } else if (hash == FnvHash.Constants.DISTRIBUTE
-                        || hash == FnvHash.Constants.SORT
-                        || hash == FnvHash.Constants.CLUSTER
-                        || hash == FnvHash.Constants.ZORDER
+                } else if (hash == TokenFnvConstants.DISTRIBUTE
+                        || hash == TokenFnvConstants.SORT
+                        || hash == TokenFnvConstants.CLUSTER
+                        || hash == TokenFnvConstants.ZORDER
                 ) {
                     Lexer.SavePoint mark = lexer.mark();
                     lexer.nextToken();
@@ -181,8 +181,8 @@ public class SQLParser {
                     lexer.nextToken();
                     if (lexer.token == Token.OUTER
                             || lexer.token == Token.JOIN
-                            || lexer.identifierEquals(FnvHash.Constants.ANTI)
-                            || lexer.identifierEquals(FnvHash.Constants.SEMI)) {
+                            || lexer.identifierEquals(TokenFnvConstants.ANTI)
+                            || lexer.identifierEquals(TokenFnvConstants.SEMI)) {
                         lexer.reset(mark);
                         break;
                     } else {
@@ -542,22 +542,11 @@ public class SQLParser {
             arround = lexer.text;
         }
 
-        // throw new
-        // ParserException("syntax error, error arround:'"+arround+"',expect "
-        // + token + ", actual " + lexer.token + " "
-        // + lexer.stringVal() + ", pos " + this.lexer.pos());
-        StringBuilder buf = new StringBuilder()
-                .append("syntax error, error in :'")
-                .append(arround);
+        StringBuilder buf = new StringBuilder().append("syntax error, error in :'").append(arround);
         if (token != lexer.token) {
-            buf.append("', expect ")
-                    .append(token.name)
-                    .append(", actual ")
-                    .append(lexer.token.name);
+            buf.append("', expect ").append(token.name).append(", actual ").append(lexer.token.name);
         }
-        buf.append(", ")
-                .append(
-                        lexer.info());
+        buf.append(", ").append(lexer.info());
 
         throw new ParserException(buf.toString());
     }
@@ -573,19 +562,18 @@ public class SQLParser {
 
     public int acceptInteger() {
         if (lexer.token == Token.LITERAL_INT) {
-            int intVal = ((Integer) lexer.integerValue()).intValue();
+            int intVal = lexer.integerValue().intValue();
             lexer.nextToken();
             return intVal;
         } else {
-            throw new ParserException("syntax error, expect int, actual " + lexer.token + " "
-                    + lexer.info());
+            throw new ParserException("syntax error, expect int, actual " + lexer.token + " " + lexer.info());
         }
     }
 
     public void match(Token token) {
         if (lexer.token != token) {
             throw new ParserException("syntax error, expect " + token + ", actual " + lexer.token + " "
-                                      + lexer.info());
+                    + lexer.info());
         }
     }
 

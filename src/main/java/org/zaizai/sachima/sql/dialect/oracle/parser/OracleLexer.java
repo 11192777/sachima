@@ -67,7 +67,7 @@ public class OracleLexer extends Lexer {
 
         map.put("SHARE", Token.SHARE);
         map.put("START", Token.START);
-        map.put("SYSDATE", Token.SYSDATE);
+        //map.put("SYSDATE", Token.SYSDATE);
         map.put("UNLIMITED", Token.UNLIMITED);
         map.put("USING", Token.USING);
 
@@ -113,8 +113,9 @@ public class OracleLexer extends Lexer {
         map.put("（", Token.LPAREN);
         map.put("）", Token.RPAREN);
 
-        map.put("NUMBER", Token.NUMBER);
         map.put("SIZE", Token.SIZE);
+        map.put("MODIFY", Token.MODIFY);
+        map.put("NUMBER", Token.NUMBER);
 
         DEFAULT_ORACLE_KEYWORDS = new Keywords(map);
     }
@@ -174,7 +175,7 @@ public class OracleLexer extends Lexer {
         }
 
         if (c0 == ':' && c1 >= '0' && c1 <= '9') {
-            for (; ; ) {
+            while(true) {
                 ch = charAt(++pos);
 
                 if (ch < '0' || ch > '9') {
@@ -185,7 +186,7 @@ public class OracleLexer extends Lexer {
                 continue;
             }
         } else {
-            for (; ; ) {
+            while(true) {
                 ch = charAt(++pos);
 
                 if (!isIdentifierChar(ch) && ch != ':') {

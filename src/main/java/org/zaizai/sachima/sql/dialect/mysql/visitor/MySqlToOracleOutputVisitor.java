@@ -1,11 +1,17 @@
 package org.zaizai.sachima.sql.dialect.mysql.visitor;
 
+import org.zaizai.sachima.constant.TokenFnvConstants;
+import org.zaizai.sachima.lang.Assert;
+import org.zaizai.sachima.sql.ast.SQLDataType;
 import org.zaizai.sachima.sql.ast.SQLExpr;
 import org.zaizai.sachima.sql.ast.SQLName;
 import org.zaizai.sachima.sql.ast.expr.*;
-import org.zaizai.sachima.sql.ast.statement.SQLExprTableSource;
-import org.zaizai.sachima.sql.ast.statement.SQLSelectItem;
-import org.zaizai.sachima.sql.dialect.mysql.visitor.handler.NclobTypeHandler;
+import org.zaizai.sachima.sql.ast.statement.*;
+import org.zaizai.sachima.sql.dialect.mysql.ast.MySqlObjectImpl;
+import org.zaizai.sachima.sql.dialect.mysql.ast.statement.MySqlAlterTableModifyColumn;
+import org.zaizai.sachima.sql.dialect.mysql.visitor.handler.ColumnTypeHandler;
+import org.zaizai.sachima.sql.dialect.mysql.visitor.handler.DataTypeHandler;
+import org.zaizai.sachima.sql.dialect.mysql.visitor.handler.PrimaryKeyHandler;
 import org.zaizai.sachima.sql.dialect.oracle.constant.FunctionConstant;
 import org.zaizai.sachima.sql.dialect.oracle.parser.OracleLexer;
 import org.zaizai.sachima.sql.dialect.oracle.visitor.OracleOutputVisitor;
@@ -13,8 +19,10 @@ import org.zaizai.sachima.sql.parser.Token;
 import org.zaizai.sachima.util.CollectionUtils;
 import org.zaizai.sachima.util.StringUtils;
 
+import java.time.DateTimeException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -33,12 +41,9 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
     private static final Number FALSE = 0;
     private String tableName = null;
 
+
     public MySqlToOracleOutputVisitor(Appendable appender) {
         super(appender);
-    }
-
-    public MySqlToOracleOutputVisitor(Appendable appender, boolean printPostSemi) {
-        super(appender, printPostSemi);
     }
 
     @Override
@@ -56,7 +61,7 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
      */
     @Override
     public boolean visit(SQLPropertyExpr x) {
-        x.setName(identifierTransferredMeaning(x.getName()));
+        x.setName(this.identifierTransferredMeaning(x.getName()));
         return super.visit(x);
     }
 
@@ -123,7 +128,7 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
      *     select CONCAT(id, '666', name) FROM user; ===> select (id||'666',name) FROM user;
      *     </li> or CONCAT(?, CONCAT(?, CONCAT(field, ?)))
      *     <li>FIELD -> DECODE
-     *     select * from user where id in (1, 2, 3) order by field(id, 3, 1, 2) ===> select * from "USER" where "ID" in (1, 2, 3) order by DECODE("ID", 3, 1, 2)
+     *     select * from user where id in (1, 2, 3) order by field(id, 3, 1, 2) ===> select * from "USER" where "ID" in (1, 2, 3) order by DECODE("ID", 3 , 1, 1, 3, 2, 5)
      *     </li>
      *     <li>NOW() -> SYSDATE
      *     insert into user (created_date) values(now()) ===> insert into user (created_date) values(SYSDATE)
@@ -149,6 +154,9 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
             x.setMethodName(FunctionConstant.NVL);
         } else if (StringUtils.equalsIgnoreCase(methodName, FunctionConstant.FIELD)) {
             x.setMethodName(FunctionConstant.DECODE);
+            for (int i = 1; i < x.getArguments().size(); i += 2) {
+                x.getArguments().add(i + 1, new SQLNumberExpr(i));
+            }
         } else if (StringUtils.equalsIgnoreCase(methodName, FunctionConstant.NOW)) {
             x.setMethodName(FunctionConstant.SYSDATE);
             x.setHoldEmptyArgumentBracket(false);
@@ -166,6 +174,12 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
             x.setMethodName(FunctionConstant.SUBSTR);
             x.getArguments().add(x.getArguments().get(1).clone());
             x.getArguments().set(1, new SQLIntegerExpr(0));
+        } else if (StringUtils.equalsIgnoreCase(methodName, FunctionConstant.YEAR)) {
+            x.setMethodName(FunctionConstant.TO_CHAR);
+            x.getArguments().add(new SQLCharExpr("yyyy"));
+        } else if (StringUtils.equalsIgnoreCase(methodName, FunctionConstant.MONTH)) {
+            x.setMethodName(FunctionConstant.TO_CHAR);
+            x.getArguments().add(new SQLCharExpr("MM"));
         }
         return super.visit(x);
     }
@@ -222,7 +236,7 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
      * @since 2022/12/2
      */
     protected SQLBinaryOpExpr getSQLNullBinaryOpExpr(SQLExpr left, boolean isNot) {
-        return new SQLBinaryOpExpr(left, isNot? SQLBinaryOperator.IsNot : SQLBinaryOperator.Is, new SQLNullExpr());
+        return new SQLBinaryOpExpr(left, isNot ? SQLBinaryOperator.IsNot : SQLBinaryOperator.Is, new SQLNullExpr());
     }
 
     /**
@@ -241,15 +255,22 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
      * </ol>
      *
      * <p>if not. Define a new class and override this method. </p>
+     *
+     * <pre>NCLOB type. example: file_url(NCLOB)
+     *
+     *  MySQL:  select id from file where file_url = 'https://....'
+     *  Oracle: select id from file where TO_CHAR(file_url) = 'https://....'
+     * </pre>
      */
     @Override
     public boolean visit(SQLBinaryOpExpr x) {
         if (Objects.isNull(x.getRight()) || Objects.isNull(x.getOperator())) {
             return super.visit(x);
         }
-        if (x.getRight() instanceof SQLBooleanExpr) {
-            x.setRight(new SQLNumberExpr(getBooleanNumber((SQLBooleanExpr) x.getRight())));
-        } else if (x.getRight() instanceof SQLNullExpr) {
+        //if (x.getRight() instanceof SQLBooleanExpr) {
+        //    x.setRight(new SQLNumberExpr(getBooleanNumber((SQLBooleanExpr) x.getRight())));
+        //} else
+        if (x.getRight() instanceof SQLNullExpr) {
             if (SQLBinaryOperator.Equality.equals(x.getOperator())) {
                 x.setOperator(SQLBinaryOperator.Is);
             } else if (SQLBinaryOperator.NotEqual.equals(x.getOperator())) {
@@ -262,34 +283,174 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
             } else if (SQLBinaryOperator.NotEqual.equals(x.getOperator())) {
                 x.setOperator(SQLBinaryOperator.IsNot);
             }
-        } else if (Objects.nonNull(this.getNclobTypeHandler()) && x.getLeft() instanceof SQLName && Objects.nonNull(tableName)) {
+        }
+
+        if (ColumnTypeHandler.nonNull() && x.getLeft() instanceof SQLName && Objects.nonNull(tableName)) {
             SQLName filed = (SQLName) x.getLeft();
-            if (this.getNclobTypeHandler().contains(tableName, filed.getSimpleName())) {
+            if (ColumnTypeHandler.contains(TokenFnvConstants.NCLOB, tableName, filed.getSimpleName())) {
                 x.setLeft(new SQLMethodInvokeExpr(FunctionConstant.TO_CHAR, null, Collections.singletonList(filed)));
             }
         }
         return super.visit(x);
     }
 
-    private static Number getBooleanNumber(SQLBooleanExpr right) {
-        //How do you think it's boolean field?
-        //if params has boolean field map. need cache?
-        return String.valueOf(right).equalsIgnoreCase(Boolean.TRUE.toString()) ? TRUE : FALSE;
+    @Override
+    public boolean visit(SQLBooleanExpr x) {
+        return super.visit(new SQLNumberExpr(getBooleanNumber(x)));
     }
-
 
     /**
-     * <H2>NCLOB type.</H2>
-     * <pre>example: file_url(NCLOB)
-     *  MySQL:  select id from file where file_url = 'https://....'
-     *  Oracle: select id from file where TO_CHAR(file_url) = 'https://....'
-     * </pre>
-     *
-     * @author Qingyu.Meng
-     * @since 2022/12/12
+     * Oracle adapt.
+     * TRUE -> 1, FALSE -> 0
      */
-    public NclobTypeHandler getNclobTypeHandler() {
-        return null;
+    private static Number getBooleanNumber(SQLBooleanExpr x) {
+        //TODO use ColmnTypeHandler to check is boolean field
+        return String.valueOf(x).equalsIgnoreCase(Boolean.TRUE.toString()) ? TRUE : FALSE;
     }
+
+    @Override
+    public boolean visit(SQLCommentStatement x) {
+        if (x.getOn().getExpr() instanceof SQLPropertyExpr) {
+            SQLPropertyExpr expr = (SQLPropertyExpr) x.getOn().getExpr();
+            expr.setName(this.identifierTransferredMeaning(expr.getName()));
+        }
+        return super.visit(x);
+    }
+
+
+    @Override
+    public boolean visit(SQLAlterTableStatement x) {
+        return super.visit(x);
+    }
+
+    /**
+     * Nonsupport comment.
+     *
+     * such as: alter table [table_name] add [column_name] [column_type] DEFAULT NULL COMMENT '[comment]';
+     * result is: alter table [table_name] add [column_name] [column_type] DEFAULT NULL;
+     */
+    public void visit(MySqlObjectImpl x) {
+        if (x instanceof MySqlAlterTableModifyColumn) {
+            print0("MODIFY ");
+            SQLColumnDefinition columnDefinition = ((MySqlAlterTableModifyColumn) x).getNewColumnDefinition();
+            SQLExpr comment = columnDefinition.getComment();
+            if (Objects.nonNull(comment)) {
+                columnDefinition.setComment(null);
+                columnDefinition.getConstraints().clear();
+            }
+            super.visit(columnDefinition);
+            //支持拆成两条SQL，但是JDBC不支持
+            //if (Objects.nonNull(comment)) {
+            //    print0("\n/\n");
+            //    SQLCommentStatement sqlCommentStatement = new SQLCommentStatement();
+            //    sqlCommentStatement.setOn(new SQLExprTableSource(new SQLPropertyExpr(tableName, columnDefinition.getColumnName())));
+            //    sqlCommentStatement.setType(SQLCommentStatement.Type.COLUMN);
+            //    sqlCommentStatement.setComment(comment);
+            //    super.visit(sqlCommentStatement);
+            //}
+        }
+    }
+
+    /**
+     * MySQL data type mapping to Oracle data type.
+     *
+     * such as : bigint to Number
+     */
+    @Override
+    public boolean visit(SQLDataType x) {
+        //x.setName(DataTypeHandler.getOracleDataType(x.getName()));
+        return super.visit(x);
+    }
+
+    /**
+     * MySQL create table adapt.
+     */
+    @Override
+    public boolean visit(SQLCreateIndexStatement x) {
+        //SQLName indexName = x.getIndexDefinition().getName();
+        //SQLTableSource table = x.getIndexDefinition().getTable();
+        //if (indexName instanceof SQLPropertyExpr && table instanceof SQLExprTableSource) {
+        //    SQLPropertyExpr indexNameProperty = (SQLPropertyExpr) indexName;
+        //    indexNameProperty.setName(((SQLExprTableSource) table).getTableName().concat("_").concat(indexNameProperty.getName()));
+        //}
+        return super.visit(x);
+    }
+
+    /**
+     * MySQL insert adapt.
+     *
+     * <p>Adapt point:</p>
+     * <ol>
+     *     <li>ID compensate</li>
+     *     <li>Insert columns to_char format</li>
+     * </ol>
+     *
+     */
+    @Override
+    public boolean visit(SQLInsertStatement x) {
+        this.tableName = x.getTableName().getSimpleName();
+        String tablePrimaryKey = PrimaryKeyHandler.getTablePrimaryKey(this.tableName);
+        SQLInsertStatement.ValuesClause values = x.getValues();
+        List<SQLExpr> columns = x.getColumns();
+        if (Objects.nonNull(tablePrimaryKey)) {
+            boolean existPrimaryField = false;
+            for (SQLExpr column : columns) {
+                if (column instanceof SQLIdentifierExpr && ((SQLIdentifierExpr) column).getName().equalsIgnoreCase(tablePrimaryKey)) {
+                    existPrimaryField = true;
+                    break;
+                }
+            }
+            if (!existPrimaryField) {
+                x.getColumns().add(new SQLIdentifierExpr(tablePrimaryKey));
+                values.addValue(new SQLCharExpr(PrimaryKeyHandler.generateId()));
+            }
+        }
+        for (int i = 0; i < columns.size(); i++) {
+            SQLExpr column = columns.get(i);
+            if (column instanceof SQLIdentifierExpr) {
+                String columnName = ((SQLIdentifierExpr) column).getName();
+                if (ColumnTypeHandler.contains(TokenFnvConstants.DATE, this.tableName, columnName)) {
+                    SQLExpr sqlExpr = values.getValues().get(i);
+                    if (sqlExpr instanceof SQLCharExpr) {
+                        SQLMethodInvokeExpr sqlMethodInvokeExpr = new SQLMethodInvokeExpr(FunctionConstant.TO_DATE);
+                        sqlMethodInvokeExpr.getArguments().add(x.getValues().getValues().get(i));
+                        sqlMethodInvokeExpr.getArguments().add(new SQLCharExpr(this.getOracleDateFormat(((SQLCharExpr) sqlExpr).getText())));
+                        values.getValues().set(i, sqlMethodInvokeExpr);
+                    }
+                }
+            }
+        }
+        return super.visit(x);
+    }
+
+    /**
+     * Get oracle to_char format.
+     *
+     * such as : @param: "2022-12-22 01:01:01" @result: "yyyy-mm-dd hh24:mi:ss"
+     *
+     * @param date  日期串
+     * @return  Oracle日期format串
+     */
+    public String getOracleDateFormat(String date) {
+        Assert.notNull(date, "Inaccurate date value: {}", date);
+        String[] formatItems = new String[]{"yyyy", "mm", "dd", "hh24", "mi", "ss"};
+        int formatItemIndex = 0;
+        boolean appendFlag = true;
+        char[] dateItems = date.toCharArray();
+        StringBuilder appender = new StringBuilder();
+        for (char dateItem : dateItems) {
+            if (dateItem >= '0' && dateItem <= '9') {
+                if (appendFlag) {
+                    appender.append(formatItems[formatItemIndex++]);
+                    appendFlag = false;
+                }
+            } else {
+                appendFlag = true;
+                appender.append(dateItem);
+            }
+        }
+        return appender.toString();
+    }
+
 
 }

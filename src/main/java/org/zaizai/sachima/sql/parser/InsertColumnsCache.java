@@ -16,7 +16,7 @@
 package org.zaizai.sachima.sql.parser;
 
 import org.zaizai.sachima.sql.ast.SQLExpr;
-import org.zaizai.sachima.util.FnvHash;
+import org.zaizai.sachima.util.FnvHashUtils;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -77,7 +77,7 @@ public class InsertColumnsCache {
             this.hashCode64 = hashCode64;
             this.columnsString = columnsString;
             this.columnsFormattedString = columnsFormattedString;
-            this.columnsFormattedStringHash = FnvHash.fnv1a64lower(columnsFormattedString);
+            this.columnsFormattedStringHash = FnvHashUtils.fnv1a64lower(columnsFormattedString);
             this.columns = columns;
             this.next = next;
         }

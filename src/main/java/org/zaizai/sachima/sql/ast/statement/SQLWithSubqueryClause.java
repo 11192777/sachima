@@ -62,8 +62,7 @@ public class SQLWithSubqueryClause extends SQLObjectImpl {
     @Override
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor.visit(this)) {
-            for (int i = 0; i < entries.size(); i++) {
-                Entry entry = entries.get(i);
+            for (Entry entry : entries) {
                 if (entry != null) {
                     entry.accept(visitor);
                 }

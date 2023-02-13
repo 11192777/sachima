@@ -17,7 +17,7 @@ package org.zaizai.sachima.sql.repository;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.zaizai.sachima.util.FnvHash;
+import org.zaizai.sachima.constant.TokenFnvConstants;
 import org.zaizai.sachima.enums.DbType;
 import org.zaizai.sachima.exception.FastsqlException;
 import org.zaizai.sachima.util.SQLUtils;
@@ -813,7 +813,7 @@ public class SchemaRepository {
                                 if (resolvedColumn.getDefaultExpr() != null) {
                                     column.setDefaultExpr(resolvedColumn.getDefaultExpr().clone());
                                 }
-                                if (resolvedColumn.getConstraints().size() > 0) {
+                                if (!resolvedColumn.getConstraints().isEmpty()) {
                                     for (SQLColumnConstraint constraint : resolvedColumn.getConstraints()) {
                                         column.addConstraint(constraint.clone());
                                     }
@@ -836,7 +836,7 @@ public class SchemaRepository {
                     column.setDbType(dbType);
                     x1.addColumn(column);
                 }
-                if (x1.getTableElementList().size() > 0) {
+                if (!x1.getTableElementList().isEmpty()) {
                     x1.setSelect(null);
                 }
             }
@@ -1006,7 +1006,7 @@ public class SchemaRepository {
     }
 
     public SQLDataType findFuntionReturnType(long functionNameHashCode) {
-        if (functionNameHashCode == FnvHash.Constants.LEN || functionNameHashCode == FnvHash.Constants.LENGTH) {
+        if (functionNameHashCode == TokenFnvConstants.LEN || functionNameHashCode == TokenFnvConstants.LENGTH) {
             return SQLIntegerExpr.DATA_TYPE;
         }
 

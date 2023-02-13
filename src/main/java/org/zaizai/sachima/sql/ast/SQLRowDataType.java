@@ -1,6 +1,6 @@
 package org.zaizai.sachima.sql.ast;
 
-import org.zaizai.sachima.util.FnvHash;
+import org.zaizai.sachima.constant.TokenFnvConstants;
 import org.zaizai.sachima.enums.DbType;
 import org.zaizai.sachima.sql.visitor.SQLASTVisitor;
 import org.zaizai.sachima.sql.ast.SQLStructDataType.Field;
@@ -29,7 +29,7 @@ public class SQLRowDataType extends SQLObjectImpl implements SQLDataType {
 
     @Override
     public long nameHashCode64() {
-        return FnvHash.Constants.ROW;
+        return TokenFnvConstants.ROW;
     }
 
     @Override

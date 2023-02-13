@@ -17,6 +17,7 @@ package org.zaizai.sachima.sql.dialect.mysql.ast;
 
 import org.zaizai.sachima.sql.ast.SQLObjectImpl;
 import org.zaizai.sachima.sql.dialect.mysql.visitor.MySqlASTVisitor;
+import org.zaizai.sachima.sql.dialect.mysql.visitor.MySqlToOracleOutputVisitor;
 import org.zaizai.sachima.sql.visitor.SQLASTVisitor;
 
 public abstract class MySqlObjectImpl extends SQLObjectImpl implements MySqlObject {
@@ -25,10 +26,9 @@ public abstract class MySqlObjectImpl extends SQLObjectImpl implements MySqlObje
     protected void accept0(SQLASTVisitor v) {
         if (v instanceof MySqlASTVisitor) {
             accept0((MySqlASTVisitor) v);
-        } else {
-            throw new IllegalArgumentException("not support visitor type : " + v.getClass().getName());
+        } else if (v instanceof MySqlToOracleOutputVisitor) {
+            ((MySqlToOracleOutputVisitor) v).visit(this);
         }
     }
 
-    public abstract void accept0(MySqlASTVisitor v);
 }

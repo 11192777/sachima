@@ -264,7 +264,7 @@ public class MySqlLexer extends Lexer {
             stringVal = subString(mark, bufPos);
             token = Token.VARIANT;
         } else {
-            for (; ; ) {
+            while(true) {
                 ch = charAt(++pos);
 
                 if (!isIdentifierChar(ch)) {

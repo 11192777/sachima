@@ -19,7 +19,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.zaizai.sachima.enums.DbType;
 import org.zaizai.sachima.sql.ast.statement.SQLSelectQueryBlock;
-import org.zaizai.sachima.util.FnvHash;
+import org.zaizai.sachima.util.FnvHashUtils;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -49,7 +49,7 @@ public class SQLSelectListCache {
         selectParser.accept(Token.EOF);
 
         String printSql = queryBlock.toString();
-        long printSqlHash = FnvHash.fnv1a64lower(printSql);
+        long printSqlHash = FnvHashUtils.fnv1a64lower(printSql);
         entries.add(
                 new Entry(select.substring(6)
                         , queryBlock

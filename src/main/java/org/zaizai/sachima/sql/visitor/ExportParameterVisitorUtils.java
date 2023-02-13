@@ -140,7 +140,7 @@ public final class ExportParameterVisitorUtils {
                             exportParameter(mergedListParams, binaryOpItem.getRight());
                         }
                     }
-                    if (mergedListParams.size() > 0) {
+                    if (!mergedListParams.isEmpty()) {
                         mergedListParams.add(0, value);
                         value = mergedListParams;
                     }

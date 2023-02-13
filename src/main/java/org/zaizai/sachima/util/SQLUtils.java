@@ -298,7 +298,7 @@ public class SQLUtils {
 
     public static SQLASTOutputVisitor createFormatOutputVisitor(Appendable out, List<SQLStatement> statementList, DbType dbType) {
         if (dbType == null) {
-            if (statementList != null && statementList.size() > 0) {
+            if (statementList != null && !statementList.isEmpty()) {
                 dbType = statementList.get(0).getDbType();
             }
 
@@ -309,11 +309,7 @@ public class SQLUtils {
 
         switch (dbType) {
             case oracle:
-                if (statementList == null || statementList.size() == 1) {
-                    return new OracleOutputVisitor(out, false);
-                } else {
-                    return new OracleOutputVisitor(out, true);
-                }
+                return new OracleOutputVisitor(out);
             case mysql:
                 return new MySqlOutputVisitor(out);
             default:
@@ -1027,7 +1023,6 @@ public class SQLUtils {
         }
 
     }
-
 
 
 }

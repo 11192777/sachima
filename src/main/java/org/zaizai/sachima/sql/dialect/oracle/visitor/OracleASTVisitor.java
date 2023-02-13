@@ -17,94 +17,15 @@
  */
 package org.zaizai.sachima.sql.dialect.oracle.visitor;
 
-import org.zaizai.sachima.sql.ast.statement.SQLCheck;
-import org.zaizai.sachima.sql.ast.statement.SQLCreateIndexStatement;
-import org.zaizai.sachima.sql.ast.statement.SQLCreateTableStatement;
-import org.zaizai.sachima.sql.ast.statement.SQLDeleteStatement;
-import org.zaizai.sachima.sql.ast.statement.SQLForeignKeyImpl;
-import org.zaizai.sachima.sql.ast.statement.SQLInsertStatement;
-import org.zaizai.sachima.sql.ast.statement.SQLSelectQueryBlock;
-import org.zaizai.sachima.sql.ast.statement.SQLUnique;
-import org.zaizai.sachima.sql.ast.statement.SQLUpdateStatement;
+import org.zaizai.sachima.sql.ast.statement.*;
 import org.zaizai.sachima.sql.dialect.oracle.ast.OracleDataTypeIntervalDay;
 import org.zaizai.sachima.sql.dialect.oracle.ast.OracleDataTypeIntervalYear;
-import org.zaizai.sachima.sql.dialect.oracle.ast.clause.CycleClause;
-import org.zaizai.sachima.sql.dialect.oracle.ast.clause.ModelClause;
-import org.zaizai.sachima.sql.dialect.oracle.ast.clause.OracleLobStorageClause;
-import org.zaizai.sachima.sql.dialect.oracle.ast.clause.OracleReturningClause;
-import org.zaizai.sachima.sql.dialect.oracle.ast.clause.OracleStorageClause;
-import org.zaizai.sachima.sql.dialect.oracle.ast.clause.OracleWithSubqueryEntry;
-import org.zaizai.sachima.sql.dialect.oracle.ast.clause.PartitionExtensionClause;
-import org.zaizai.sachima.sql.dialect.oracle.ast.clause.SampleClause;
-import org.zaizai.sachima.sql.dialect.oracle.ast.clause.SearchClause;
-import org.zaizai.sachima.sql.dialect.oracle.ast.expr.OracleAnalytic;
-import org.zaizai.sachima.sql.dialect.oracle.ast.expr.OracleAnalyticWindowing;
-import org.zaizai.sachima.sql.dialect.oracle.ast.expr.OracleArgumentExpr;
-import org.zaizai.sachima.sql.dialect.oracle.ast.expr.OracleBinaryDoubleExpr;
-import org.zaizai.sachima.sql.dialect.oracle.ast.expr.OracleBinaryFloatExpr;
-import org.zaizai.sachima.sql.dialect.oracle.ast.expr.OracleCursorExpr;
-import org.zaizai.sachima.sql.dialect.oracle.ast.expr.OracleDatetimeExpr;
-import org.zaizai.sachima.sql.dialect.oracle.ast.expr.OracleIntervalExpr;
-import org.zaizai.sachima.sql.dialect.oracle.ast.expr.OracleIsOfTypeExpr;
-import org.zaizai.sachima.sql.dialect.oracle.ast.expr.OracleIsSetExpr;
-import org.zaizai.sachima.sql.dialect.oracle.ast.expr.OracleOuterExpr;
-import org.zaizai.sachima.sql.dialect.oracle.ast.expr.OracleRangeExpr;
-import org.zaizai.sachima.sql.dialect.oracle.ast.expr.OracleSysdateExpr;
-import org.zaizai.sachima.sql.dialect.oracle.ast.expr.OracleTreatExpr;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleAlterSessionStatement;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleAlterSynonymStatement;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleAlterTableDropPartition;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleAlterTableModify;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleAlterTableMoveTablespace;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleAlterTableSplitPartition;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleAlterTableTruncatePartition;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleAlterTablespaceAddDataFile;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleAlterTablespaceStatement;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleAlterTriggerStatement;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleAlterViewStatement;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleCheck;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleContinueStatement;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleCreateDatabaseDbLinkStatement;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleCreateIndexStatement;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleCreatePackageStatement;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleCreateSynonymStatement;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleCreateTableStatement;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleCreateTypeStatement;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleDeleteStatement;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleDropDbLinkStatement;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleExceptionStatement;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleExecuteImmediateStatement;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleExitStatement;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleExplainStatement;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleFileSpecification;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleForStatement;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleForeignKey;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleGotoStatement;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleInsertStatement;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleLabelStatement;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleLockTableStatement;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleMultiInsertStatement;
+import org.zaizai.sachima.sql.dialect.oracle.ast.clause.*;
+import org.zaizai.sachima.sql.dialect.oracle.ast.expr.*;
+import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.*;
 import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleMultiInsertStatement.ConditionalInsertClause;
 import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleMultiInsertStatement.ConditionalInsertClauseItem;
 import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleMultiInsertStatement.InsertIntoClause;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OraclePipeRowStatement;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OraclePrimaryKey;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleRaiseStatement;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleRunStatement;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleSelectJoin;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleSelectPivot;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleSelectQueryBlock;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleSelectRestriction;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleSelectSubqueryTableSource;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleSelectTableReference;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleSelectUnPivot;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleSetTransactionStatement;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleSupplementalIdKey;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleSupplementalLogGrp;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleUnique;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleUpdateStatement;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleUsingIndexClause;
-import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleXmlColumnProperties;
 import org.zaizai.sachima.sql.visitor.SQLASTVisitor;
 
 public interface OracleASTVisitor extends SQLASTVisitor {
@@ -877,4 +798,5 @@ public interface OracleASTVisitor extends SQLASTVisitor {
     default void endVisit(OracleXmlColumnProperties.OracleXMLTypeStorage x) {
 
     }
+
 }

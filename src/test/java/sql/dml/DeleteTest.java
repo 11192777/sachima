@@ -1,10 +1,7 @@
-package sql;
+package sql.dml;
 
-import custom.MySqlToOracleOVLimit3;
 import custom.TestHelper;
 import org.junit.Test;
-import org.zaizai.sachima.enums.DbType;
-import org.zaizai.sachima.util.SQLUtils;
 
 /**
  * <H1></H1>

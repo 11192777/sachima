@@ -1,8 +1,7 @@
-package sql;
+package sql.dml;
 
 import custom.TestHelper;
 import org.junit.Test;
-import org.zaizai.sachima.sql.ast.SQLStatement;
 
 /**
  * <H1></H1>
@@ -30,6 +29,7 @@ public class NclobTests extends TestHelper {
         String sql = "select * from test.user as u where name = 'zhangSan'";
         eq(toOracleNclob(sql), "select * from test.user u where TO_CHAR(name) = 'zhangSan'", true);
     }
+
 
     @Test
     public void case3() {

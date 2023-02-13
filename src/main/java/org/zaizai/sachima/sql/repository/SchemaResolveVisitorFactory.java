@@ -15,7 +15,7 @@
  */
 package org.zaizai.sachima.sql.repository;
 
-import org.zaizai.sachima.util.FnvHash;
+import org.zaizai.sachima.constant.TokenFnvConstants;
 import org.zaizai.sachima.util.SQLUtils;
 import org.zaizai.sachima.sql.ast.*;
 import org.zaizai.sachima.sql.ast.expr.*;
@@ -228,7 +228,7 @@ class SchemaResolveVisitorFactory {
         }
 
         public boolean visit(SQLIdentifierExpr x) {
-            if (x.nameHashCode64() == FnvHash.Constants.ROWNUM) {
+            if (x.nameHashCode64() == TokenFnvConstants.ROWNUM) {
                 return false;
             }
 
@@ -580,7 +580,7 @@ class SchemaResolveVisitorFactory {
         long hash = x.nameHashCode64();
         SQLTableSource tableSource = null;
 
-        if ((hash == FnvHash.Constants.LEVEL || hash == FnvHash.Constants.CONNECT_BY_ISCYCLE)
+        if ((hash == TokenFnvConstants.LEVEL || hash == TokenFnvConstants.CONNECT_BY_ISCYCLE)
                 && ctx.object instanceof SQLSelectQueryBlock) {
             SQLSelectQueryBlock queryBlock = (SQLSelectQueryBlock) ctx.object;
             if (queryBlock.getStartWith() != null
@@ -678,7 +678,7 @@ class SchemaResolveVisitorFactory {
                             }
                         }
 
-                        if (createStmt != null && createStmt.getTableElementList().size() > 0) {
+                        if (createStmt != null && !createStmt.getTableElementList().isEmpty()) {
                             tableSource = null; // maybe parent
                         }
                     }
@@ -691,7 +691,7 @@ class SchemaResolveVisitorFactory {
 
             if (expr instanceof SQLMethodInvokeExpr) {
                 SQLMethodInvokeExpr func = (SQLMethodInvokeExpr) expr;
-                if (func.methodNameHashCode64() == FnvHash.Constants.ANN) {
+                if (func.methodNameHashCode64() == TokenFnvConstants.ANN) {
                     expr = func.getArguments().get(0);
                 }
             }
@@ -1021,7 +1021,7 @@ class SchemaResolveVisitorFactory {
                 expr.accept(visitor);
             }
 
-            if (columns.size() > 0) {
+            if (!columns.isEmpty()) {
                 for (SQLSelectItem column : columns) {
                     column.setParent(x);
                     column.getExpr().accept(visitor);
@@ -1399,7 +1399,7 @@ class SchemaResolveVisitorFactory {
         SQLExpr annFeature = null;
         if (expr instanceof SQLMethodInvokeExpr) {
             SQLMethodInvokeExpr func = (SQLMethodInvokeExpr) expr;
-            if (func.methodNameHashCode64() == FnvHash.Constants.ANN) {
+            if (func.methodNameHashCode64() == TokenFnvConstants.ANN) {
                 expr = func.getArguments().get(0);
 
                 annFeature = func.getArguments().get(1);
@@ -1907,7 +1907,7 @@ class SchemaResolveVisitorFactory {
             List<SQLSelectQuery> rights = new ArrayList<>();
             rights.add(right);
 
-            for (; ; ) {
+            while(true) {
                 SQLSelectQuery leftLeft = leftUnion.getLeft();
                 SQLSelectQuery leftRight = leftUnion.getRight();
 

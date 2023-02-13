@@ -28,10 +28,15 @@ import java.util.List;
 
 public class SQLUnique extends SQLConstraintImpl implements SQLUniqueConstraint, SQLTableElement {
 
-    protected final SQLIndexDefinition indexDefinition = new SQLIndexDefinition();
+    protected final SQLIndexDefinition indexDefinition;
 
     public SQLUnique(){
+        indexDefinition = new SQLIndexDefinition();
         indexDefinition.setParent(this);
+    }
+
+    public SQLUnique(SQLIndexDefinition indexDefinition) {
+        this.indexDefinition = indexDefinition;
     }
 
     // Override name and comment in constraint impl.

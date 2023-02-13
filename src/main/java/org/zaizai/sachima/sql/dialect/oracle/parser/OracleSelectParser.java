@@ -15,7 +15,7 @@
  */
 package org.zaizai.sachima.sql.dialect.oracle.parser;
 
-import org.zaizai.sachima.util.FnvHash;
+import org.zaizai.sachima.constant.TokenFnvConstants;
 import org.zaizai.sachima.sql.ast.*;
 import org.zaizai.sachima.sql.ast.expr.*;
 import org.zaizai.sachima.sql.ast.statement.*;
@@ -190,10 +190,10 @@ public class OracleSelectParser extends SQLSelectParser {
                     throw new ParserException("syntax erorr : " + lexer.token());
                 }
 
-                if (lexer.identifierEquals(FnvHash.Constants.DEPTH)) {
+                if (lexer.identifierEquals(TokenFnvConstants.DEPTH)) {
                     lexer.nextToken();
                     searchClause.setType(SearchClause.Type.DEPTH);
-                } else if (lexer.identifierEquals(FnvHash.Constants.BREADTH)) {
+                } else if (lexer.identifierEquals(TokenFnvConstants.BREADTH)) {
                     lexer.nextToken();
                     searchClause.setType(SearchClause.Type.BREADTH);
                 } else {
@@ -368,7 +368,7 @@ public class OracleSelectParser extends SQLSelectParser {
     private void parseModelClause(OracleSelectQueryBlock queryBlock) {
         Lexer.SavePoint savePoint = lexer.mark();
 
-        if (!lexer.identifierEquals(FnvHash.Constants.MODEL)) {
+        if (!lexer.identifierEquals(TokenFnvConstants.MODEL)) {
             return;
         }
 
@@ -377,7 +377,7 @@ public class OracleSelectParser extends SQLSelectParser {
         ModelClause model = new ModelClause();
         parseCellReferenceOptions(model.getCellReferenceOptions());
 
-        if (lexer.identifierEquals(FnvHash.Constants.RETURN)) {
+        if (lexer.identifierEquals(TokenFnvConstants.RETURN)) {
             lexer.nextToken();
             ReturnRowsClause returnRowsClause = new ReturnRowsClause();
             if (lexer.token() == Token.ALL) {
@@ -391,7 +391,7 @@ public class OracleSelectParser extends SQLSelectParser {
             model.setReturnRowsClause(returnRowsClause);
         }
 
-        while (lexer.identifierEquals(FnvHash.Constants.REFERENCE)) {
+        while (lexer.identifierEquals(TokenFnvConstants.REFERENCE)) {
             ReferenceModelClause referenceModelClause = new ReferenceModelClause();
             lexer.nextToken();
 
@@ -577,11 +577,11 @@ public class OracleSelectParser extends SQLSelectParser {
     }
 
     private void parseCellReferenceOptions(List<CellReferenceOption> options) {
-        if (lexer.identifierEquals(FnvHash.Constants.IGNORE)) {
+        if (lexer.identifierEquals(TokenFnvConstants.IGNORE)) {
             lexer.nextToken();
             acceptIdentifier("NAV");
             options.add(CellReferenceOption.IgnoreNav);
-        } else if (lexer.identifierEquals(FnvHash.Constants.KEEP)) {
+        } else if (lexer.identifierEquals(TokenFnvConstants.KEEP)) {
             lexer.nextToken();
             acceptIdentifier("NAV");
             options.add(CellReferenceOption.KeepNav);
@@ -850,7 +850,7 @@ public class OracleSelectParser extends SQLSelectParser {
             joinType = SQLJoinTableSource.JoinType.FULL_OUTER_JOIN;
         }
 
-        boolean natural = lexer.identifierEquals(FnvHash.Constants.NATURAL);
+        boolean natural = lexer.identifierEquals(TokenFnvConstants.NATURAL);
         if (natural) {
             lexer.nextToken();
         }
@@ -917,7 +917,7 @@ public class OracleSelectParser extends SQLSelectParser {
 
             return parseTableSourceRest(join);
         } else {
-            if (lexer.identifierEquals(FnvHash.Constants.PIVOT)) {
+            if (lexer.identifierEquals(TokenFnvConstants.PIVOT)) {
                 parsePivot(tableSource);
             }
         }
@@ -927,7 +927,7 @@ public class OracleSelectParser extends SQLSelectParser {
 
     private void parsePivot(OracleSelectTableSource tableSource) {
         OracleSelectPivot.Item item;
-        if (lexer.identifierEquals(FnvHash.Constants.PIVOT)) {
+        if (lexer.identifierEquals(TokenFnvConstants.PIVOT)) {
             lexer.nextToken();
 
             OracleSelectPivot pivot = new OracleSelectPivot();
@@ -982,7 +982,7 @@ public class OracleSelectParser extends SQLSelectParser {
                 item.setExpr(expr);
                 pivot.getPivotIn().add(item);
             } else {
-                for (; ; ) {
+                while(true) {
                     item = new OracleSelectPivot.Item();
                     item.setExpr(this.exprParser.expr());
                     item.setAlias(as());

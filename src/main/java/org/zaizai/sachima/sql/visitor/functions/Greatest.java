@@ -51,7 +51,7 @@ public class Greatest implements Function {
     public Object eval(SQLMethodInvokeExpr x) {
         List<SQLExpr> parameters = x.getArguments();
 
-        if (parameters.size() > 0) {
+        if (!parameters.isEmpty()) {
             SQLExpr p0 = parameters.get(0);
             if (p0 instanceof SQLIntegerExpr && ((SQLIntegerExpr) p0).getNumber() instanceof Integer) {
                 int val = ((SQLIntegerExpr) p0).getNumber().intValue();

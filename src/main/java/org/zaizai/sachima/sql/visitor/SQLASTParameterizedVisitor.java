@@ -15,7 +15,7 @@
  */
 package org.zaizai.sachima.sql.visitor;
 
-import org.zaizai.sachima.util.FnvHash;
+import org.zaizai.sachima.constant.TokenFnvConstants;
 import org.zaizai.sachima.enums.DbType;
 import org.zaizai.sachima.util.SQLUtils;
 import org.zaizai.sachima.sql.ast.SQLExpr;
@@ -107,7 +107,7 @@ public class SQLASTParameterizedVisitor extends SQLASTVisitorAdapter {
     @Override
     public boolean visit(SQLMethodInvokeExpr x) {
         List<SQLExpr> arguments = x.getArguments();
-        if (x.methodNameHashCode64() == FnvHash.Constants.TRIM
+        if (x.methodNameHashCode64() == TokenFnvConstants.TRIM
                 && arguments.size() == 1
                 && arguments.get(0) instanceof SQLCharExpr && x.getTrimOption() == null && x.getFrom() == null) {
             parameterizeAndExportPara(x);

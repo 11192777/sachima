@@ -15,17 +15,13 @@
  */
 package org.zaizai.sachima.sql.dialect.oracle.visitor;
 
-import org.zaizai.sachima.util.FnvHash;
+import org.zaizai.sachima.constant.TokenFnvConstants;
 import org.zaizai.sachima.sql.ast.SQLExpr;
 import org.zaizai.sachima.sql.ast.expr.*;
 import org.zaizai.sachima.sql.ast.statement.*;
 import org.zaizai.sachima.sql.dialect.oracle.ast.stmt.OracleSelectQueryBlock;
 
 public class OracleToMySqlOutputVisitor extends OracleOutputVisitor {
-
-    public OracleToMySqlOutputVisitor(Appendable appender, boolean printPostSemi) {
-        super(appender, printPostSemi);
-    }
 
     public OracleToMySqlOutputVisitor(Appendable appender) {
         super(appender);
@@ -144,7 +140,7 @@ public class OracleToMySqlOutputVisitor extends OracleOutputVisitor {
     static boolean isRowNumber(SQLExpr expr) {
         if (expr instanceof SQLIdentifierExpr) {
             return ((SQLIdentifierExpr) expr)
-                    .hashCode64() == FnvHash.Constants.ROWNUM;
+                    .hashCode64() == TokenFnvConstants.ROWNUM;
         }
 
         return false;

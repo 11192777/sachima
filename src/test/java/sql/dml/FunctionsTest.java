@@ -1,9 +1,8 @@
-package sql;
+package sql.dml;
 
 import custom.TestHelper;
 import org.junit.Test;
 import org.zaizai.sachima.sql.ast.SQLStatement;
-import org.zaizai.sachima.util.StringUtils;
 
 /**
  * <H1></H1>
@@ -46,7 +45,7 @@ public class FunctionsTest extends TestHelper {
     @Test   //order by field -> order by decode
     public void case4() {
         String sql = "select * from user where id in (1, 2, 3) order by field(id, 3, 1, 2)";
-        eq(sql, "select * from \"USER\" where id in (1, 2, 3) order by DECODE(id, 3, 1, 2)");
+        eq(sql, "select * from \"USER\" where id in (1, 2, 3) order by DECODE(id, 3, 1, 1, 3, 2, 5)");
     }
 
 
@@ -78,27 +77,42 @@ public class FunctionsTest extends TestHelper {
     }
 
 
-    @Test
+    @Test   //year -> to_char(?, 'yyyy')
     public void case9() {
-
+        String sql = "select year(date) from user";
+        eq(sql, "select TO_CHAR(date, 'yyyy') from \"USER\"");
     }
 
 
-    @Test
+    @Test //month -> to_char(?, 'MM')
     public void case10() {
-
+        String sql = "select year(date) from user";
+        eq(sql, "select TO_CHAR(date, 'yyyy') from \"USER\"");
     }
 
 
     @Test
     public void case11() {
-
+        String sql = "select sum(eds.statistic_count) as total, concat(year(eds.statistic_date), '-' , LPAD(month(eds.statistic_date), 2, '0')) AS res_date\n" +
+                "from document_statistic eds\n" +
+                "where eds.tenant_id = ?\n" +
+                "  and eds.statistic_date >= ?\n" +
+                "  and eds.statistic_date <= ?\n" +
+                "  and eds.form_id in (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)\n" +
+                "  and eds.company_id in (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)\n" +
+                "  and eds.statistic_type in (?)\n" +
+                "  and eds.tenant_id = 1534382837723181057\n" +
+                "group by (year(eds.statistic_date) , '-', LPAD(month(statistic_date), 2, '0'))";
+        eq(sql, "select sum(eds.statistic_count) as total , (TO_CHAR(eds.statistic_date, 'yyyy')||'-'||LPAD(TO_CHAR(eds.statistic_date, 'MM'), 2, '0')) as res_date from document_statistic eds where eds.tenant_id = ? and eds.statistic_date >= ? and eds.statistic_date <= ? and eds.form_id in (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) and eds.company_id in (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) and eds.statistic_type in (?) and eds.tenant_id = 1534382837723181057 group by (TO_CHAR(eds.statistic_date, 'yyyy'), '-', LPAD(TO_CHAR(statistic_date, 'MM'), 2, '0'))");
     }
 
 
     @Test
     public void case12() {
-
+        String sql = "select * from user where id in (1, 3, 4, 2) order by field(id, 4, 3, 2, 1)";
+        SQLStatement statement = getStatement(sql);
+        System.out.println(statement);
+        eq(sql, "select * from \"USER\" where id in (1, 3, 4, 2) order by DECODE(id, 4, 1, 3, 3, 2, 5, 1, 7)");
     }
 
 

@@ -1,10 +1,11 @@
 package custom;
 
 import org.zaizai.sachima.sql.dialect.mysql.visitor.MySqlToOracleOutputVisitor;
-import org.zaizai.sachima.sql.dialect.mysql.visitor.handler.NclobTypeHandler;
+import org.zaizai.sachima.sql.dialect.mysql.visitor.handler.ColumnTypeHandler;
 
 import java.util.HashMap;
-import java.util.Set;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -22,14 +23,4 @@ public class MySqlToOracleOVNclob extends MySqlToOracleOutputVisitor {
         super(appender);
     }
 
-    public MySqlToOracleOVNclob(Appendable appender, boolean printPostSemi) {
-        super(appender, printPostSemi);
-    }
-
-    @Override
-    public NclobTypeHandler getNclobTypeHandler() {
-        HashMap<String, Set<String>> map = new HashMap<>();
-        map.put("user", Stream.of("name", "CodE").collect(Collectors.toSet()));
-        return new NclobTypeHandler(map);
-    }
 }

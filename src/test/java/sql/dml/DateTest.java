@@ -1,4 +1,4 @@
-package sql;
+package sql.dml;
 
 import custom.TestHelper;
 import org.junit.Test;

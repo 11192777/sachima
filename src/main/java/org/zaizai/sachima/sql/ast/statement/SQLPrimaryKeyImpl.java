@@ -15,14 +15,17 @@
  */
 package org.zaizai.sachima.sql.ast.statement;
 
+import org.zaizai.sachima.sql.ast.SQLIndexDefinition;
 import org.zaizai.sachima.sql.visitor.SQLASTVisitor;
 
 public class SQLPrimaryKeyImpl extends SQLUnique implements SQLPrimaryKey, SQLTableConstraint {
     protected boolean disableNovalidate = false;
     protected boolean clustered         = false; // sql server
 
-    public SQLPrimaryKeyImpl() {
+    public SQLPrimaryKeyImpl() {}
 
+    public SQLPrimaryKeyImpl(SQLIndexDefinition indexDefinition) {
+        super(indexDefinition);
     }
 
     @Override

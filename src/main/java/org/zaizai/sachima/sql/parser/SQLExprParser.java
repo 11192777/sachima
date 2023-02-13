@@ -15,6 +15,7 @@
  */
 package org.zaizai.sachima.sql.parser;
 
+import org.zaizai.sachima.constant.TokenFnvConstants;
 import org.zaizai.sachima.enums.DbType;
 import org.zaizai.sachima.sql.ast.*;
 import org.zaizai.sachima.sql.ast.expr.*;
@@ -37,10 +38,10 @@ public class SQLExprParser extends SQLParser {
 
     static {
         String[] strings = {"AVG", "COUNT", "MAX", "MIN", "STDDEV", "SUM"};
-        AGGREGATE_FUNCTIONS_CODES = FnvHash.fnv1a64lower(strings, true);
+        AGGREGATE_FUNCTIONS_CODES = FnvHashUtils.fnv1a64lower(strings, true);
         AGGREGATE_FUNCTIONS = new String[AGGREGATE_FUNCTIONS_CODES.length];
         for (String str : strings) {
-            long hash = FnvHash.fnv1a64lower(str);
+            long hash = FnvHashUtils.fnv1a64lower(str);
             int index = Arrays.binarySearch(AGGREGATE_FUNCTIONS_CODES, hash);
             AGGREGATE_FUNCTIONS[index] = str;
         }
@@ -243,7 +244,7 @@ public class SQLExprParser extends SQLParser {
             SQLExpr rightExp = bitXor();
             expr = new SQLBinaryOpExpr(expr, SQLBinaryOperator.DIV, rightExp, getDbType());
             expr = multiplicativeRest(expr);
-        } else if (lexer.identifierEquals(FnvHash.Constants.MOD) || lexer.token == Token.MOD) {
+        } else if (lexer.identifierEquals(TokenFnvConstants.MOD) || lexer.token == Token.MOD) {
             Lexer.SavePoint savePoint = lexer.mark();
             lexer.nextToken();
 
@@ -368,7 +369,7 @@ public class SQLExprParser extends SQLParser {
 
                 lexer.nextToken();
 
-                if (hash_lower == FnvHash.Constants.TRY_CAST) {
+                if (hash_lower == TokenFnvConstants.TRY_CAST) {
                     accept(Token.LPAREN);
                     SQLCastExpr cast = new SQLCastExpr();
                     cast.setTry(true);
@@ -378,36 +379,36 @@ public class SQLExprParser extends SQLParser {
                     accept(Token.RPAREN);
 
                     sqlExpr = cast;
-                } else if (hash_lower == FnvHash.Constants.DATE && (lexer.token == Token.LITERAL_CHARS || lexer.token == Token.VARIANT) && (SQLDateExpr.isSupport(dbType))) {
+                } else if (hash_lower == TokenFnvConstants.DATE && (lexer.token == Token.LITERAL_CHARS || lexer.token == Token.VARIANT) && (SQLDateExpr.isSupport(dbType))) {
                     String literal = lexer.token == Token.LITERAL_CHARS ? lexer.stringVal() : "?";
                     lexer.nextToken();
                     SQLDateExpr dateExpr = new SQLDateExpr();
                     dateExpr.setLiteral(literal);
                     sqlExpr = dateExpr;
-                } else if (hash_lower == FnvHash.Constants.TIMESTAMP && (lexer.token == Token.LITERAL_CHARS || lexer.token == Token.VARIANT) && DbType.oracle != dbType) {
+                } else if (hash_lower == TokenFnvConstants.TIMESTAMP && (lexer.token == Token.LITERAL_CHARS || lexer.token == Token.VARIANT) && DbType.oracle != dbType) {
                     SQLTimestampExpr dateExpr = new SQLTimestampExpr(lexer.stringVal());
                     lexer.nextToken();
                     sqlExpr = dateExpr;
-                } else if (hash_lower == FnvHash.Constants.TIME && (lexer.token == Token.LITERAL_CHARS || lexer.token == Token.VARIANT)) {
+                } else if (hash_lower == TokenFnvConstants.TIME && (lexer.token == Token.LITERAL_CHARS || lexer.token == Token.VARIANT)) {
                     SQLTimeExpr dateExpr = new SQLTimeExpr(lexer.stringVal());
                     lexer.nextToken();
                     sqlExpr = dateExpr;
-                } else if (hash_lower == FnvHash.Constants.TIME && lexer.token == Token.LITERAL_ALIAS) {
+                } else if (hash_lower == TokenFnvConstants.TIME && lexer.token == Token.LITERAL_ALIAS) {
                     SQLTimeExpr dateExpr = new SQLTimeExpr(SQLUtils.normalize(lexer.stringVal()));
                     lexer.nextToken();
                     sqlExpr = dateExpr;
-                } else if (hash_lower == FnvHash.Constants.DATETIME && (lexer.token == Token.LITERAL_CHARS || lexer.token == Token.VARIANT)) {
+                } else if (hash_lower == TokenFnvConstants.DATETIME && (lexer.token == Token.LITERAL_CHARS || lexer.token == Token.VARIANT)) {
                     SQLDateTimeExpr dateExpr = new SQLDateTimeExpr(lexer.stringVal());
                     lexer.nextToken();
                     sqlExpr = dateExpr;
-                } else if (hash_lower == FnvHash.Constants.DATETIME && lexer.token == Token.LITERAL_ALIAS) {
+                } else if (hash_lower == TokenFnvConstants.DATETIME && lexer.token == Token.LITERAL_ALIAS) {
                     SQLDateTimeExpr dateExpr = new SQLDateTimeExpr(SQLUtils.normalize(lexer.stringVal()));
                     lexer.nextToken();
                     sqlExpr = dateExpr;
-                } else if (hash_lower == FnvHash.Constants.BOOLEAN && lexer.token == Token.LITERAL_CHARS) {
+                } else if (hash_lower == TokenFnvConstants.BOOLEAN && lexer.token == Token.LITERAL_CHARS) {
                     sqlExpr = new SQLBooleanExpr(Boolean.valueOf(lexer.stringVal()));
                     lexer.nextToken();
-                } else if (hash_lower == FnvHash.Constants.VARCHAR && lexer.token == Token.LITERAL_CHARS) {
+                } else if (hash_lower == TokenFnvConstants.VARCHAR && lexer.token == Token.LITERAL_CHARS) {
                     if (dbType == DbType.mysql) {
                         MySqlCharExpr mysqlChar = new MySqlCharExpr(lexer.stringVal());
                         mysqlChar.setType("VARCHAR");
@@ -416,7 +417,7 @@ public class SQLExprParser extends SQLParser {
                         sqlExpr = new SQLCharExpr(lexer.stringVal());
                     }
                     lexer.nextToken();
-                } else if (hash_lower == FnvHash.Constants.CHAR && lexer.token == Token.LITERAL_CHARS) {
+                } else if (hash_lower == TokenFnvConstants.CHAR && lexer.token == Token.LITERAL_CHARS) {
                     if (dbType == DbType.mysql) {
                         MySqlCharExpr mysqlChar = new MySqlCharExpr(lexer.stringVal());
                         mysqlChar.setType("CHAR");
@@ -427,32 +428,32 @@ public class SQLExprParser extends SQLParser {
                     lexer.nextToken();
                 } else if (DbType.mysql == dbType && ident.startsWith("0x") && (ident.length() % 2) == 0) {
                     sqlExpr = new SQLHexExpr(ident.substring(2));
-                } else if (DbType.mysql == dbType && hash_lower == FnvHash.Constants.JSON && lexer.token == Token.LITERAL_CHARS) {
+                } else if (DbType.mysql == dbType && hash_lower == TokenFnvConstants.JSON && lexer.token == Token.LITERAL_CHARS) {
                     sqlExpr = new SQLJSONExpr(lexer.stringVal());
                     lexer.nextToken();
-                } else if (DbType.mysql == dbType && hash_lower == FnvHash.Constants.DECIMAL && lexer.token == Token.LITERAL_CHARS) {
+                } else if (DbType.mysql == dbType && hash_lower == TokenFnvConstants.DECIMAL && lexer.token == Token.LITERAL_CHARS) {
                     sqlExpr = new SQLDecimalExpr(lexer.stringVal());
                     lexer.nextToken();
-                } else if (DbType.mysql == dbType && hash_lower == FnvHash.Constants.DOUBLE && lexer.token == Token.LITERAL_CHARS) {
+                } else if (DbType.mysql == dbType && hash_lower == TokenFnvConstants.DOUBLE && lexer.token == Token.LITERAL_CHARS) {
                     sqlExpr = new SQLDoubleExpr(lexer.stringVal());
                     lexer.nextToken();
-                } else if (DbType.mysql == dbType && hash_lower == FnvHash.Constants.FLOAT && lexer.token == Token.LITERAL_CHARS) {
+                } else if (DbType.mysql == dbType && hash_lower == TokenFnvConstants.FLOAT && lexer.token == Token.LITERAL_CHARS) {
                     sqlExpr = new SQLFloatExpr(lexer.stringVal());
                     lexer.nextToken();
-                } else if (DbType.mysql == dbType && hash_lower == FnvHash.Constants.SMALLINT && lexer.token == Token.LITERAL_CHARS) {
+                } else if (DbType.mysql == dbType && hash_lower == TokenFnvConstants.SMALLINT && lexer.token == Token.LITERAL_CHARS) {
                     sqlExpr = new SQLSmallIntExpr(lexer.stringVal());
                     lexer.nextToken();
-                } else if (DbType.mysql == dbType && hash_lower == FnvHash.Constants.TINYINT && lexer.token == Token.LITERAL_CHARS) {
+                } else if (DbType.mysql == dbType && hash_lower == TokenFnvConstants.TINYINT && lexer.token == Token.LITERAL_CHARS) {
                     sqlExpr = new SQLTinyIntExpr(lexer.stringVal());
                     lexer.nextToken();
-                } else if (DbType.mysql == dbType && hash_lower == FnvHash.Constants.BIGINT && lexer.token == Token.LITERAL_CHARS) {
+                } else if (DbType.mysql == dbType && hash_lower == TokenFnvConstants.BIGINT && lexer.token == Token.LITERAL_CHARS) {
                     String strVal = lexer.stringVal();
                     if (strVal.startsWith("--")) {
                         strVal = strVal.substring(2);
                     }
                     sqlExpr = new SQLBigIntExpr(strVal);
                     lexer.nextToken();
-                } else if (DbType.mysql == dbType && hash_lower == FnvHash.Constants.INTEGER && lexer.token == Token.LITERAL_CHARS) {
+                } else if (DbType.mysql == dbType && hash_lower == TokenFnvConstants.INTEGER && lexer.token == Token.LITERAL_CHARS) {
                     String strVal = lexer.stringVal();
                     if (strVal.startsWith("--")) {
                         strVal = strVal.substring(2);
@@ -461,7 +462,7 @@ public class SQLExprParser extends SQLParser {
                     integerExpr.setType("INTEGER");
                     sqlExpr = integerExpr;
                     lexer.nextToken();
-                } else if (DbType.mysql == dbType && hash_lower == FnvHash.Constants.REAL && lexer.token == Token.LITERAL_CHARS) {
+                } else if (DbType.mysql == dbType && hash_lower == TokenFnvConstants.REAL && lexer.token == Token.LITERAL_CHARS) {
                     sqlExpr = new SQLRealExpr(lexer.stringVal());
                     lexer.nextToken();
                 } else {
@@ -1017,12 +1018,12 @@ public class SQLExprParser extends SQLParser {
             }
             case LBRACE: {
                 lexer.nextToken();
-                if (lexer.identifierEquals(FnvHash.Constants.TS)) {
+                if (lexer.identifierEquals(TokenFnvConstants.TS)) {
                     lexer.nextToken();
                     String literal = lexer.stringVal();
                     lexer.nextToken();
                     sqlExpr = new SQLTimestampExpr(literal);
-                } else if (lexer.identifierEquals(FnvHash.Constants.D) || lexer.identifierEquals(FnvHash.Constants.DATE)) {
+                } else if (lexer.identifierEquals(TokenFnvConstants.D) || lexer.identifierEquals(TokenFnvConstants.DATE)) {
                     lexer.nextToken();
                     String literal = lexer.stringVal();
                     if (literal.length() > 2 && literal.charAt(0) == '"' && literal.charAt(literal.length() - 1) == '"') {
@@ -1030,12 +1031,12 @@ public class SQLExprParser extends SQLParser {
                     }
                     lexer.nextToken();
                     sqlExpr = new SQLDateExpr(literal);
-                } else if (lexer.identifierEquals(FnvHash.Constants.T)) {
+                } else if (lexer.identifierEquals(TokenFnvConstants.T)) {
                     lexer.nextToken();
                     String literal = lexer.stringVal();
                     lexer.nextToken();
                     sqlExpr = new SQLTimeExpr(literal);
-                } else if (lexer.identifierEquals(FnvHash.Constants.FN)) {
+                } else if (lexer.identifierEquals(TokenFnvConstants.FN)) {
                     lexer.nextToken();
                     sqlExpr = this.expr();
                 } else if (DbType.mysql == dbType) {
@@ -1234,7 +1235,7 @@ public class SQLExprParser extends SQLParser {
         if (token == Token.OF) {
             if (expr instanceof SQLIdentifierExpr) {
                 long hashCode64 = ((SQLIdentifierExpr) expr).hashCode64();
-                if (hashCode64 == FnvHash.Constants.CURRENT) {
+                if (hashCode64 == TokenFnvConstants.CURRENT) {
                     lexer.nextToken();
                     SQLName cursorName = this.name();
                     return new SQLCurrentOfCursorExpr(cursorName);
@@ -1243,17 +1244,17 @@ public class SQLExprParser extends SQLParser {
         } else if (token == Token.FOR) {
             if (expr instanceof SQLIdentifierExpr) {
                 SQLIdentifierExpr idenExpr = (SQLIdentifierExpr) expr;
-                if (idenExpr.hashCode64() == FnvHash.Constants.NEXTVAL) {
+                if (idenExpr.hashCode64() == TokenFnvConstants.NEXTVAL) {
                     lexer.nextToken();
                     SQLName seqName = this.name();
                     SQLSequenceExpr seqExpr = new SQLSequenceExpr(seqName, SQLSequenceExpr.Function.NextVal);
                     return seqExpr;
-                } else if (idenExpr.hashCode64() == FnvHash.Constants.CURRVAL) {
+                } else if (idenExpr.hashCode64() == TokenFnvConstants.CURRVAL) {
                     lexer.nextToken();
                     SQLName seqName = this.name();
                     SQLSequenceExpr seqExpr = new SQLSequenceExpr(seqName, SQLSequenceExpr.Function.CurrVal);
                     return seqExpr;
-                } else if (idenExpr.hashCode64() == FnvHash.Constants.PREVVAL) {
+                } else if (idenExpr.hashCode64() == TokenFnvConstants.PREVVAL) {
                     lexer.nextToken();
                     SQLName seqName = this.name();
                     SQLSequenceExpr seqExpr = new SQLSequenceExpr(seqName, SQLSequenceExpr.Function.PrevVal);
@@ -1272,7 +1273,7 @@ public class SQLExprParser extends SQLParser {
 
             expr = dotRest(expr);
             return primaryRest(expr);
-        } else if (lexer.identifierEquals(FnvHash.Constants.SETS) //
+        } else if (lexer.identifierEquals(TokenFnvConstants.SETS) //
                 && expr.getClass() == SQLIdentifierExpr.class //
                 && "GROUPING".equalsIgnoreCase(((SQLIdentifierExpr) expr).getName())) {
             SQLGroupingSetExpr groupingSets = new SQLGroupingSetExpr();
@@ -1341,7 +1342,7 @@ public class SQLExprParser extends SQLParser {
             accept(Token.RPAREN);
         }
 
-        if (lexer.identifierEquals(FnvHash.Constants.AGAINST)) {
+        if (lexer.identifierEquals(TokenFnvConstants.AGAINST)) {
             lexer.nextToken();
         }
 
@@ -1351,7 +1352,7 @@ public class SQLExprParser extends SQLParser {
 
         if (lexer.token() == Token.IN) {
             lexer.nextToken();
-            if (lexer.identifierEquals(FnvHash.Constants.NATURAL)) {
+            if (lexer.identifierEquals(TokenFnvConstants.NATURAL)) {
                 lexer.nextToken();
                 acceptIdentifier("LANGUAGE");
                 acceptIdentifier("MODE");
@@ -1363,7 +1364,7 @@ public class SQLExprParser extends SQLParser {
                 } else {
                     matchAgainstExpr.setSearchModifier(SQLMatchAgainstExpr.SearchModifier.IN_NATURAL_LANGUAGE_MODE);
                 }
-            } else if (lexer.identifierEquals(FnvHash.Constants.BOOLEAN)) {
+            } else if (lexer.identifierEquals(TokenFnvConstants.BOOLEAN)) {
                 lexer.nextToken();
                 acceptIdentifier("MODE");
                 matchAgainstExpr.setSearchModifier(SQLMatchAgainstExpr.SearchModifier.IN_BOOLEAN_MODE);
@@ -1410,18 +1411,18 @@ public class SQLExprParser extends SQLParser {
             hash_lower = identifierExpr.nameHashCode64();
 
             if (allowIdentifierMethod) {
-                if (hash_lower == FnvHash.Constants.TRIM) {
-                    if (lexer.identifierEquals(FnvHash.Constants.LEADING) || lexer.identifierEquals(FnvHash.Constants.BOTH) || lexer.identifierEquals(FnvHash.Constants.TRAILING)) {
+                if (hash_lower == TokenFnvConstants.TRIM) {
+                    if (lexer.identifierEquals(TokenFnvConstants.LEADING) || lexer.identifierEquals(TokenFnvConstants.BOTH) || lexer.identifierEquals(TokenFnvConstants.TRAILING)) {
                         trimOption = lexer.stringVal();
                         lexer.nextToken();
                     }
-                } else if (hash_lower == FnvHash.Constants.MATCH && (DbType.mysql == dbType)) {
+                } else if (hash_lower == TokenFnvConstants.MATCH && (DbType.mysql == dbType)) {
                     return parseMatch();
-                } else if (hash_lower == FnvHash.Constants.EXTRACT && DbType.mysql == dbType) {
+                } else if (hash_lower == TokenFnvConstants.EXTRACT && DbType.mysql == dbType) {
                     return parseExtract();
-                } else if (hash_lower == FnvHash.Constants.POSITION && DbType.mysql == dbType) {
+                } else if (hash_lower == TokenFnvConstants.POSITION && DbType.mysql == dbType) {
                     return parsePosition();
-                } else if (hash_lower == FnvHash.Constants.TRY_CAST) {
+                } else if (hash_lower == TokenFnvConstants.TRY_CAST) {
                     SQLCastExpr cast = new SQLCastExpr();
                     cast.setTry(true);
                     cast.setExpr(expr());
@@ -1429,7 +1430,7 @@ public class SQLExprParser extends SQLParser {
                     cast.setDataType(parseDataType(false));
                     accept(Token.RPAREN);
                     return cast;
-                } else if (hash_lower == FnvHash.Constants.CONVERT && DbType.mysql == dbType) {
+                } else if (hash_lower == TokenFnvConstants.CONVERT && DbType.mysql == dbType) {
                     methodInvokeExpr = new SQLMethodInvokeExpr(methodName, hash_lower);
                     SQLExpr arg0 = this.expr();
                     // Fix for using.
@@ -1448,7 +1449,7 @@ public class SQLExprParser extends SQLParser {
                         methodInvokeExpr.addArgument(dataTypeRefExpr);
                     }
 
-                    if (lexer.token == Token.USING || lexer.identifierEquals(FnvHash.Constants.USING)) {
+                    if (lexer.token == Token.USING || lexer.identifierEquals(TokenFnvConstants.USING)) {
                         lexer.nextToken();
                         SQLExpr using;
                         if (lexer.token == Token.STAR) {
@@ -1477,7 +1478,7 @@ public class SQLExprParser extends SQLParser {
         } else if (expr instanceof SQLPropertyExpr) {
             methodName = ((SQLPropertyExpr) expr).getSimpleName();
             aggMethodName = SQLUtils.normalize(methodName);
-            hash_lower = FnvHash.fnv1a64lower(aggMethodName);
+            hash_lower = FnvHashUtils.fnv1a64lower(aggMethodName);
             aggMethodName = getAggregateFunction(hash_lower);
 
             owner = ((SQLPropertyExpr) expr).getOwner();
@@ -1519,7 +1520,7 @@ public class SQLExprParser extends SQLParser {
             exprList(methodInvokeExpr.getArguments(), methodInvokeExpr);
         }
 
-        if (hash_lower == FnvHash.Constants.EXIST && methodInvokeExpr.getArguments().size() == 1 && methodInvokeExpr.getArguments().get(0) instanceof SQLQueryExpr) {
+        if (hash_lower == TokenFnvConstants.EXIST && methodInvokeExpr.getArguments().size() == 1 && methodInvokeExpr.getArguments().get(0) instanceof SQLQueryExpr) {
             throw new ParserException("exists syntax error.");
         }
 
@@ -1535,7 +1536,7 @@ public class SQLExprParser extends SQLParser {
             }
         }
 
-        if (lexer.token == Token.USING || lexer.identifierEquals(FnvHash.Constants.USING)) {
+        if (lexer.token == Token.USING || lexer.identifierEquals(TokenFnvConstants.USING)) {
             lexer.nextToken();
             SQLExpr using;
             if (lexer.token == Token.STAR) {
@@ -1551,14 +1552,14 @@ public class SQLExprParser extends SQLParser {
         }
 
         // mysql
-        if (hash_lower == FnvHash.Constants.WEIGHT_STRING) {
+        if (hash_lower == TokenFnvConstants.WEIGHT_STRING) {
             if (lexer.token == Token.AS) {
                 lexer.nextToken();
                 SQLDataType as = this.parseDataType();
                 methodInvokeExpr.putAttribute("as", as);
             }
 
-            if (lexer.identifierEquals(FnvHash.Constants.LEVEL)) {
+            if (lexer.identifierEquals(TokenFnvConstants.LEVEL)) {
                 lexer.nextToken();
                 List<SQLSelectOrderByItem> levels = new ArrayList<>();
                 while (true) {
@@ -1573,7 +1574,7 @@ public class SQLExprParser extends SQLParser {
                 methodInvokeExpr.putAttribute("levels", levels);
             }
 
-            if (lexer.identifierEquals(FnvHash.Constants.REVERSE)) {
+            if (lexer.identifierEquals(TokenFnvConstants.REVERSE)) {
                 lexer.nextToken();
                 methodInvokeExpr.putAttribute("reverse", true);
             }
@@ -1594,7 +1595,7 @@ public class SQLExprParser extends SQLParser {
 
         accept(Token.RPAREN);
 
-        if (lexer.identifierEquals(FnvHash.Constants.FILTER)) {
+        if (lexer.identifierEquals(TokenFnvConstants.FILTER)) {
             if (aggregateExpr == null) {
                 Lexer.SavePoint mark = lexer.mark();
                 lexer.nextToken();
@@ -1645,13 +1646,13 @@ public class SQLExprParser extends SQLParser {
                 hash_lower = lexer.hash_lower;
                 lexer.nextToken();
 
-                if (hash_lower == FnvHash.Constants.NEXTVAL) {
+                if (hash_lower == TokenFnvConstants.NEXTVAL) {
                     expr = new SQLSequenceExpr((SQLName) expr, SQLSequenceExpr.Function.NextVal);
                     return primaryRest(expr);
-                } else if (hash_lower == FnvHash.Constants.CURRVAL) {
+                } else if (hash_lower == TokenFnvConstants.CURRVAL) {
                     expr = new SQLSequenceExpr((SQLName) expr, SQLSequenceExpr.Function.CurrVal);
                     return primaryRest(expr);
-                } else if (hash_lower == FnvHash.Constants.PREVVAL) {
+                } else if (hash_lower == TokenFnvConstants.PREVVAL) {
                     expr = new SQLSequenceExpr((SQLName) expr, SQLSequenceExpr.Function.PrevVal);
                     return primaryRest(expr);
                 }
@@ -1669,7 +1670,7 @@ public class SQLExprParser extends SQLParser {
             }
 
             if (lexer.token == Token.LPAREN) {
-                boolean aggregate = hash_lower == FnvHash.Constants.WM_CONCAT && expr instanceof SQLIdentifierExpr && ((SQLIdentifierExpr) expr).nameHashCode64() == FnvHash.Constants.WMSYS;
+                boolean aggregate = hash_lower == TokenFnvConstants.WM_CONCAT && expr instanceof SQLIdentifierExpr && ((SQLIdentifierExpr) expr).nameHashCode64() == TokenFnvConstants.WMSYS;
                 expr = methodRest(expr, name, aggregate);
             } else {
                 if (name.charAt(0) == '`') {
@@ -2014,7 +2015,7 @@ public class SQLExprParser extends SQLParser {
     }
 
     public boolean isAggregateFunction(String word) {
-        long hash_lower = FnvHash.fnv1a64lower(word);
+        long hash_lower = FnvHashUtils.fnv1a64lower(word);
         return isAggregateFunction(hash_lower);
     }
 
@@ -2044,7 +2045,7 @@ public class SQLExprParser extends SQLParser {
         } else if (lexer.token == Token.DISTINCT) {
             aggregateExpr = new SQLAggregateExpr(methodName, SQLAggregateOption.DISTINCT);
             lexer.nextToken();
-        } else if (lexer.identifierEquals(FnvHash.Constants.DEDUPLICATION)) { // just for nut
+        } else if (lexer.identifierEquals(TokenFnvConstants.DEDUPLICATION)) { // just for nut
             aggregateExpr = new SQLAggregateExpr(methodName, SQLAggregateOption.DEDUPLICATION);
             lexer.nextToken();
         } else {
@@ -2065,7 +2066,7 @@ public class SQLExprParser extends SQLParser {
 
         accept(Token.RPAREN);
 
-        if (lexer.identifierEquals(FnvHash.Constants.WITHIN)) {
+        if (lexer.identifierEquals(TokenFnvConstants.WITHIN)) {
             lexer.nextToken();
             accept(Token.GROUP);
             accept(Token.LPAREN);
@@ -2075,7 +2076,7 @@ public class SQLExprParser extends SQLParser {
             accept(Token.RPAREN);
         }
 
-        if (lexer.identifierEquals(FnvHash.Constants.FILTER)) {
+        if (lexer.identifierEquals(TokenFnvConstants.FILTER)) {
             filter(aggregateExpr);
         }
 
@@ -2141,10 +2142,10 @@ public class SQLExprParser extends SQLParser {
         }
 
         SQLOver.WindowingType windowingType = null;
-        if (lexer.identifierEquals(FnvHash.Constants.ROWS) || lexer.token == Token.ROWS) {
+        if (lexer.identifierEquals(TokenFnvConstants.ROWS) || lexer.token == Token.ROWS) {
             windowingType = SQLOver.WindowingType.ROWS;
 
-        } else if (lexer.identifierEquals(FnvHash.Constants.RANGE)) {
+        } else if (lexer.identifierEquals(TokenFnvConstants.RANGE)) {
             windowingType = SQLOver.WindowingType.RANGE;
         }
 
@@ -2161,7 +2162,7 @@ public class SQLExprParser extends SQLParser {
                 } else if (lexer.token == Token.IDENTIFIER) {
                     long hash = lexer.hash_lower();
 
-                    if (hash != FnvHash.Constants.PRECEDING && hash != FnvHash.Constants.FOLLOWING && hash != FnvHash.Constants.CURRENT && hash != FnvHash.Constants.UNBOUNDED) {
+                    if (hash != TokenFnvConstants.PRECEDING && hash != TokenFnvConstants.FOLLOWING && hash != TokenFnvConstants.CURRENT && hash != TokenFnvConstants.UNBOUNDED) {
                         SQLExpr betweenBegin = this.primary();
                         over.setWindowingBetweenBegin(betweenBegin);
                     }
@@ -2180,7 +2181,7 @@ public class SQLExprParser extends SQLParser {
                 } else if (lexer.token == Token.IDENTIFIER) {
                     long hash = lexer.hash_lower();
 
-                    if (hash != FnvHash.Constants.PRECEDING && hash != FnvHash.Constants.FOLLOWING && hash != FnvHash.Constants.CURRENT && hash != FnvHash.Constants.UNBOUNDED) {
+                    if (hash != TokenFnvConstants.PRECEDING && hash != TokenFnvConstants.FOLLOWING && hash != TokenFnvConstants.CURRENT && hash != TokenFnvConstants.UNBOUNDED) {
                         SQLExpr betweenBegin = this.additive();
                         over.setWindowingBetweenEnd(betweenBegin);
                     }
@@ -2197,7 +2198,7 @@ public class SQLExprParser extends SQLParser {
                 } else if (lexer.token == Token.IDENTIFIER) {
                     long hash = lexer.hash_lower();
 
-                    if (hash != FnvHash.Constants.PRECEDING && hash != FnvHash.Constants.FOLLOWING && hash != FnvHash.Constants.CURRENT && hash != FnvHash.Constants.UNBOUNDED) {
+                    if (hash != TokenFnvConstants.PRECEDING && hash != TokenFnvConstants.FOLLOWING && hash != TokenFnvConstants.CURRENT && hash != TokenFnvConstants.UNBOUNDED) {
                         SQLExpr betweenBegin = this.additive();
                         over.setWindowingBetweenBegin(betweenBegin);
                     }
@@ -2214,23 +2215,23 @@ public class SQLExprParser extends SQLParser {
     }
 
     protected SQLOver.WindowingBound parseWindowingBound() {
-        if (lexer.identifierEquals(FnvHash.Constants.PRECEDING)) {
+        if (lexer.identifierEquals(TokenFnvConstants.PRECEDING)) {
             lexer.nextToken();
             return SQLOver.WindowingBound.PRECEDING;
-        } else if (lexer.identifierEquals(FnvHash.Constants.FOLLOWING)) {
+        } else if (lexer.identifierEquals(TokenFnvConstants.FOLLOWING)) {
             lexer.nextToken();
             return SQLOver.WindowingBound.FOLLOWING;
-        } else if (lexer.identifierEquals(FnvHash.Constants.CURRENT) || lexer.token == Token.CURRENT) {
+        } else if (lexer.identifierEquals(TokenFnvConstants.CURRENT) || lexer.token == Token.CURRENT) {
             lexer.nextToken();
-            if (lexer.identifierEquals(FnvHash.Constants.ROW)) {
+            if (lexer.identifierEquals(TokenFnvConstants.ROW)) {
                 lexer.nextToken();
             } else {
                 accept(Token.ROW);
             }
             return SQLOver.WindowingBound.CURRENT_ROW;
-        } else if (lexer.identifierEquals(FnvHash.Constants.UNBOUNDED)) {
+        } else if (lexer.identifierEquals(TokenFnvConstants.UNBOUNDED)) {
             lexer.nextToken();
-            if (lexer.identifierEquals(FnvHash.Constants.PRECEDING)) {
+            if (lexer.identifierEquals(TokenFnvConstants.PRECEDING)) {
                 lexer.nextToken();
                 return SQLOver.WindowingBound.UNBOUNDED_PRECEDING;
             } else {
@@ -2252,7 +2253,7 @@ public class SQLExprParser extends SQLParser {
 
             lexer.nextToken();
 
-            if (lexer.identifierEquals(FnvHash.Constants.SIBLINGS)) {
+            if (lexer.identifierEquals(TokenFnvConstants.SIBLINGS)) {
                 lexer.nextToken();
                 orderBy.setSibings(true);
             }
@@ -2277,7 +2278,7 @@ public class SQLExprParser extends SQLParser {
 
             lexer.nextToken();
 
-            if (lexer.identifierEquals(FnvHash.Constants.SIBLINGS)) {
+            if (lexer.identifierEquals(TokenFnvConstants.SIBLINGS)) {
                 lexer.nextToken();
                 orderBy.setSibings(true);
             }
@@ -2302,7 +2303,7 @@ public class SQLExprParser extends SQLParser {
 
             lexer.nextToken();
 
-            if (lexer.identifierEquals(FnvHash.Constants.SIBLINGS)) {
+            if (lexer.identifierEquals(TokenFnvConstants.SIBLINGS)) {
                 lexer.nextToken();
                 orderBy.setSibings(true);
             }
@@ -2322,12 +2323,12 @@ public class SQLExprParser extends SQLParser {
     }
 
     public SQLOrderBy parseSortBy() {
-        if (lexer.token == Token.SORT || lexer.identifierEquals(FnvHash.Constants.SORT)) {
+        if (lexer.token == Token.SORT || lexer.identifierEquals(TokenFnvConstants.SORT)) {
             SQLOrderBy orderBy = new SQLOrderBy();
 
             lexer.nextToken();
 
-            if (lexer.identifierEquals(FnvHash.Constants.SIBLINGS)) {
+            if (lexer.identifierEquals(TokenFnvConstants.SIBLINGS)) {
                 lexer.nextToken();
                 orderBy.setSibings(true);
             }
@@ -2395,7 +2396,7 @@ public class SQLExprParser extends SQLParser {
             setAllowIdentifierMethod(true);
         }
 
-        if (lexer.identifierEquals(FnvHash.Constants.COLLATE)) {
+        if (lexer.identifierEquals(TokenFnvConstants.COLLATE)) {
             lexer.nextToken();
             String collate = lexer.stringVal();
             item.setCollate(collate);
@@ -2410,12 +2411,12 @@ public class SQLExprParser extends SQLParser {
             item.setType(SQLOrderingSpecification.DESC);
         }
 
-        if (lexer.identifierEquals(FnvHash.Constants.NULLS)) {
+        if (lexer.identifierEquals(TokenFnvConstants.NULLS)) {
             lexer.nextToken();
-            if (lexer.identifierEquals(FnvHash.Constants.FIRST) || lexer.token == Token.FIRST) {
+            if (lexer.identifierEquals(TokenFnvConstants.FIRST) || lexer.token == Token.FIRST) {
                 lexer.nextToken();
                 item.setNullsOrderType(SQLSelectOrderByItem.NullsOrderType.NullsFirst);
-            } else if (lexer.identifierEquals(FnvHash.Constants.LAST)) {
+            } else if (lexer.identifierEquals(TokenFnvConstants.LAST)) {
                 lexer.nextToken();
                 item.setNullsOrderType(SQLSelectOrderByItem.NullsOrderType.NullsLast);
             } else {
@@ -2588,7 +2589,7 @@ public class SQLExprParser extends SQLParser {
                                     queryExpr.getSubQuery().setQuery(query);
                                 }
 
-                                if (hints != null && hints.size() > 0) {
+                                if (hints != null && !hints.isEmpty()) {
                                     queryExpr.getSubQuery().setHeadHint(hints.get(0));
                                 }
                             }
@@ -2991,20 +2992,20 @@ public class SQLExprParser extends SQLParser {
                     op = SQLBinaryOperator.Is;
                 }
 
-                if (lexer.identifierEquals(FnvHash.Constants.JSON)) {
+                if (lexer.identifierEquals(TokenFnvConstants.JSON)) {
                     lexer.nextToken();
 
                     String name = "JSON";
-                    if (lexer.identifierEquals(FnvHash.Constants.VALUE)) {
+                    if (lexer.identifierEquals(TokenFnvConstants.VALUE)) {
                         lexer.nextToken();
                         name = "JSON VALUE";
-                    } else if (lexer.identifierEquals(FnvHash.Constants.OBJECT)) {
+                    } else if (lexer.identifierEquals(TokenFnvConstants.OBJECT)) {
                         lexer.nextToken();
                         name = "JSON OBJECT";
-                    } else if (lexer.identifierEquals(FnvHash.Constants.ARRAY)) {
+                    } else if (lexer.identifierEquals(TokenFnvConstants.ARRAY)) {
                         lexer.nextToken();
                         name = "JSON ARRAY";
-                    } else if (lexer.identifierEquals(FnvHash.Constants.SCALAR)) {
+                    } else if (lexer.identifierEquals(TokenFnvConstants.SCALAR)) {
                         lexer.nextToken();
                         name = "JSON SCALAR";
                     }
@@ -3203,14 +3204,14 @@ public class SQLExprParser extends SQLParser {
                 break;
             case IDENTIFIER:
                 long hash = lexer.hash_lower;
-                if (hash == FnvHash.Constants.SOUNDS) {
+                if (hash == TokenFnvConstants.SOUNDS) {
                     lexer.nextToken();
                     accept(Token.LIKE);
 
                     rightExp = bitOr();
 
                     expr = new SQLBinaryOpExpr(expr, SQLBinaryOperator.SoudsLike, rightExp, getDbType());
-                } else if (hash == FnvHash.Constants.REGEXP) {
+                } else if (hash == TokenFnvConstants.REGEXP) {
                     lexer.nextToken();
                     rightExp = bitOr();
 
@@ -3384,7 +3385,7 @@ public class SQLExprParser extends SQLParser {
                 break;
             case IDENTIFIER:
                 long hash = lexer.hash_lower();
-                if (hash == FnvHash.Constants.REGEXP) {
+                if (hash == TokenFnvConstants.REGEXP) {
                     lexer.nextToken();
                     rightExp = bitOr();
                     expr = new SQLBinaryOpExpr(expr, SQLBinaryOperator.NotRegExp, rightExp, getDbType());
@@ -3408,7 +3409,7 @@ public class SQLExprParser extends SQLParser {
             return null;
         }
 
-        if (lexer.identifierEquals(FnvHash.Constants.ARRAY)) {
+        if (lexer.identifierEquals(TokenFnvConstants.ARRAY)) {
             lexer.nextToken();
 
             if (lexer.token == Token.LPAREN) {
@@ -3439,7 +3440,7 @@ public class SQLExprParser extends SQLParser {
             return array;
         }
 
-        if (lexer.identifierEquals(FnvHash.Constants.MAP)) {
+        if (lexer.identifierEquals(TokenFnvConstants.MAP)) {
             lexer.nextToken();
 
             if (lexer.token == Token.LPAREN) { // presto
@@ -3465,7 +3466,7 @@ public class SQLExprParser extends SQLParser {
             return new SQLMapDataType(keyType, valueType, dbType);
         }
 
-        if (lexer.identifierEquals(FnvHash.Constants.STRUCT)) {
+        if (lexer.identifierEquals(TokenFnvConstants.STRUCT)) {
             lexer.nextToken();
 
             SQLStructDataType struct = new SQLStructDataType(dbType);
@@ -3507,12 +3508,12 @@ public class SQLExprParser extends SQLParser {
                 accept(Token.GT);
             }
             return struct;
-        } else if (lexer.identifierEquals(FnvHash.Constants.ROW) || lexer.token == Token.ROW) {
+        } else if (lexer.identifierEquals(TokenFnvConstants.ROW) || lexer.token == Token.ROW) {
             lexer.nextToken();
             return parseSqlRowDataType();
         }
 
-        if (lexer.identifierEquals(FnvHash.Constants.UNIONTYPE)) {
+        if (lexer.identifierEquals(TokenFnvConstants.UNIONTYPE)) {
             lexer.nextToken();
             accept(Token.LT);
 
@@ -3531,7 +3532,7 @@ public class SQLExprParser extends SQLParser {
             return unionType;
         }
 
-        if (lexer.identifierEquals(FnvHash.Constants.GENERATED) || lexer.identifierEquals(FnvHash.Constants.RENAME)) {
+        if (lexer.identifierEquals(TokenFnvConstants.GENERATED) || lexer.identifierEquals(TokenFnvConstants.RENAME)) {
             return null;
         }
 
@@ -3539,22 +3540,22 @@ public class SQLExprParser extends SQLParser {
         final long typeNameHashCode = typeExpr.nameHashCode64();
         String typeName = typeExpr.toString();
 
-        if (typeNameHashCode == FnvHash.Constants.LONG && lexer.identifierEquals(FnvHash.Constants.BYTE) && DbType.mysql == dbType) {
+        if (typeNameHashCode == TokenFnvConstants.LONG && lexer.identifierEquals(TokenFnvConstants.BYTE) && DbType.mysql == dbType) {
             typeName += (' ' + lexer.stringVal());
             lexer.nextToken();
-        } else if (typeNameHashCode == FnvHash.Constants.DOUBLE) {
-            if (DbType.mysql == dbType && lexer.identifierEquals(FnvHash.Constants.PRECISION)) {
+        } else if (typeNameHashCode == TokenFnvConstants.DOUBLE) {
+            if (DbType.mysql == dbType && lexer.identifierEquals(TokenFnvConstants.PRECISION)) {
                 typeName += (' ' + lexer.stringVal());
                 lexer.nextToken();
             }
         }
 
-        if (typeNameHashCode == FnvHash.Constants.UNSIGNED) {
+        if (typeNameHashCode == TokenFnvConstants.UNSIGNED) {
             if (lexer.token == Token.IDENTIFIER) {
                 typeName += (' ' + lexer.stringVal());
                 lexer.nextToken();
             }
-        } else if (typeNameHashCode == FnvHash.Constants.SIGNED) {
+        } else if (typeNameHashCode == TokenFnvConstants.SIGNED) {
             if (lexer.token == Token.IDENTIFIER) {
                 typeName += (' ' + lexer.stringVal());
                 lexer.nextToken();
@@ -3573,7 +3574,7 @@ public class SQLExprParser extends SQLParser {
 
             if (lexer.token == Token.LPAREN) {
                 lexer.nextToken();
-                if (typeNameHashCode == FnvHash.Constants.ENUM) {
+                if (typeNameHashCode == TokenFnvConstants.ENUM) {
                     exprList(charType.getArguments(), charType);
                 } else {
                     SQLExpr arg = this.expr();
@@ -3590,14 +3591,14 @@ public class SQLExprParser extends SQLParser {
                 charType.setHints(hints);
             }
 
-            if (lexer.identifierEquals(FnvHash.Constants.ARRAY) || lexer.token == Token.LBRACKET) {
+            if (lexer.identifierEquals(TokenFnvConstants.ARRAY) || lexer.token == Token.LBRACKET) {
                 return parseDataTypeRest(charType);
             }
 
             return charType;
         }
 
-        if ("national".equalsIgnoreCase(typeName) && (lexer.identifierEquals(FnvHash.Constants.CHAR) || lexer.identifierEquals(FnvHash.Constants.VARCHAR))) {
+        if ("national".equalsIgnoreCase(typeName) && (lexer.identifierEquals(TokenFnvConstants.CHAR) || lexer.identifierEquals(TokenFnvConstants.VARCHAR))) {
             typeName += ' ' + lexer.stringVal();
             lexer.nextToken();
 
@@ -3618,7 +3619,7 @@ public class SQLExprParser extends SQLParser {
                 charType.setHints(hints);
             }
 
-            if (lexer.identifierEquals(FnvHash.Constants.ARRAY)) {
+            if (lexer.identifierEquals(TokenFnvConstants.ARRAY)) {
                 return parseDataTypeRest(charType);
             }
 
@@ -3711,13 +3712,13 @@ public class SQLExprParser extends SQLParser {
             accept(Token.RPAREN);
         }
 
-        if (lexer.identifierEquals(FnvHash.Constants.PRECISION) && dataType.nameHashCode64() == FnvHash.Constants.DOUBLE) {
+        if (lexer.identifierEquals(TokenFnvConstants.PRECISION) && dataType.nameHashCode64() == TokenFnvConstants.DOUBLE) {
             lexer.nextToken();
             dataType.setName("DOUBLE PRECISION");
         }
 
-        if (FnvHash.Constants.TIMESTAMP == dataType.nameHashCode64() || FnvHash.Constants.TIME == dataType.nameHashCode64()) {
-            if (lexer.identifierEquals(FnvHash.Constants.WITHOUT)) {
+        if (TokenFnvConstants.TIMESTAMP == dataType.nameHashCode64() || TokenFnvConstants.TIME == dataType.nameHashCode64()) {
+            if (lexer.identifierEquals(TokenFnvConstants.WITHOUT)) {
                 lexer.nextToken();
                 acceptIdentifier("TIME");
                 acceptIdentifier("ZONE");
@@ -3725,7 +3726,7 @@ public class SQLExprParser extends SQLParser {
             } else if (lexer.token == Token.WITH) {
                 Lexer.SavePoint mark = lexer.mark();
                 lexer.nextToken();
-                if (lexer.identifierEquals(FnvHash.Constants.TIME)) {
+                if (lexer.identifierEquals(TokenFnvConstants.TIME)) {
                     lexer.nextToken();
                     acceptIdentifier("ZONE");
                     dataType.setWithTimeZone(true);
@@ -3745,7 +3746,7 @@ public class SQLExprParser extends SQLParser {
 
 
     protected boolean isCharType(long hash) {
-        return hash == FnvHash.Constants.CHAR || hash == FnvHash.Constants.VARCHAR || hash == FnvHash.Constants.NCHAR || hash == FnvHash.Constants.NVARCHAR || hash == FnvHash.Constants.TINYTEXT || hash == FnvHash.Constants.TEXT || hash == FnvHash.Constants.MEDIUMTEXT || hash == FnvHash.Constants.LONGTEXT || hash == FnvHash.Constants.ENUM;
+        return hash == TokenFnvConstants.CHAR || hash == TokenFnvConstants.VARCHAR || hash == TokenFnvConstants.NCHAR || hash == TokenFnvConstants.NVARCHAR || hash == TokenFnvConstants.TINYTEXT || hash == TokenFnvConstants.TEXT || hash == TokenFnvConstants.MEDIUMTEXT || hash == TokenFnvConstants.LONGTEXT || hash == TokenFnvConstants.ENUM;
     }
 
     protected SQLDataType parseCharTypeRest(SQLCharacterDataType charType) {
@@ -3754,7 +3755,7 @@ public class SQLExprParser extends SQLParser {
             lexer.nextToken();
         }
 
-        if (lexer.identifierEquals(FnvHash.Constants.CHARACTER)) {
+        if (lexer.identifierEquals(TokenFnvConstants.CHARACTER)) {
             lexer.nextToken();
 
             accept(Token.SET);
@@ -3764,7 +3765,7 @@ public class SQLExprParser extends SQLParser {
             }
             charType.setCharSetName(lexer.stringVal());
             lexer.nextToken();
-        } else if (lexer.identifierEquals(FnvHash.Constants.CHARSET)) {
+        } else if (lexer.identifierEquals(TokenFnvConstants.CHARSET)) {
             lexer.nextToken();
 
             if (lexer.token != Token.IDENTIFIER && lexer.token != Token.LITERAL_CHARS && lexer.token != Token.BINARY) {
@@ -3779,7 +3780,7 @@ public class SQLExprParser extends SQLParser {
             lexer.nextToken();
         }
 
-        if (lexer.identifierEquals(FnvHash.Constants.COLLATE)) {
+        if (lexer.identifierEquals(TokenFnvConstants.COLLATE)) {
             lexer.nextToken();
 
             if (lexer.token == Token.LITERAL_ALIAS || lexer.token == Token.IDENTIFIER || lexer.token == Token.LITERAL_CHARS) {
@@ -3856,10 +3857,64 @@ public class SQLExprParser extends SQLParser {
                 column.addConstraint(notNull);
                 return parseColumnRest(column);
             }
+            case SELECT:
+                break;
+            case DELETE:
+                break;
+            case INSERT:
+                break;
+            case UPDATE:
+                break;
+            case FROM:
+                break;
+            case HAVING:
+                break;
+            case WHERE:
+                break;
+            case ORDER:
+                break;
+            case BY:
+                break;
+            case GROUP:
+                break;
+            case INTO:
+                break;
+            case AS:
+                break;
+            case CREATE:
+                break;
+            case ALTER:
+                break;
+            case DROP:
+                break;
+            case SET:
+                break;
             case NULL:
                 lexer.nextToken();
                 column.getConstraints().add(new SQLNullConstraint());
                 return parseColumnRest(column);
+            case DISTINCT:
+                break;
+            case TABLE:
+                break;
+            case TABLESPACE:
+                break;
+            case VIEW:
+                break;
+            case SEQUENCE:
+                break;
+            case TRIGGER:
+                break;
+            case USER:
+                break;
+            case INDEX:
+                break;
+            case SESSION:
+                break;
+            case PROCEDURE:
+                break;
+            case FUNCTION:
+                break;
             case PRIMARY:
                 lexer.nextToken();
                 accept(Token.KEY);
@@ -3876,6 +3931,8 @@ public class SQLExprParser extends SQLParser {
                 lexer.nextToken();
                 column.addConstraint(new SQLColumnPrimaryKey());
                 return parseColumnRest(column);
+            case FOREIGN:
+                break;
             case REFERENCES: {
                 SQLColumnReference ref = parseReference();
                 column.addConstraint(ref);
@@ -3942,19 +3999,19 @@ public class SQLExprParser extends SQLParser {
                 return parseColumnRest(column);
             case IDENTIFIER:
                 long hash = lexer.hash_lower();
-                if (hash == FnvHash.Constants.AUTO_INCREMENT) {
+                if (hash == TokenFnvConstants.AUTO_INCREMENT) {
                     lexer.nextToken();
                     column.setAutoIncrement(true);
                     //sequence parser
                     if (lexer.token == Token.BY) {
                         lexer.nextToken();
-                        if (lexer.hash_lower() == FnvHash.Constants.GROUP) {
+                        if (lexer.hash_lower() == TokenFnvConstants.GROUP) {
                             lexer.nextToken();
                             column.setSequenceType(AutoIncrementType.GROUP);
-                            if (lexer.identifierEquals(FnvHash.Constants.UNIT)) {
+                            if (lexer.identifierEquals(TokenFnvConstants.UNIT)) {
                                 lexer.nextToken();
 
-                                if (lexer.identifierEquals(FnvHash.Constants.COUNT)) {
+                                if (lexer.identifierEquals(TokenFnvConstants.COUNT)) {
                                     lexer.nextToken();
                                     SQLExpr unitCount = primary();
                                     column.setUnitCount(unitCount);
@@ -3966,7 +4023,7 @@ public class SQLExprParser extends SQLParser {
                                     column.setUnitIndex(unitIndex);
                                 }
 
-                                if (lexer.hash_lower() == FnvHash.Constants.STEP) {
+                                if (lexer.hash_lower() == TokenFnvConstants.STEP) {
                                     lexer.nextToken();
                                     SQLExpr step = primary();
                                     column.setStep(step);
@@ -3974,15 +4031,15 @@ public class SQLExprParser extends SQLParser {
                             } else {
                                 return parseColumnRest(column);
                             }
-                        } else if (lexer.hash_lower() == FnvHash.Constants.TIME) {
+                        } else if (lexer.hash_lower() == TokenFnvConstants.TIME) {
                             lexer.nextToken();
                             column.setSequenceType(AutoIncrementType.TIME);
                             return parseColumnRest(column);
-                        } else if (lexer.hash_lower() == FnvHash.Constants.SIMPLE) {
+                        } else if (lexer.hash_lower() == TokenFnvConstants.SIMPLE) {
                             lexer.nextToken();
-                            if (lexer.hash_lower() == FnvHash.Constants.WITH) {
+                            if (lexer.hash_lower() == TokenFnvConstants.WITH) {
                                 lexer.nextToken();
-                                if (lexer.hash_lower() == FnvHash.Constants.CACHE) {
+                                if (lexer.hash_lower() == TokenFnvConstants.CACHE) {
                                     column.setSequenceType(AutoIncrementType.SIMPLE_CACHE);
                                 } else {
                                     throw new ParserException("TODO : " + lexer.info());
@@ -3995,10 +4052,10 @@ public class SQLExprParser extends SQLParser {
                             }
                         }
                         return parseColumnRest(column);
-                    } else if (lexer.identifierEquals(FnvHash.Constants.UNIT)) {
+                    } else if (lexer.identifierEquals(TokenFnvConstants.UNIT)) {
                         lexer.nextToken();
 
-                        if (lexer.identifierEquals(FnvHash.Constants.COUNT)) {
+                        if (lexer.identifierEquals(TokenFnvConstants.COUNT)) {
                             lexer.nextToken();
                             SQLExpr unitCount = primary();
                             column.setUnitCount(unitCount);
@@ -4010,7 +4067,7 @@ public class SQLExprParser extends SQLParser {
                             column.setUnitIndex(unitIndex);
                         }
 
-                        if (lexer.hash_lower() == FnvHash.Constants.STEP) {
+                        if (lexer.hash_lower() == TokenFnvConstants.STEP) {
                             lexer.nextToken();
                             SQLExpr unitIndex = primary();
                             column.setStep(unitIndex);
@@ -4042,6 +4099,202 @@ public class SQLExprParser extends SQLParser {
                     return parseColumnRest(column);
                 }
                 break;
+            case EXPLAIN:
+                break;
+            case FOR:
+                break;
+            case IF:
+                break;
+            case GLOBAL:
+                break;
+            case ALL:
+                break;
+            case UNION:
+                break;
+            case EXCEPT:
+                break;
+            case INTERSECT:
+                break;
+            case MINUS:
+                break;
+            case INNER:
+                break;
+            case LEFT:
+                break;
+            case RIGHT:
+                break;
+            case FULL:
+                break;
+            case OUTER:
+                break;
+            case JOIN:
+                break;
+            case STRAIGHT_JOIN:
+                break;
+            case ON:
+                break;
+            case SCHEMA:
+                break;
+            case CAST:
+                break;
+            case COLUMN:
+                break;
+            case USE:
+                break;
+            case DATABASE:
+                break;
+            case TO:
+                break;
+            case AND:
+                break;
+            case OR:
+                break;
+            case XOR:
+                break;
+            case CASE:
+                break;
+            case WHEN:
+                break;
+            case THEN:
+                break;
+            case ELSE:
+                break;
+            case ELSIF:
+                break;
+            case END:
+                break;
+            case EXISTS:
+                break;
+            case IN:
+                break;
+            case NEW:
+                break;
+            case ASC:
+                break;
+            case DESC:
+                break;
+            case IS:
+                break;
+            case LIKE:
+                break;
+            case ESCAPE:
+                break;
+            case BETWEEN:
+                break;
+            case VALUES:
+                break;
+            case INTERVAL:
+                break;
+            case LOCK:
+                break;
+            case SOME:
+                break;
+            case ANY:
+                break;
+            case TRUNCATE:
+                break;
+            case RETURN:
+                break;
+            case TRUE:
+                break;
+            case FALSE:
+                break;
+            case LIMIT:
+                break;
+            case KILL:
+                break;
+            case IDENTIFIED:
+                break;
+            case PASSWORD:
+                break;
+            case DUAL:
+                break;
+            case BINARY:
+                break;
+            case SHOW:
+                break;
+            case REPLACE:
+                break;
+            case PERIOD:
+                break;
+            case BITS:
+                break;
+            case WHILE:
+                break;
+            case DO:
+                break;
+            case LEAVE:
+                break;
+            case ITERATE:
+                break;
+            case REPEAT:
+                break;
+            case UNTIL:
+                break;
+            case OPEN:
+                break;
+            case CLOSE:
+                break;
+            case OUT:
+                break;
+            case INOUT:
+                break;
+            case EXIT:
+                break;
+            case UNDO:
+                break;
+            case SQLSTATE:
+                break;
+            case CONDITION:
+                break;
+            case DIV:
+                break;
+            case WINDOW:
+                break;
+            case OFFSET:
+                break;
+            case ROW:
+                break;
+            case ROWS:
+                break;
+            case ONLY:
+                break;
+            case FIRST:
+                break;
+            case NEXT:
+                break;
+            case FETCH:
+                break;
+            case OF:
+                break;
+            case SHARE:
+                break;
+            case NOWAIT:
+                break;
+            case RECURSIVE:
+                break;
+            case TEMPORARY:
+                break;
+            case TEMP:
+                break;
+            case UNLOGGED:
+                break;
+            case RESTART:
+                break;
+            case IDENTITY:
+                break;
+            case CONTINUE:
+                break;
+            case CASCADE:
+                break;
+            case RESTRICT:
+                break;
+            case USING:
+                break;
+            case CURRENT:
+                break;
+            case RETURNING:
+                break;
             case COMMENT:
                 lexer.nextToken();
 
@@ -4050,17 +4303,341 @@ public class SQLExprParser extends SQLParser {
                     if (alias.length() > 2 && alias.charAt(0) == '"' && alias.charAt(alias.length() - 1) == '"') {
                         alias = alias.substring(1, alias.length() - 1);
                     }
-                    column.setComment(alias);
+                    column.setCommentStr(alias);
                     lexer.nextToken();
                 } else if (lexer.token == Token.LITERAL_CHARS) {
                     String stringVal = lexer.stringVal();
                     lexer.nextToken();
 
-                    column.setComment(stringVal);
+                    column.setCommentStr(stringVal);
                 } else {
                     column.setComment(primary());
                 }
                 return parseColumnRest(column);
+            case OVER:
+                break;
+            case TYPE:
+                break;
+            case ILIKE:
+                break;
+            case RLIKE:
+                break;
+            case FULLTEXT:
+                break;
+            case START:
+                break;
+            case PRIOR:
+                break;
+            case CONNECT:
+                break;
+            case WITH:
+                break;
+            case EXTRACT:
+                break;
+            case CURSOR:
+                break;
+            case MERGE:
+                break;
+            case MATCHED:
+                break;
+            case ERRORS:
+                break;
+            case REJECT:
+                break;
+            case UNLIMITED:
+                break;
+            case BEGIN:
+                break;
+            case EXCLUSIVE:
+                break;
+            case MODE:
+                break;
+            case WAIT:
+                break;
+            case ADVISE:
+                break;
+            case SYSDATE:
+                break;
+            case DECLARE:
+                break;
+            case EXCEPTION:
+                break;
+            case GRANT:
+                break;
+            case REVOKE:
+                break;
+            case LOOP:
+                break;
+            case GOTO:
+                break;
+            case COMMIT:
+                break;
+            case SAVEPOINT:
+                break;
+            case CROSS:
+                break;
+            case PCTFREE:
+                break;
+            case INITRANS:
+                break;
+            case MAXTRANS:
+                break;
+            case INITIALLY:
+                break;
+            case ENABLE:
+                break;
+            case DISABLE:
+                break;
+            case SEGMENT:
+                break;
+            case CREATION:
+                break;
+            case IMMEDIATE:
+                break;
+            case DEFERRED:
+                break;
+            case STORAGE:
+                break;
+            case MINEXTENTS:
+                break;
+            case MAXEXTENTS:
+                break;
+            case MAXSIZE:
+                break;
+            case PCTINCREASE:
+                break;
+            case FLASH_CACHE:
+                break;
+            case CELL_FLASH_CACHE:
+                break;
+            case NONE:
+                break;
+            case LOB:
+                break;
+            case STORE:
+                break;
+            case CHUNK:
+                break;
+            case CACHE:
+                break;
+            case NOCACHE:
+                break;
+            case LOGGING:
+                break;
+            case NOCOMPRESS:
+                break;
+            case KEEP_DUPLICATES:
+                break;
+            case EXCEPTIONS:
+                break;
+            case PURGE:
+                break;
+            case COMPUTE:
+                break;
+            case ANALYZE:
+                break;
+            case OPTIMIZE:
+                break;
+            case GENERATED:
+                break;
+            case TOP:
+                break;
+            case ARRAY:
+                break;
+            case DISTRIBUTE:
+                break;
+            case EOF:
+                break;
+            case ERROR:
+                break;
+            case HINT:
+                break;
+            case VARIANT:
+                break;
+            case LITERAL_INT:
+                break;
+            case LITERAL_FLOAT:
+                break;
+            case LITERAL_HEX:
+                break;
+            case LITERAL_CHARS:
+                break;
+            case LITERAL_NCHARS:
+                break;
+            case LITERAL_PATH:
+                break;
+            case LITERAL_ALIAS:
+                break;
+            case LINE_COMMENT:
+                break;
+            case MULTI_LINE_COMMENT:
+                break;
+            case BINARY_FLOAT:
+                break;
+            case BINARY_DOUBLE:
+                break;
+            case SIZE:
+                break;
+            case PARTITION:
+                break;
+            case PARTITIONED:
+                break;
+            case OVERWRITE:
+                break;
+            case SORT:
+                break;
+            case LATERAL:
+                break;
+            case SEL:
+                break;
+            case LOCKING:
+                break;
+            case ACCESS:
+                break;
+            case VOLATILE:
+                break;
+            case MULTISET:
+                break;
+            case POSITION:
+                break;
+            case RANGE_N:
+                break;
+            case FORMAT:
+                break;
+            case QUALIFY:
+                break;
+            case MOD:
+                break;
+            case CONTAINS:
+                break;
+            case CONCAT:
+                break;
+            case UPSERT:
+                break;
+            case LPAREN:
+                break;
+            case RPAREN:
+                break;
+            case LBRACE:
+                break;
+            case RBRACE:
+                break;
+            case LBRACKET:
+                break;
+            case RBRACKET:
+                break;
+            case SEMI:
+                break;
+            case COMMA:
+                break;
+            case DOT:
+                break;
+            case DOTDOT:
+                break;
+            case DOTDOTDOT:
+                break;
+            case EQ:
+                break;
+            case GT:
+                break;
+            case LT:
+                break;
+            case LT_SUB_GT:
+                break;
+            case BANG:
+                break;
+            case BANGBANG:
+                break;
+            case BANG_TILDE:
+                break;
+            case BANG_TILDE_STAR:
+                break;
+            case TILDE:
+                break;
+            case TILDE_STAR:
+                break;
+            case TILDE_EQ:
+                break;
+            case QUES:
+                break;
+            case QUESQUES:
+                break;
+            case QUESBAR:
+                break;
+            case QUESAMP:
+                break;
+            case COLON:
+                break;
+            case COLONCOLON:
+                break;
+            case COLONEQ:
+                break;
+            case EQEQ:
+                break;
+            case EQGT:
+                break;
+            case LTEQ:
+                break;
+            case LTEQGT:
+                break;
+            case LTGT:
+                break;
+            case GTEQ:
+                break;
+            case BANGEQ:
+                break;
+            case BANGGT:
+                break;
+            case BANGLT:
+                break;
+            case AMPAMP:
+                break;
+            case BARBAR:
+                break;
+            case BARBARSLASH:
+                break;
+            case BARSLASH:
+                break;
+            case PLUS:
+                break;
+            case SUB:
+                break;
+            case SUBGT:
+                break;
+            case SUBGTGT:
+                break;
+            case STAR:
+                break;
+            case SLASH:
+                break;
+            case AMP:
+                break;
+            case BAR:
+                break;
+            case CARET:
+                break;
+            case CARETEQ:
+                break;
+            case PERCENT:
+                break;
+            case LTLT:
+                break;
+            case GTGT:
+                break;
+            case MONKEYS_AT:
+                break;
+            case MONKEYS_AT_AT:
+                break;
+            case POUND:
+                break;
+            case POUNDGT:
+                break;
+            case POUNDGTGT:
+                break;
+            case MONKEYS_AT_GT:
+                break;
+            case LT_MONKEYS_AT:
+                break;
             default:
                 break;
         }
@@ -4077,15 +4654,15 @@ public class SQLExprParser extends SQLParser {
         this.names(fk.getColumns(), fk);
         accept(Token.RPAREN);
 
-        if (lexer.identifierEquals(FnvHash.Constants.MATCH)) {
+        if (lexer.identifierEquals(TokenFnvConstants.MATCH)) {
             lexer.nextToken();
             if (lexer.identifierEquals("FULL") || lexer.token() == Token.FULL) {
                 fk.setReferenceMatch(SQLForeignKeyImpl.Match.FULL);
                 lexer.nextToken();
-            } else if (lexer.identifierEquals(FnvHash.Constants.PARTIAL)) {
+            } else if (lexer.identifierEquals(TokenFnvConstants.PARTIAL)) {
                 fk.setReferenceMatch(SQLForeignKeyImpl.Match.PARTIAL);
                 lexer.nextToken();
-            } else if (lexer.identifierEquals(FnvHash.Constants.SIMPLE)) {
+            } else if (lexer.identifierEquals(TokenFnvConstants.SIMPLE)) {
                 fk.setReferenceMatch(SQLForeignKeyImpl.Match.SIMPLE);
                 lexer.nextToken();
             } else {
@@ -4116,10 +4693,10 @@ public class SQLExprParser extends SQLParser {
 
     protected SQLForeignKeyImpl.Option parseReferenceOption() {
         SQLForeignKeyImpl.Option option;
-        if (lexer.token() == Token.RESTRICT || lexer.identifierEquals(FnvHash.Constants.RESTRICT)) {
+        if (lexer.token() == Token.RESTRICT || lexer.identifierEquals(TokenFnvConstants.RESTRICT)) {
             option = SQLForeignKeyImpl.Option.RESTRICT;
             lexer.nextToken();
-        } else if (lexer.identifierEquals(FnvHash.Constants.CASCADE)) {
+        } else if (lexer.identifierEquals(TokenFnvConstants.CASCADE)) {
             option = SQLForeignKeyImpl.Option.CASCADE;
             lexer.nextToken();
         } else if (lexer.token() == Token.SET) {
@@ -4133,9 +4710,9 @@ public class SQLExprParser extends SQLParser {
             } else {
                 throw new ParserException("syntax error," + lexer.info());
             }
-        } else if (lexer.identifierEquals(FnvHash.Constants.NO)) {
+        } else if (lexer.identifierEquals(TokenFnvConstants.NO)) {
             lexer.nextToken();
-            if (lexer.identifierEquals(FnvHash.Constants.ACTION)) {
+            if (lexer.identifierEquals(TokenFnvConstants.ACTION)) {
                 option = SQLForeignKeyImpl.Option.NO_ACTION;
                 lexer.nextToken();
             } else {
@@ -4159,16 +4736,16 @@ public class SQLExprParser extends SQLParser {
         } else if (lexer.token == Token.ENABLE) {
             lexer.nextToken();
             check.setEnable(true);
-        } else if (lexer.identifierEquals(FnvHash.Constants.VALIDATE)) {
+        } else if (lexer.identifierEquals(TokenFnvConstants.VALIDATE)) {
             lexer.nextToken();
             check.setValidate(Boolean.TRUE);
-        } else if (lexer.identifierEquals(FnvHash.Constants.NOVALIDATE)) {
+        } else if (lexer.identifierEquals(TokenFnvConstants.NOVALIDATE)) {
             lexer.nextToken();
             check.setValidate(Boolean.FALSE);
-        } else if (lexer.identifierEquals(FnvHash.Constants.RELY)) {
+        } else if (lexer.identifierEquals(TokenFnvConstants.RELY)) {
             lexer.nextToken();
             check.setRely(Boolean.TRUE);
-        } else if (lexer.identifierEquals(FnvHash.Constants.NORELY)) {
+        } else if (lexer.identifierEquals(TokenFnvConstants.NORELY)) {
             lexer.nextToken();
             check.setRely(Boolean.FALSE);
         } else if (lexer.identifierEquals("ENFORCED")) {
@@ -4194,7 +4771,7 @@ public class SQLExprParser extends SQLParser {
 
         SQLPrimaryKeyImpl pk = new SQLPrimaryKeyImpl();
 
-        if (lexer.identifierEquals(FnvHash.Constants.CLUSTERED)) {
+        if (lexer.identifierEquals(TokenFnvConstants.CLUSTERED)) {
             lexer.nextToken();
             pk.setClustered(true);
         }
@@ -4226,16 +4803,16 @@ public class SQLExprParser extends SQLParser {
         } else if (lexer.token == Token.ENABLE) {
             lexer.nextToken();
             unique.setEnable(true);
-        } else if (lexer.identifierEquals(FnvHash.Constants.VALIDATE)) {
+        } else if (lexer.identifierEquals(TokenFnvConstants.VALIDATE)) {
             lexer.nextToken();
             unique.setValidate(Boolean.TRUE);
-        } else if (lexer.identifierEquals(FnvHash.Constants.NOVALIDATE)) {
+        } else if (lexer.identifierEquals(TokenFnvConstants.NOVALIDATE)) {
             lexer.nextToken();
             unique.setValidate(Boolean.FALSE);
-        } else if (lexer.identifierEquals(FnvHash.Constants.RELY)) {
+        } else if (lexer.identifierEquals(TokenFnvConstants.RELY)) {
             lexer.nextToken();
             unique.setRely(Boolean.TRUE);
-        } else if (lexer.identifierEquals(FnvHash.Constants.NORELY)) {
+        } else if (lexer.identifierEquals(TokenFnvConstants.NORELY)) {
             lexer.nextToken();
             unique.setRely(Boolean.FALSE);
         }
@@ -4275,7 +4852,7 @@ public class SQLExprParser extends SQLParser {
         item.setTarget(var);
         if (lexer.token == Token.COLONEQ) {
             lexer.nextToken();
-        } else if (lexer.token == Token.TRUE || lexer.identifierEquals(FnvHash.Constants.TRUE)) {
+        } else if (lexer.token == Token.TRUE || lexer.identifierEquals(TokenFnvConstants.TRUE)) {
             lexer.nextToken();
             item.setValue(new SQLBooleanExpr(true));
             return item;
@@ -4360,28 +4937,28 @@ public class SQLExprParser extends SQLParser {
         if (lexer.token() == Token.CONSTRAINT) {
             indexDefinition.setHasConstraint(true);
             lexer.nextToken();
-            if (lexer.token() == Token.IDENTIFIER && !lexer.identifierEquals(FnvHash.Constants.GLOBAL) && !lexer.identifierEquals(FnvHash.Constants.LOCAL) && !lexer.identifierEquals(FnvHash.Constants.SPATIAL)) {
+            if (lexer.token() == Token.IDENTIFIER && !lexer.identifierEquals(TokenFnvConstants.GLOBAL) && !lexer.identifierEquals(TokenFnvConstants.LOCAL) && !lexer.identifierEquals(TokenFnvConstants.SPATIAL)) {
                 indexDefinition.setSymbol(name());
             }
         }
 
-        if (lexer.identifierEquals(FnvHash.Constants.GLOBAL)) {
+        if (lexer.identifierEquals(TokenFnvConstants.GLOBAL)) {
             indexDefinition.setGlobal(true);
             lexer.nextToken();
-        } else if (lexer.identifierEquals(FnvHash.Constants.LOCAL)) {
+        } else if (lexer.identifierEquals(TokenFnvConstants.LOCAL)) {
             indexDefinition.setLocal(true);
             lexer.nextToken();
         }
 
-        if (lexer.token() == Token.FULLTEXT || lexer.token() == Token.UNIQUE || lexer.token() == Token.PRIMARY || lexer.identifierEquals(FnvHash.Constants.SPATIAL) || lexer.identifierEquals(FnvHash.Constants.CLUSTERED) || lexer.identifierEquals(FnvHash.Constants.CLUSTERING) || lexer.identifierEquals(FnvHash.Constants.ANN)) {
+        if (lexer.token() == Token.FULLTEXT || lexer.token() == Token.UNIQUE || lexer.token() == Token.PRIMARY || lexer.identifierEquals(TokenFnvConstants.SPATIAL) || lexer.identifierEquals(TokenFnvConstants.CLUSTERED) || lexer.identifierEquals(TokenFnvConstants.CLUSTERING) || lexer.identifierEquals(TokenFnvConstants.ANN)) {
             indexDefinition.setType(lexer.stringVal());
             lexer.nextToken();
         }
 
-        if (lexer.identifierEquals(FnvHash.Constants.GLOBAL)) {
+        if (lexer.identifierEquals(TokenFnvConstants.GLOBAL)) {
             indexDefinition.setGlobal(true);
             lexer.nextToken();
-        } else if (lexer.identifierEquals(FnvHash.Constants.LOCAL)) {
+        } else if (lexer.identifierEquals(TokenFnvConstants.LOCAL)) {
             indexDefinition.setLocal(true);
             lexer.nextToken();
         }
@@ -4395,7 +4972,7 @@ public class SQLExprParser extends SQLParser {
         }
 
         while (lexer.token() != Token.LPAREN && lexer.token() != Token.ON) {
-            if (DbType.mysql == dbType && lexer.identifierEquals(FnvHash.Constants.USING)) {
+            if (DbType.mysql == dbType && lexer.identifierEquals(TokenFnvConstants.USING)) {
                 lexer.nextToken();
                 indexDefinition.getOptions().setIndexType(lexer.stringVal());
                 lexer.nextToken();
@@ -4403,7 +4980,7 @@ public class SQLExprParser extends SQLParser {
                 lexer.nextToken();
                 indexDefinition.setHashMapType(true);
                 indexDefinition.getParent().putAttribute("ads.index", Boolean.TRUE);
-            } else if ((DbType.mysql == dbType) && lexer.identifierEquals(FnvHash.Constants.HASH)) {
+            } else if ((DbType.mysql == dbType) && lexer.identifierEquals(TokenFnvConstants.HASH)) {
                 lexer.nextToken();
                 indexDefinition.setHashType(true);
                 indexDefinition.getParent().putAttribute("ads.index", Boolean.TRUE);
@@ -4455,12 +5032,12 @@ public class SQLExprParser extends SQLParser {
                                     acceptIdentifier("ANALYZER");
                                     indexDefinition.setIndexAnalyzerName(name());
                                     continue;
-                                } else if (lexer.identifierEquals(FnvHash.Constants.QUERY)) {
+                                } else if (lexer.identifierEquals(TokenFnvConstants.QUERY)) {
                                     lexer.nextToken();
                                     acceptIdentifier("ANALYZER");
                                     indexDefinition.setQueryAnalyzerName(name());
                                     continue;
-                                } else if (lexer.identifierEquals(FnvHash.Constants.ANALYZER)) {
+                                } else if (lexer.identifierEquals(TokenFnvConstants.ANALYZER)) {
                                     lexer.nextToken();
                                     SQLName name = name();
                                     indexDefinition.setAnalyzerName(name);
@@ -4484,24 +5061,24 @@ public class SQLExprParser extends SQLParser {
                         break;
 
                     case IDENTIFIER:
-                        if (lexer.identifierEquals(FnvHash.Constants.KEY_BLOCK_SIZE) || lexer.identifierEquals(FnvHash.Constants.BLOCK_SIZE)) {
+                        if (lexer.identifierEquals(TokenFnvConstants.KEY_BLOCK_SIZE) || lexer.identifierEquals(TokenFnvConstants.BLOCK_SIZE)) {
                             lexer.nextToken();
                             if (lexer.token() == Token.EQ) {
                                 lexer.nextToken();
                             }
                             indexDefinition.getOptions().setKeyBlockSize(expr());
-                        } else if (lexer.identifierEquals(FnvHash.Constants.USING)) {
+                        } else if (lexer.identifierEquals(TokenFnvConstants.USING)) {
                             lexer.nextToken();
                             indexDefinition.getOptions().setIndexType(lexer.stringVal());
                             lexer.nextToken();
-                        } else if (lexer.identifierEquals(FnvHash.Constants.ALGORITHM)) {
+                        } else if (lexer.identifierEquals(TokenFnvConstants.ALGORITHM)) {
                             lexer.nextToken();
                             if (lexer.token() == Token.EQ) {
                                 lexer.nextToken();
                             }
                             indexDefinition.getOptions().setAlgorithm(lexer.stringVal());
                             lexer.nextToken();
-                        } else if (lexer.identifierEquals(FnvHash.Constants.DISTANCEMEASURE)) {
+                        } else if (lexer.identifierEquals(TokenFnvConstants.DISTANCEMEASURE)) {
                             // Caution: Not in MySql documents.
                             SQLExpr key = new SQLIdentifierExpr(lexer.stringVal());
                             lexer.nextToken();
@@ -4517,15 +5094,15 @@ public class SQLExprParser extends SQLParser {
                             // Add both with same object.
                             indexDefinition.getOptions().getOtherOptions().add(item);
                             indexDefinition.getCompatibleOptions().add(item);
-                        } else if (lexer.identifierEquals(FnvHash.Constants.DBPARTITION)) {
+                        } else if (lexer.identifierEquals(TokenFnvConstants.DBPARTITION)) {
                             lexer.nextToken();
                             accept(Token.BY);
                             indexDefinition.setDbPartitionBy(primary());
-                        } else if (lexer.identifierEquals(FnvHash.Constants.TBPARTITION)) {
+                        } else if (lexer.identifierEquals(TokenFnvConstants.TBPARTITION)) {
                             lexer.nextToken();
                             accept(Token.BY);
                             SQLExpr expr = expr();
-                            if (lexer.identifierEquals(FnvHash.Constants.STARTWITH)) {
+                            if (lexer.identifierEquals(TokenFnvConstants.STARTWITH)) {
                                 lexer.nextToken();
                                 SQLExpr start = primary();
                                 acceptIdentifier("ENDWITH");
@@ -4533,7 +5110,7 @@ public class SQLExprParser extends SQLParser {
                                 expr = new SQLBetweenExpr(expr, start, end);
                             }
                             indexDefinition.setTbPartitionBy(expr);
-                        } else if (lexer.identifierEquals(FnvHash.Constants.TBPARTITIONS)) {
+                        } else if (lexer.identifierEquals(TokenFnvConstants.TBPARTITIONS)) {
                             lexer.nextToken();
                             indexDefinition.setTbPartitions(primary());
                         } else {
@@ -4652,7 +5229,7 @@ public class SQLExprParser extends SQLParser {
         if (lexer.token == Token.ON) {
             lexer.nextToken();
             accept(Token.DELETE);
-            if (lexer.identifierEquals(FnvHash.Constants.CASCADE) || lexer.token == Token.CASCADE) {
+            if (lexer.identifierEquals(TokenFnvConstants.CASCADE) || lexer.token == Token.CASCADE) {
                 lexer.nextToken();
                 fk.setOnDeleteCascade(true);
             } else {
@@ -4666,7 +5243,7 @@ public class SQLExprParser extends SQLParser {
             Lexer.SavePoint mark = lexer.mark();
 
             lexer.nextToken();
-            if (lexer.identifierEquals(FnvHash.Constants.NOVALIDATE)) {
+            if (lexer.identifierEquals(TokenFnvConstants.NOVALIDATE)) {
                 lexer.nextToken();
                 fk.setDisableNovalidate(true);
             } else {
@@ -4693,7 +5270,7 @@ public class SQLExprParser extends SQLParser {
             long hash_lower = lexer.hash_lower();
             lexer.nextTokenComma();
 
-            if (hash_lower == FnvHash.Constants.CONNECT_BY_ROOT) {
+            if (hash_lower == TokenFnvConstants.CONNECT_BY_ROOT) {
                 connectByRoot = lexer.token != Token.LPAREN;
                 if (connectByRoot) {
                     expr = new SQLIdentifierExpr(lexer.stringVal());
@@ -4701,7 +5278,7 @@ public class SQLExprParser extends SQLParser {
                 } else {
                     expr = new SQLIdentifierExpr(ident);
                 }
-            } else if (lexer.identifierEquals(FnvHash.Constants.COLLATE) && dbType == DbType.mysql && lexer.stringVal().charAt(0) != '`') {
+            } else if (lexer.identifierEquals(TokenFnvConstants.COLLATE) && dbType == DbType.mysql && lexer.stringVal().charAt(0) != '`') {
                 lexer.nextToken();
                 String collate = lexer.stringVal();
                 lexer.nextToken();
@@ -4709,7 +5286,7 @@ public class SQLExprParser extends SQLParser {
                 SQLBinaryOpExpr binaryExpr = new SQLBinaryOpExpr(new SQLIdentifierExpr(ident), SQLBinaryOperator.COLLATE, new SQLIdentifierExpr(collate), DbType.mysql);
 
                 expr = binaryExpr;
-            } else if (lexer.identifierEquals(FnvHash.Constants.REGEXP) && lexer.stringVal().charAt(0) != '`' && dbType == DbType.mysql) {
+            } else if (lexer.identifierEquals(TokenFnvConstants.REGEXP) && lexer.stringVal().charAt(0) != '`' && dbType == DbType.mysql) {
                 lexer.nextToken();
                 SQLExpr rightExp = bitOr();
 
@@ -4717,7 +5294,7 @@ public class SQLExprParser extends SQLParser {
 
                 expr = binaryExpr;
                 expr = relationalRest(expr);
-            } else if (FnvHash.Constants.DATE == hash_lower && lexer.stringVal().charAt(0) != '`' && lexer.token == Token.LITERAL_CHARS && (SQLDateExpr.isSupport(dbType))) {
+            } else if (TokenFnvConstants.DATE == hash_lower && lexer.stringVal().charAt(0) != '`' && lexer.token == Token.LITERAL_CHARS && (SQLDateExpr.isSupport(dbType))) {
                 String literal = lexer.stringVal();
                 lexer.nextToken();
 
@@ -4725,21 +5302,21 @@ public class SQLExprParser extends SQLParser {
                 dateExpr.setLiteral(literal);
 
                 expr = dateExpr;
-            } else if (FnvHash.Constants.TIMESTAMP == hash_lower && lexer.stringVal().charAt(0) != '`' && lexer.token == Token.LITERAL_CHARS && dbType != DbType.oracle) {
+            } else if (TokenFnvConstants.TIMESTAMP == hash_lower && lexer.stringVal().charAt(0) != '`' && lexer.token == Token.LITERAL_CHARS && dbType != DbType.oracle) {
                 String literal = lexer.stringVal();
                 lexer.nextToken();
 
                 SQLTimestampExpr ts = new SQLTimestampExpr(literal);
                 expr = ts;
 
-                if (lexer.identifierEquals(FnvHash.Constants.AT)) {
+                if (lexer.identifierEquals(TokenFnvConstants.AT)) {
                     Lexer.SavePoint mark = lexer.mark();
                     lexer.nextToken();
 
                     String timeZone = null;
-                    if (lexer.identifierEquals(FnvHash.Constants.TIME)) {
+                    if (lexer.identifierEquals(TokenFnvConstants.TIME)) {
                         lexer.nextToken();
-                        if (lexer.identifierEquals(FnvHash.Constants.ZONE)) {
+                        if (lexer.identifierEquals(TokenFnvConstants.ZONE)) {
                             lexer.nextToken();
                             timeZone = lexer.stringVal();
                             lexer.nextToken();
@@ -4751,50 +5328,50 @@ public class SQLExprParser extends SQLParser {
                         ts.setTimeZone(timeZone);
                     }
                 }
-            } else if (FnvHash.Constants.DATETIME == hash_lower && lexer.stringVal().charAt(0) != '`' && lexer.token == Token.LITERAL_CHARS && dbType != DbType.oracle) {
+            } else if (TokenFnvConstants.DATETIME == hash_lower && lexer.stringVal().charAt(0) != '`' && lexer.token == Token.LITERAL_CHARS && dbType != DbType.oracle) {
                 String literal = lexer.stringVal();
                 lexer.nextToken();
 
                 expr = new SQLDateTimeExpr(literal);
-            } else if (FnvHash.Constants.BOOLEAN == hash_lower && lexer.stringVal().charAt(0) != '`' && lexer.token == Token.LITERAL_CHARS && dbType == DbType.mysql) {
+            } else if (TokenFnvConstants.BOOLEAN == hash_lower && lexer.stringVal().charAt(0) != '`' && lexer.token == Token.LITERAL_CHARS && dbType == DbType.mysql) {
                 String literal = lexer.stringVal();
                 lexer.nextToken();
 
                 expr = new SQLBooleanExpr(Boolean.parseBoolean(literal));
-            } else if ((FnvHash.Constants.CHAR == hash_lower || FnvHash.Constants.VARCHAR == hash_lower) && lexer.token == Token.LITERAL_CHARS && dbType == DbType.mysql) {
+            } else if ((TokenFnvConstants.CHAR == hash_lower || TokenFnvConstants.VARCHAR == hash_lower) && lexer.token == Token.LITERAL_CHARS && dbType == DbType.mysql) {
                 String literal = lexer.stringVal();
                 lexer.nextToken();
 
                 expr = new SQLCharExpr(literal);
-            } else if (FnvHash.Constants.TIME == hash_lower && lexer.token == Token.LITERAL_CHARS) {
+            } else if (TokenFnvConstants.TIME == hash_lower && lexer.token == Token.LITERAL_CHARS) {
                 String literal = lexer.stringVal();
                 lexer.nextToken();
 
                 expr = new SQLTimeExpr(literal);
-            } else if (hash_lower == FnvHash.Constants.DECIMAL && lexer.token == Token.LITERAL_CHARS) {
+            } else if (hash_lower == TokenFnvConstants.DECIMAL && lexer.token == Token.LITERAL_CHARS) {
                 String decimal = lexer.stringVal();
                 expr = new SQLDecimalExpr(decimal);
                 lexer.nextToken();
-            } else if (hash_lower == FnvHash.Constants.REAL && lexer.token == Token.LITERAL_CHARS) {
+            } else if (hash_lower == TokenFnvConstants.REAL && lexer.token == Token.LITERAL_CHARS) {
                 String decimal = lexer.stringVal();
                 expr = new SQLRealExpr(decimal);
                 lexer.nextToken();
-            } else if (hash_lower == FnvHash.Constants.DOUBLE && lexer.token == Token.LITERAL_CHARS) {
+            } else if (hash_lower == TokenFnvConstants.DOUBLE && lexer.token == Token.LITERAL_CHARS) {
                 String decimal = lexer.stringVal();
                 expr = new SQLDoubleExpr(decimal);
                 lexer.nextToken();
-            } else if (hash_lower == FnvHash.Constants.FLOAT && lexer.token == Token.LITERAL_CHARS) {
+            } else if (hash_lower == TokenFnvConstants.FLOAT && lexer.token == Token.LITERAL_CHARS) {
                 String decimal = lexer.stringVal();
                 expr = new SQLFloatExpr(decimal);
                 lexer.nextToken();
-            } else if (hash_lower == FnvHash.Constants.BIGINT && lexer.token == Token.LITERAL_CHARS) {
+            } else if (hash_lower == TokenFnvConstants.BIGINT && lexer.token == Token.LITERAL_CHARS) {
                 String strVal = lexer.stringVal();
                 if (strVal.startsWith("--")) {
                     strVal = strVal.substring(2);
                 }
                 expr = new SQLBigIntExpr(strVal);
                 lexer.nextToken();
-            } else if (hash_lower == FnvHash.Constants.INTEGER && lexer.token == Token.LITERAL_CHARS) {
+            } else if (hash_lower == TokenFnvConstants.INTEGER && lexer.token == Token.LITERAL_CHARS) {
                 String strVal = lexer.stringVal();
                 if (strVal.startsWith("--")) {
                     strVal = strVal.substring(2);
@@ -4803,19 +5380,19 @@ public class SQLExprParser extends SQLParser {
                 integerExpr.setType("INTEGER");
                 expr = integerExpr;
                 lexer.nextToken();
-            } else if (hash_lower == FnvHash.Constants.SMALLINT && lexer.token == Token.LITERAL_CHARS) {
+            } else if (hash_lower == TokenFnvConstants.SMALLINT && lexer.token == Token.LITERAL_CHARS) {
                 String decimal = lexer.stringVal();
                 expr = new SQLSmallIntExpr(decimal);
                 lexer.nextToken();
-            } else if (hash_lower == FnvHash.Constants.TINYINT && lexer.token == Token.LITERAL_CHARS) {
+            } else if (hash_lower == TokenFnvConstants.TINYINT && lexer.token == Token.LITERAL_CHARS) {
                 String decimal = lexer.stringVal();
                 expr = new SQLTinyIntExpr(decimal);
                 lexer.nextToken();
-            } else if (hash_lower == FnvHash.Constants.JSON && lexer.token == Token.LITERAL_CHARS) {
+            } else if (hash_lower == TokenFnvConstants.JSON && lexer.token == Token.LITERAL_CHARS) {
                 String decimal = lexer.stringVal();
                 expr = new SQLJSONExpr(decimal);
                 lexer.nextToken();
-            } else if (hash_lower == FnvHash.Constants.TRY_CAST) {
+            } else if (hash_lower == TokenFnvConstants.TRY_CAST) {
                 accept(Token.LPAREN);
                 SQLCastExpr cast = new SQLCastExpr();
                 cast.setTry(true);
@@ -4824,27 +5401,27 @@ public class SQLExprParser extends SQLParser {
                 cast.setDataType(parseDataType(false));
                 accept(Token.RPAREN);
                 expr = cast;
-            } else if (FnvHash.Constants.CURRENT_DATE == hash_lower && ident.charAt(0) != '`' && lexer.token != Token.LPAREN && (dbType == DbType.mysql)) {
+            } else if (TokenFnvConstants.CURRENT_DATE == hash_lower && ident.charAt(0) != '`' && lexer.token != Token.LPAREN && (dbType == DbType.mysql)) {
                 expr = new SQLCurrentTimeExpr(SQLCurrentTimeExpr.Type.CURRENT_DATE);
 
-            } else if (FnvHash.Constants.CURRENT_TIMESTAMP == hash_lower && ident.charAt(0) != '`' && lexer.token != Token.LPAREN && (dbType == DbType.mysql)) {
+            } else if (TokenFnvConstants.CURRENT_TIMESTAMP == hash_lower && ident.charAt(0) != '`' && lexer.token != Token.LPAREN && (dbType == DbType.mysql)) {
                 expr = new SQLCurrentTimeExpr(SQLCurrentTimeExpr.Type.CURRENT_TIMESTAMP);
 
-            } else if (FnvHash.Constants.CURRENT_TIME == hash_lower && ident.charAt(0) != '`' && lexer.token != Token.LPAREN && (dbType == DbType.mysql)) {
+            } else if (TokenFnvConstants.CURRENT_TIME == hash_lower && ident.charAt(0) != '`' && lexer.token != Token.LPAREN && (dbType == DbType.mysql)) {
                 expr = new SQLCurrentTimeExpr(SQLCurrentTimeExpr.Type.CURRENT_TIME);
 
-            } else if (FnvHash.Constants.CURDATE == hash_lower && ident.charAt(0) != '`' && lexer.token != Token.LPAREN && (dbType == DbType.mysql)) {
+            } else if (TokenFnvConstants.CURDATE == hash_lower && ident.charAt(0) != '`' && lexer.token != Token.LPAREN && (dbType == DbType.mysql)) {
                 expr = new SQLCurrentTimeExpr(SQLCurrentTimeExpr.Type.CURDATE);
 
-            } else if (FnvHash.Constants.LOCALTIME == hash_lower && ident.charAt(0) != '`' && lexer.token != Token.LPAREN && (dbType == DbType.mysql)) {
+            } else if (TokenFnvConstants.LOCALTIME == hash_lower && ident.charAt(0) != '`' && lexer.token != Token.LPAREN && (dbType == DbType.mysql)) {
                 expr = new SQLCurrentTimeExpr(SQLCurrentTimeExpr.Type.LOCALTIME);
 
-            } else if (FnvHash.Constants.LOCALTIMESTAMP == hash_lower && ident.charAt(0) != '`' && lexer.token != Token.LPAREN && dbType == DbType.mysql) {
+            } else if (TokenFnvConstants.LOCALTIMESTAMP == hash_lower && ident.charAt(0) != '`' && lexer.token != Token.LPAREN && dbType == DbType.mysql) {
                 expr = new SQLCurrentTimeExpr(SQLCurrentTimeExpr.Type.LOCALTIMESTAMP);
 
-            } else if (FnvHash.Constants.CURRENT_USER == hash_lower && ident.charAt(0) != '`' && lexer.token != Token.LPAREN && isEnabled(SQLParserFeature.EnableCurrentUserExpr)) {
+            } else if (TokenFnvConstants.CURRENT_USER == hash_lower && ident.charAt(0) != '`' && lexer.token != Token.LPAREN && isEnabled(SQLParserFeature.EnableCurrentUserExpr)) {
                 expr = new SQLCurrentUserExpr();
-            } else if ((FnvHash.Constants._LATIN1 == hash_lower) && ident.charAt(0) != '`' && dbType == DbType.mysql) {
+            } else if ((TokenFnvConstants._LATIN1 == hash_lower) && ident.charAt(0) != '`' && dbType == DbType.mysql) {
                 String hexString;
                 if (lexer.token == Token.LITERAL_HEX) {
                     hexString = lexer.hexString();
@@ -4862,7 +5439,7 @@ public class SQLExprParser extends SQLParser {
                     lexer.nextToken();
 
                     String collate = null;
-                    if (lexer.identifierEquals(FnvHash.Constants.COLLATE)) {
+                    if (lexer.identifierEquals(TokenFnvConstants.COLLATE)) {
                         lexer.nextToken();
                         collate = lexer.stringVal();
                         if (lexer.token() == Token.LITERAL_CHARS) {
@@ -4876,7 +5453,7 @@ public class SQLExprParser extends SQLParser {
                 } else {
                     expr = new MySqlCharExpr(hexString, "_latin1");
                 }
-            } else if ((FnvHash.Constants._UTF8 == hash_lower || FnvHash.Constants._UTF8MB4 == hash_lower) && ident.charAt(0) != '`' && dbType == DbType.mysql) {
+            } else if ((TokenFnvConstants._UTF8 == hash_lower || TokenFnvConstants._UTF8MB4 == hash_lower) && ident.charAt(0) != '`' && dbType == DbType.mysql) {
                 String hexString;
                 if (lexer.token == Token.LITERAL_HEX) {
                     hexString = lexer.hexString();
@@ -4894,7 +5471,7 @@ public class SQLExprParser extends SQLParser {
                     lexer.nextToken();
 
                     String collate = null;
-                    if (lexer.identifierEquals(FnvHash.Constants.COLLATE)) {
+                    if (lexer.identifierEquals(TokenFnvConstants.COLLATE)) {
                         lexer.nextToken();
                         collate = lexer.stringVal();
                         if (lexer.token() == Token.LITERAL_CHARS) {
@@ -4908,7 +5485,7 @@ public class SQLExprParser extends SQLParser {
                 } else {
                     expr = new SQLCharExpr(MySqlUtils.utf8(hexString));
                 }
-            } else if ((FnvHash.Constants._UTF16 == hash_lower || FnvHash.Constants._UCS2 == hash_lower) && ident.charAt(0) != '`' && dbType == DbType.mysql) {
+            } else if ((TokenFnvConstants._UTF16 == hash_lower || TokenFnvConstants._UCS2 == hash_lower) && ident.charAt(0) != '`' && dbType == DbType.mysql) {
                 String hexString;
                 if (lexer.token == Token.LITERAL_HEX) {
                     hexString = lexer.hexString();
@@ -4928,7 +5505,7 @@ public class SQLExprParser extends SQLParser {
                 }
 
                 expr = new MySqlCharExpr(hexString, "_utf16");
-            } else if (FnvHash.Constants._UTF32 == hash_lower && ident.charAt(0) != '`' && dbType == DbType.mysql) {
+            } else if (TokenFnvConstants._UTF32 == hash_lower && ident.charAt(0) != '`' && dbType == DbType.mysql) {
                 String hexString;
                 if (lexer.token == Token.LITERAL_HEX) {
                     hexString = lexer.hexString();
@@ -4948,7 +5525,7 @@ public class SQLExprParser extends SQLParser {
                 } else {
                     expr = new SQLCharExpr(MySqlUtils.utf32(hexString));
                 }
-            } else if (FnvHash.Constants._GBK == hash_lower && ident.charAt(0) != '`' && dbType == DbType.mysql) {
+            } else if (TokenFnvConstants._GBK == hash_lower && ident.charAt(0) != '`' && dbType == DbType.mysql) {
                 String hexString;
                 if (lexer.token == Token.LITERAL_HEX) {
                     hexString = lexer.hexString();
@@ -4968,7 +5545,7 @@ public class SQLExprParser extends SQLParser {
                 } else {
                     expr = new SQLCharExpr(MySqlUtils.gbk(hexString));
                 }
-            } else if (FnvHash.Constants._BIG5 == hash_lower && ident.charAt(0) != '`' && dbType == DbType.mysql) {
+            } else if (TokenFnvConstants._BIG5 == hash_lower && ident.charAt(0) != '`' && dbType == DbType.mysql) {
                 String hexString;
                 if (lexer.token == Token.LITERAL_HEX) {
                     hexString = lexer.hexString();
@@ -5013,7 +5590,7 @@ public class SQLExprParser extends SQLParser {
 
                 if (lexer.token == Token.STAR) {
                     name = "*";
-                    name_hash_lower = FnvHash.Constants.STAR;
+                    name_hash_lower = TokenFnvConstants.STAR;
                 } else {
                     name = lexer.stringVal();
                     name_hash_lower = lexer.hash_lower();
@@ -5023,15 +5600,15 @@ public class SQLExprParser extends SQLParser {
 
                 token = lexer.token;
                 if (token == Token.LPAREN) {
-                    boolean aggregate = hash_lower == FnvHash.Constants.WMSYS && name_hash_lower == FnvHash.Constants.WM_CONCAT;
+                    boolean aggregate = hash_lower == TokenFnvConstants.WMSYS && name_hash_lower == TokenFnvConstants.WM_CONCAT;
                     expr = methodRest(expr, name, aggregate);
                     token = lexer.token;
                 } else {
-                    if (name_hash_lower == FnvHash.Constants.NEXTVAL) {
+                    if (name_hash_lower == TokenFnvConstants.NEXTVAL) {
                         expr = new SQLSequenceExpr((SQLIdentifierExpr) expr, SQLSequenceExpr.Function.NextVal);
-                    } else if (name_hash_lower == FnvHash.Constants.CURRVAL) {
+                    } else if (name_hash_lower == TokenFnvConstants.CURRVAL) {
                         expr = new SQLSequenceExpr((SQLIdentifierExpr) expr, SQLSequenceExpr.Function.CurrVal);
-                    } else if (name_hash_lower == FnvHash.Constants.PREVVAL) {
+                    } else if (name_hash_lower == TokenFnvConstants.PREVVAL) {
                         expr = new SQLSequenceExpr((SQLIdentifierExpr) expr, SQLSequenceExpr.Function.PrevVal);
                     } else {
                         if (lexer.isEnabled(SQLParserFeature.IgnoreNameQuotes)) {
@@ -5079,9 +5656,9 @@ public class SQLExprParser extends SQLParser {
                 return new SQLSelectItem(expr, as, connectByRoot);
             }
 
-            if (token == Token.IDENTIFIER && hash_lower != FnvHash.Constants.CURRENT) {
+            if (token == Token.IDENTIFIER && hash_lower != TokenFnvConstants.CURRENT) {
                 String as;
-                if (lexer.hash_lower == FnvHash.Constants.FORCE && DbType.mysql == dbType) {
+                if (lexer.hash_lower == TokenFnvConstants.FORCE && DbType.mysql == dbType) {
                     String force = lexer.stringVal();
 
                     Lexer.SavePoint savePoint = lexer.mark();
@@ -5097,7 +5674,7 @@ public class SQLExprParser extends SQLParser {
                         }
                         lexer.nextTokenComma();
                     }
-                } else if (lexer.hash_lower == FnvHash.Constants.SOUNDS && DbType.mysql == dbType) {
+                } else if (lexer.hash_lower == TokenFnvConstants.SOUNDS && DbType.mysql == dbType) {
                     String sounds = lexer.stringVal();
 
                     Lexer.SavePoint savePoint = lexer.mark();
@@ -5114,10 +5691,10 @@ public class SQLExprParser extends SQLParser {
                         }
                         lexer.nextTokenComma();
                     }
-                } else if (lexer.hash_lower == FnvHash.Constants.COLLATE && lexer.stringVal().charAt(0) != '`' && DbType.mysql == dbType) {
+                } else if (lexer.hash_lower == TokenFnvConstants.COLLATE && lexer.stringVal().charAt(0) != '`' && DbType.mysql == dbType) {
                     expr = primaryRest(expr);
                     as = as();
-                } else if (lexer.hash_lower == FnvHash.Constants.REGEXP && lexer.stringVal().charAt(0) != '`' && DbType.mysql == dbType) {
+                } else if (lexer.hash_lower == TokenFnvConstants.REGEXP && lexer.stringVal().charAt(0) != '`' && DbType.mysql == dbType) {
                     expr = exprRest(expr);
                     as = as();
                 } else {
@@ -5294,7 +5871,7 @@ public class SQLExprParser extends SQLParser {
         SQLPartitionBy partitionClause = null;
         if (lexer.identifierEquals("VALUE")) {
             partitionClause = new SQLPartitionByValue();
-            if (lexer.identifierEquals(FnvHash.Constants.VALUE)) {
+            if (lexer.identifierEquals(TokenFnvConstants.VALUE)) {
                 lexer.nextToken();
 
                 if (lexer.token() == Token.LPAREN) {
@@ -5304,7 +5881,7 @@ public class SQLExprParser extends SQLParser {
                 }
             }
 
-            if (lexer.identifierEquals(FnvHash.Constants.LIFECYCLE)) {
+            if (lexer.identifierEquals(TokenFnvConstants.LIFECYCLE)) {
                 lexer.nextToken();
                 partitionClause.setLifecycle((SQLIntegerExpr) expr());
             }
@@ -5318,7 +5895,7 @@ public class SQLExprParser extends SQLParser {
 
         SQLGroupingSetExpr expr = new SQLGroupingSetExpr();
 
-        if (lexer.token == Token.SET || lexer.identifierEquals(FnvHash.Constants.SET)) {
+        if (lexer.token == Token.SET || lexer.identifierEquals(TokenFnvConstants.SET)) {
             lexer.nextToken();
         } else {
             return new SQLIdentifierExpr(tmp);
@@ -5348,13 +5925,13 @@ public class SQLExprParser extends SQLParser {
             accept(Token.LPAREN);
             this.exprList(values.getItems(), values);
             accept(Token.RPAREN);
-        } else if (lexer.identifierEquals(FnvHash.Constants.LESS)) {
+        } else if (lexer.identifierEquals(TokenFnvConstants.LESS)) {
             lexer.nextToken();
             acceptIdentifier("THAN");
 
             values = new SQLPartitionValue(SQLPartitionValue.Operator.LessThan);
 
-            if (lexer.identifierEquals(FnvHash.Constants.MAXVALUE)) {
+            if (lexer.identifierEquals(TokenFnvConstants.MAXVALUE)) {
                 SQLIdentifierExpr maxValue = new SQLIdentifierExpr(lexer.stringVal());
                 lexer.nextToken();
                 maxValue.setParent(values);
@@ -5419,7 +5996,7 @@ public class SQLExprParser extends SQLParser {
             }
 
             limit.setRowCount(rowCount);
-        } else if (lexer.identifierEquals(FnvHash.Constants.OFFSET)) {
+        } else if (lexer.identifierEquals(TokenFnvConstants.OFFSET)) {
             limit.setRowCount(temp);
             lexer.nextToken();
             limit.setOffset(this.expr());
@@ -5448,7 +6025,7 @@ public class SQLExprParser extends SQLParser {
         }
         accept(Token.RPAREN);
 
-        if (lexer.identifierEquals(FnvHash.Constants.COVERING)) {
+        if (lexer.identifierEquals(TokenFnvConstants.COVERING)) {
             Lexer.SavePoint mark = lexer.mark();
 
             lexer.nextToken();
@@ -5479,13 +6056,13 @@ public class SQLExprParser extends SQLParser {
         lexer.nextToken();
         acceptIdentifier("FORMAT");
 
-        if (lexer.identifierEquals(FnvHash.Constants.DELIMITED)) {
+        if (lexer.identifierEquals(TokenFnvConstants.DELIMITED)) {
             lexer.nextToken();
         }
 
         SQLExternalRecordFormat format = new SQLExternalRecordFormat();
 
-        if (lexer.identifierEquals(FnvHash.Constants.FIELDS)) {
+        if (lexer.identifierEquals(TokenFnvConstants.FIELDS)) {
             lexer.nextToken();
             acceptIdentifier("TERMINATED");
             accept(Token.BY);
@@ -5495,13 +6072,13 @@ public class SQLExprParser extends SQLParser {
             throw new ParserException("syntax error, expect FIELDS, " + lexer.info());
         }
 
-        if (lexer.token() == Token.ESCAPE || lexer.identifierEquals(FnvHash.Constants.ESCAPED)) {
+        if (lexer.token() == Token.ESCAPE || lexer.identifierEquals(TokenFnvConstants.ESCAPED)) {
             lexer.nextToken();
             accept(Token.BY);
             format.setEscapedBy(this.expr());
         }
 
-        if (lexer.identifierEquals(FnvHash.Constants.LINES)) {
+        if (lexer.identifierEquals(TokenFnvConstants.LINES)) {
             lexer.nextToken();
             acceptIdentifier("TERMINATED");
             accept(Token.BY);
@@ -5509,7 +6086,7 @@ public class SQLExprParser extends SQLParser {
             format.setLinesTerminatedBy(this.expr());
         }
 
-        if (lexer.identifierEquals(FnvHash.Constants.COLLECTION)) {
+        if (lexer.identifierEquals(TokenFnvConstants.COLLECTION)) {
             lexer.nextToken();
             acceptIdentifier("ITEMS");
             acceptIdentifier("TERMINATED");
@@ -5517,7 +6094,7 @@ public class SQLExprParser extends SQLParser {
             format.setCollectionItemsTerminatedBy(this.expr());
         }
 
-        if (lexer.identifierEquals(FnvHash.Constants.MAP)) {
+        if (lexer.identifierEquals(TokenFnvConstants.MAP)) {
             lexer.nextToken();
             acceptIdentifier("KEYS");
             acceptIdentifier("TERMINATED");
@@ -5525,7 +6102,7 @@ public class SQLExprParser extends SQLParser {
             format.setMapKeysTerminatedBy(this.expr());
         }
 
-        if (lexer.identifierEquals(FnvHash.Constants.SERDE)) {
+        if (lexer.identifierEquals(TokenFnvConstants.SERDE)) {
             lexer.nextToken();
             format.setSerde(this.expr());
         }

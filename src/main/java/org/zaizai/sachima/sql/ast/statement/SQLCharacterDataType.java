@@ -15,7 +15,7 @@
  */
 package org.zaizai.sachima.sql.ast.statement;
 
-import org.zaizai.sachima.util.FnvHash;
+import org.zaizai.sachima.constant.TokenFnvConstants;
 import org.zaizai.sachima.util.SQLUtils;
 import org.zaizai.sachima.sql.ast.SQLCommentHint;
 import org.zaizai.sachima.sql.ast.SQLDataTypeImpl;
@@ -134,21 +134,21 @@ public class SQLCharacterDataType extends SQLDataTypeImpl {
     public int jdbcType() {
         long nameNash = nameHashCode64();
 
-        if (nameNash == FnvHash.Constants.NCHAR) {
+        if (nameNash == TokenFnvConstants.NCHAR) {
             return Types.NCHAR;
         }
 
-        if (nameNash == FnvHash.Constants.CHAR || nameNash == FnvHash.Constants.JSON) {
+        if (nameNash == TokenFnvConstants.CHAR || nameNash == TokenFnvConstants.JSON) {
             return Types.CHAR;
         }
 
-        if (nameNash == FnvHash.Constants.VARCHAR
-                || nameNash == FnvHash.Constants.VARCHAR2
-                || nameNash == FnvHash.Constants.STRING) {
+        if (nameNash == TokenFnvConstants.VARCHAR
+                || nameNash == TokenFnvConstants.VARCHAR2
+                || nameNash == TokenFnvConstants.STRING) {
             return Types.VARCHAR;
         }
 
-        if (nameNash == FnvHash.Constants.NVARCHAR || nameNash == FnvHash.Constants.NVARCHAR2) {
+        if (nameNash == TokenFnvConstants.NVARCHAR || nameNash == TokenFnvConstants.NVARCHAR2) {
             return Types.NVARCHAR;
         }
 

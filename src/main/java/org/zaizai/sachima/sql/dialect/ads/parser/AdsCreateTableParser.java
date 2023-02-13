@@ -1,6 +1,6 @@
 package org.zaizai.sachima.sql.dialect.ads.parser;
 
-import org.zaizai.sachima.util.FnvHash;
+import org.zaizai.sachima.constant.TokenFnvConstants;
 import org.zaizai.sachima.sql.ast.SQLExpr;
 import org.zaizai.sachima.sql.ast.statement.*;
 import org.zaizai.sachima.sql.parser.ParserException;
@@ -28,7 +28,7 @@ public class AdsCreateTableParser extends SQLCreateTableParser {
             accept(Token.CREATE);
         }
 
-        if (lexer.identifierEquals(FnvHash.Constants.DIMENSION)) {
+        if (lexer.identifierEquals(TokenFnvConstants.DIMENSION)) {
             lexer.nextToken();
             stmt.setDimension(true);
         }
@@ -48,7 +48,7 @@ public class AdsCreateTableParser extends SQLCreateTableParser {
         if (lexer.token() == Token.LPAREN) {
             lexer.nextToken();
 
-            for (; ; ) {
+            while(true) {
                 Token token = lexer.token();
                 if (token == Token.IDENTIFIER //
                         || token == Token.LITERAL_ALIAS) {
@@ -70,7 +70,7 @@ public class AdsCreateTableParser extends SQLCreateTableParser {
                     accept(Token.IDENTIFIER);
                     accept(Token.LPAREN);
                     accept(Token.IDENTIFIER);
-                    for(;;) {
+                    while(true) {
                         if (lexer.token() == Token.COMMA) {
                             accept(Token.IDENTIFIER);
                             continue;
@@ -120,7 +120,7 @@ public class AdsCreateTableParser extends SQLCreateTableParser {
             acceptIdentifier("HASH");
             accept(Token.KEY);
             accept(Token.LPAREN);
-            for (; ; ) {
+            while(true) {
                 if (lexer.token() != Token.IDENTIFIER) {
                     throw new ParserException("expect identifier. " + lexer.info());
                 }
@@ -148,11 +148,11 @@ public class AdsCreateTableParser extends SQLCreateTableParser {
             accept(Token.LITERAL_INT);
         }
 
-        if (lexer.identifierEquals(FnvHash.Constants.CLUSTERED)) {
+        if (lexer.identifierEquals(TokenFnvConstants.CLUSTERED)) {
             lexer.nextToken();
             accept(Token.BY);
             accept(Token.LPAREN);
-            for (; ; ) {
+            while(true) {
                 SQLSelectOrderByItem item = this.exprParser.parseSelectOrderByItem();
                 stmt.addClusteredByItem(item);
                 if (lexer.token() == Token.COMMA) {
@@ -164,16 +164,16 @@ public class AdsCreateTableParser extends SQLCreateTableParser {
             accept(Token.RPAREN);
         }
 
-        if (lexer.identifierEquals(FnvHash.Constants.TABLEGROUP)) {
+        if (lexer.identifierEquals(TokenFnvConstants.TABLEGROUP)) {
             lexer.nextToken();
             accept(Token.IDENTIFIER);
         }
 
-        if (lexer.identifierEquals(FnvHash.Constants.OPTIONS)) {
+        if (lexer.identifierEquals(TokenFnvConstants.OPTIONS)) {
             lexer.nextToken();
             accept(Token.LPAREN);
 
-            for (; ; ) {
+            while(true) {
                 String name = lexer.stringVal();
                 lexer.nextToken();
                 accept(Token.EQ);

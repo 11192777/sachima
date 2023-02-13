@@ -242,7 +242,9 @@ public enum Token {
     COMPUTE("COMPUTE"),
     ANALYZE("ANALYZE"),
     OPTIMIZE("OPTIMIZE"),
-    
+
+    GENERATED("GENERATED"),
+
     // transact-sql
     TOP("TOP"),
     
@@ -271,8 +273,9 @@ public enum Token {
     // Oracle
     BINARY_FLOAT,
     BINARY_DOUBLE,
-    NUMBER("NUMBER"),
     SIZE("SIZE"),
+    MODIFY("MODIFY"),
+    NUMBER("NUMBER"),
     
     // odps,hive
     PARTITION,

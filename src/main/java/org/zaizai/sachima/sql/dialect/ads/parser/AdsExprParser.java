@@ -22,7 +22,7 @@ import org.zaizai.sachima.sql.parser.Lexer;
 import org.zaizai.sachima.sql.parser.SQLExprParser;
 import org.zaizai.sachima.sql.parser.SQLParserFeature;
 import org.zaizai.sachima.sql.parser.Token;
-import org.zaizai.sachima.util.FnvHash;
+import org.zaizai.sachima.util.FnvHashUtils;
 
 import java.util.Arrays;
 
@@ -33,10 +33,10 @@ public class AdsExprParser extends SQLExprParser {
     static {
         String[] strings = { "AVG", "COUNT", "MAX", "MIN", "STDDEV", "SUM", "ROW_NUMBER",
                 "ROWNUMBER" };
-        AGGREGATE_FUNCTIONS_CODES = FnvHash.fnv1a64lower(strings, true);
+        AGGREGATE_FUNCTIONS_CODES = FnvHashUtils.fnv1a64lower(strings, true);
         AGGREGATE_FUNCTIONS = new String[AGGREGATE_FUNCTIONS_CODES.length];
         for (String str : strings) {
-            long hash = FnvHash.fnv1a64lower(str);
+            long hash = FnvHashUtils.fnv1a64lower(str);
             int index = Arrays.binarySearch(AGGREGATE_FUNCTIONS_CODES, hash);
             AGGREGATE_FUNCTIONS[index] = str;
         }

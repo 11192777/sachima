@@ -18,6 +18,7 @@ package org.zaizai.sachima.sql.dialect.mysql.ast;
 import org.zaizai.sachima.enums.DbType;
 import org.zaizai.sachima.sql.ast.statement.SQLPrimaryKey;
 import org.zaizai.sachima.sql.dialect.mysql.visitor.MySqlASTVisitor;
+import org.zaizai.sachima.sql.dialect.oracle.visitor.OracleASTVisitor;
 
 public class MySqlPrimaryKey extends MySqlKey implements SQLPrimaryKey {
 
@@ -25,6 +26,7 @@ public class MySqlPrimaryKey extends MySqlKey implements SQLPrimaryKey {
         dbType = DbType.mysql;
     }
 
+    @Override
     protected void accept0(MySqlASTVisitor visitor) {
         if (visitor.visit(this)) {
             acceptChild(visitor, this.getName());

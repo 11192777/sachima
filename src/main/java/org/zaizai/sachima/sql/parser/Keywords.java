@@ -15,7 +15,7 @@
  */
 package org.zaizai.sachima.sql.parser;
 
-import org.zaizai.sachima.util.FnvHash;
+import org.zaizai.sachima.util.FnvHashUtils;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -187,11 +187,11 @@ public class Keywords {
 
         int index = 0;
         for (String k : keywords.keySet()) {
-            hashArray[index++] = FnvHash.fnv1a64lower(k);
+            hashArray[index++] = FnvHashUtils.fnv1a64lower(k);
         }
         Arrays.sort(hashArray);
         for (Map.Entry<String, Token> entry : keywords.entrySet()) {
-            long k = FnvHash.fnv1a64lower(entry.getKey());
+            long k = FnvHashUtils.fnv1a64lower(entry.getKey());
             index = Arrays.binarySearch(hashArray, k);
             tokens[index] = entry.getValue();
         }
@@ -206,7 +206,7 @@ public class Keywords {
     }
 
     public Token getKeyword(String key) {
-        long k = FnvHash.fnv1a64lower(key);
+        long k = FnvHashUtils.fnv1a64lower(key);
         int index = Arrays.binarySearch(hashArray, k);
         if (index < 0) {
             return null;

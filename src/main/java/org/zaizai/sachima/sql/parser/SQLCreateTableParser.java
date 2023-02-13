@@ -15,7 +15,7 @@
  */
 package org.zaizai.sachima.sql.parser;
 
-import org.zaizai.sachima.util.FnvHash;
+import org.zaizai.sachima.constant.TokenFnvConstants;
 import org.zaizai.sachima.enums.DbType;
 import org.zaizai.sachima.sql.ast.SQLName;
 import org.zaizai.sachima.sql.ast.SQLPartitionBy;
@@ -80,7 +80,7 @@ public class SQLCreateTableParser extends SQLDDLParser {
             }
         }
 
-        if (lexer.identifierEquals(FnvHash.Constants.DIMENSION)) {
+        if (lexer.identifierEquals(TokenFnvConstants.DIMENSION)) {
             lexer.nextToken();
             createTable.setDimension(true);
         }
@@ -100,9 +100,9 @@ public class SQLCreateTableParser extends SQLDDLParser {
         if (lexer.token == Token.LPAREN) {
             lexer.nextToken();
 
-            for (; ; ) {
+            while(true) {
                 Token token = lexer.token;
-                if (lexer.identifierEquals(FnvHash.Constants.SUPPLEMENTAL)
+                if (lexer.identifierEquals(TokenFnvConstants.SUPPLEMENTAL)
                     && DbType.oracle == dbType) {
                     SQLTableElement element = this.parseCreateTableSupplementalLogingProps();
                     element.setParent(createTable);
@@ -141,7 +141,7 @@ public class SQLCreateTableParser extends SQLDDLParser {
 
             accept(Token.RPAREN);
 
-            if (lexer.identifierEquals(FnvHash.Constants.INHERITS)) {
+            if (lexer.identifierEquals(TokenFnvConstants.INHERITS)) {
                 lexer.nextToken();
                 accept(Token.LPAREN);
                 SQLName inherits = this.exprParser.name();

@@ -16,8 +16,8 @@
 package org.zaizai.sachima.sql.dialect.mysql.ast;
 
 import org.zaizai.sachima.enums.DbType;
-import org.zaizai.sachima.sql.ast.SQLIndex;
 import org.zaizai.sachima.sql.ast.SQLExpr;
+import org.zaizai.sachima.sql.ast.SQLIndex;
 import org.zaizai.sachima.sql.ast.statement.SQLTableConstraint;
 import org.zaizai.sachima.sql.ast.statement.SQLUnique;
 import org.zaizai.sachima.sql.ast.statement.SQLUniqueConstraint;
