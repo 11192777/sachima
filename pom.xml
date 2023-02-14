@@ -9,8 +9,7 @@
   <version>1.0-SNAPSHOT</version>
 
   <properties>
-    <maven.compiler.source>8</maven.compiler.source>
-    <maven.compiler.target>8</maven.compiler.target>
+    <github.global.server>github</github.global.server>
   </properties>
 
   <dependencies>
@@ -37,5 +36,13 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
+  <distributionManagement>
+    <repository>
+      <id>github</id>
+      <name>GitHub 11192777@qq.com Apache Maven Packages</name>
+      <url>https://maven.pkg.github.com/11192777/mvn.repository</url>
+    </repository>
+  </distributionManagement>
 
 </project>
