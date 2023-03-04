@@ -10,10 +10,6 @@ public enum DbType {
     ali_oracle(1 << 4),
     oceanbase_oracle(1 << 5),
 
-    /**
-     * MySQL和
-     */
-    mysql_liquibase(1 << 6),
     ;
 
     public final long mask;

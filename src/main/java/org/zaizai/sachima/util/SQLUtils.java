@@ -17,6 +17,7 @@ package org.zaizai.sachima.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.zaizai.sachima.constant.StrPool;
 import org.zaizai.sachima.enums.DbType;
 import org.zaizai.sachima.sql.ast.*;
 import org.zaizai.sachima.sql.ast.expr.*;
@@ -31,6 +32,7 @@ import org.zaizai.sachima.sql.dialect.oracle.visitor.OracleSchemaStatVisitor;
 import org.zaizai.sachima.sql.parser.*;
 import org.zaizai.sachima.sql.repository.SchemaRepository;
 import org.zaizai.sachima.sql.visitor.*;
+import sun.nio.cs.ext.MacHebrew;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -545,6 +547,28 @@ public class SQLUtils {
         selectItem.setParent(selectItem);
     }
 
+    public static String removeLastSeparator(String sql, DbType dbType) {
+        char sep;
+        if (dbType == DbType.mysql) {
+            sep = ';';
+        } else {
+            throw new IllegalArgumentException("Undefined sep of :[" + dbType.name() + "]");
+        }
+        char[] items = sql.toCharArray();
+        for (int i = items.length - 1; i >= 0; i--) {
+            char item = items[i];
+            if (CharUtils.isNotBlankChar(item)) {
+                if (item == sep) {
+                    items[i] = ' ';
+                    return new String(items);
+                } else {
+                    break;
+                }
+            }
+        }
+        return new String(items);
+    }
+
     public static class FormatOption {
         private int features = VisitorFeature.of(VisitorFeature.OutputUCase, VisitorFeature.OutputPrettyFormat);
 
@@ -1004,21 +1028,19 @@ public class SQLUtils {
 
     static class TimeZoneVisitor extends SQLASTVisitorAdapter {
 
-        private TimeZone from;
-        private TimeZone to;
+        private final TimeZone from;
+        private final TimeZone to;
 
         public TimeZoneVisitor(TimeZone from, TimeZone to) {
             this.from = from;
             this.to = to;
         }
 
+        @Override
         public boolean visit(SQLTimestampExpr x) {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
             String newTime = format.format(x.getDate(from));
-
             x.setLiteral(newTime);
-
             return true;
         }
 

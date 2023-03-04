@@ -2,6 +2,7 @@ package sql.dml;
 
 import custom.TestHelper;
 import org.junit.Test;
+import org.zaizai.sachima.util.SQLAdaptHelper;
 
 /**
  * <H1></H1>
@@ -91,13 +92,17 @@ public class SelectTest extends TestHelper {
     @Test
     public void case8() {
         String sql = "SELECT etsj.* FROM ea_tenant_syn_job AS etsj WHERE etsj.form_code IS not NULL;";
-        System.out.println(mysqlToOracle(sql));
+        eq("SELECT etsj.*\n" +
+                "FROM ea_tenant_syn_job etsj\n" +
+                "WHERE etsj.form_code IS NOT NULL", mysqlToOracle(sql, SQLAdaptHelper::translateMysqlToOracleOnLiquibaseAndMyBaitsPlus));
     }
 
     @Test
     public void case9() {
         String sql = "select * from ea_form_field WHERE widget_type_property LIKE ?;";
-        System.out.println(mysqlToOracle(sql));
+        eq("SELECT *\n" +
+                "FROM ea_form_field\n" +
+                "WHERE widget_type_property LIKE ?", mysqlToOracle(sql, SQLAdaptHelper::translateMysqlToOracleOnLiquibaseAndMyBaitsPlus));
     }
 
 }

@@ -30,8 +30,6 @@ public class InsertTest extends TestHelper {
         String sql = " INSERT INTO ea_tenant_config (property_key, property_value, created_by, created_date, last_modified_by, last_modified_date, tenant_id, is_deleted )\n" +
                 "      VALUES\n" +
                 "      ( 'IS_SYN_MATCH_CONFIG', 'false', - 1, '2022-12-29 10:55:16', - 1, '2022-12-29 10:55:16', - 1, FALSE )";
-        SQLStatement statement = getStatement(sql);
-        System.out.println(statement);
         System.out.println(mysqlToOracle(sql));
     }
 
@@ -40,18 +38,32 @@ public class InsertTest extends TestHelper {
         String sql = " INSERT INTO ea_tenant_config (property_key, property_value, created_by, created_date, last_modified_by, last_modified_date, tenant_id, is_deleted )\n" +
                 "      VALUES\n" +
                 "      ( 'IS_SYN_MATCH_CONFIG', 'false', - 1, '2022-12-29 10:55:16', - 1, '2022-12-29 10:55:16', - 1, FALSE )";
-        SQLStatement statement = getStatement(sql);
         HashMap<String, String> map = new HashMap<>();
         map.put("ea_tenant_config", "id");
         PrimaryKeyHandler.apply(map, UUID::randomUUID);
         ArrayList<ColumnTypeHandler.ColumnType> list = new ArrayList<>();
         list.add(new ColumnTypeHandler.ColumnType("ea_tenant_config", "created_date", "DATE"));
         ColumnTypeHandler.apply(list);
-        System.out.println("ss" + mysqlToOracle(sql));
+        eq(mysqlToOracle(sql), "INSERT INTO ea_tenant_config\n" +
+                "\t(property_key, property_value, created_by, created_date, last_modified_by\n" +
+                "\t, last_modified_date, tenant_id, is_deleted, id)\n" +
+                "VALUES ('IS_SYN_MATCH_CONFIG', 'false', -1, TO_DATE('2022-12-29 10:55:16', 'yyyy-mm-dd hh24:mi:ss'), -1\n" +
+                "\t, '2022-12-29 10:55:16', -1, 0, '7c9db1cd-83c2-4ae6-902f-88489de784b0')");
     }
 
     @Test
     public void case3() {
+        String sql = " INSERT INTO `ea_tenant_config` (property_key, property_value, created_by, created_date, last_modified_by, last_modified_date, tenant_id, is_deleted )\n" +
+                "      VALUES\n" +
+                "      ( 'IS_SYN_MATCH_CONFIG', 'false', - 1, '2022-12-29 10:55:16', - 1, '2022-12-29 10:55:16', - 1, FALSE )";
+        HashMap<String, String> map = new HashMap<>();
+        map.put("ea_tenant_config", "id");
+        PrimaryKeyHandler.apply(map, UUID::randomUUID);
+        eq(mysqlToOracle(sql), "INSERT INTO ea_tenant_config\n" +
+                "\t(property_key, property_value, created_by, created_date, last_modified_by\n" +
+                "\t, last_modified_date, tenant_id, is_deleted, id)\n" +
+                "VALUES ('IS_SYN_MATCH_CONFIG', 'false', -1, TO_DATE('2022-12-29 10:55:16', 'yyyy-mm-dd hh24:mi:ss'), -1\n" +
+                "\t, '2022-12-29 10:55:16', -1, 0, '7c9db1cd-83c2-4ae6-902f-88489de784b0')");
     }
 
     @Test

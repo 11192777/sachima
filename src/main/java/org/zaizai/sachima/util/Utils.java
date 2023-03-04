@@ -30,6 +30,8 @@ import java.util.Set;
 
 public class Utils {
 
+    private Utils() {}
+
     public static final int DEFAULT_BUFFER_SIZE = 1024 * 4;
 
     public static String read(InputStream in) {
@@ -169,9 +171,7 @@ public class Utils {
 
         msgDigest.update(text.getBytes());
 
-        byte[] bytes = msgDigest.digest();
-
-        return bytes;
+        return msgDigest.digest();
     }
 
     public static String md5(String text) {
@@ -180,18 +180,18 @@ public class Utils {
     }
 
     public static void putLong(byte[] b, int off, long val) {
-        b[off + 7] = (byte) (val >>> 0);
+        b[off + 7] = (byte) (val);
         b[off + 6] = (byte) (val >>> 8);
         b[off + 5] = (byte) (val >>> 16);
         b[off + 4] = (byte) (val >>> 24);
         b[off + 3] = (byte) (val >>> 32);
         b[off + 2] = (byte) (val >>> 40);
         b[off + 1] = (byte) (val >>> 48);
-        b[off + 0] = (byte) (val >>> 56);
+        b[off] = (byte) (val >>> 56);
     }
 
     public static boolean equals(Object a, Object b) {
-        return (a == b) || (a != null && a.equals(b));
+        return Objects.equals(a, b);
     }
 
     public static String hex(int hash) {

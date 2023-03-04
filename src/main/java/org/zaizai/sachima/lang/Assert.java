@@ -74,5 +74,4 @@ public class Assert {
         return notNull(object, "[Assertion failed] - this argument is required; it must not be null");
     }
 
-
 }

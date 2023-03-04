@@ -17,12 +17,10 @@ import org.zaizai.sachima.sql.dialect.oracle.parser.OracleLexer;
 import org.zaizai.sachima.sql.dialect.oracle.visitor.OracleOutputVisitor;
 import org.zaizai.sachima.sql.parser.Token;
 import org.zaizai.sachima.util.CollectionUtils;
+import org.zaizai.sachima.util.OracleUtils;
 import org.zaizai.sachima.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * <H1>Simple MySQL to Oracle</H1>
@@ -66,7 +64,7 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
 
     @Override
     public boolean visit(SQLExprTableSource x) {
-        this.tableName = StringUtils.toLowerCase(x.getTableName());
+        this.tableName = this.cleanMySQLTableNameout(x.getTableName());
         if (x.getExpr() instanceof SQLIdentifierExpr) {
             this.identifierTransferredMeaning((SQLIdentifierExpr) x.getExpr());
         }
@@ -138,6 +136,9 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
      *     <li>left([value], [num]) -> SUBSTR([value] , 0, [num])
      *     select left(name, 2) from user ===> select substr(name, 0, 2) from user;
      *     </li>
+     *     <li>if(length(name) > 10, 'y', 'n') -> DECODE(SIGN(LENGTH(name) - 10, 1, 'y', 'n'))
+     *     select if(length(name) > 10, 'y', 'n') from dual; ===> select DECODE(SIGN(LENGTH(name) - 10, 1, 'y', 'n')) from dual;
+     *     </li>
      * </ol>
      */
     @Override
@@ -179,6 +180,19 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
         } else if (StringUtils.equalsIgnoreCase(methodName, FunctionConstant.MONTH)) {
             x.setMethodName(FunctionConstant.TO_CHAR);
             x.getArguments().add(new SQLCharExpr("MM"));
+        } else if (StringUtils.equalsIgnoreCase(methodName, FunctionConstant.IF)) {
+            x.setMethodName(FunctionConstant.DECODE);
+            if (x.getArguments().get(0) instanceof SQLBinaryOpExpr) {
+                SQLBinaryOpExpr sqlBinaryOpExpr = (SQLBinaryOpExpr) x.getArguments().get(0);
+                List<SQLExpr> args = OracleUtils.listMySqlIfMethodInvokeArgs(sqlBinaryOpExpr.getOperator(), x.getArguments().get(1), x.getArguments().get(2));
+                sqlBinaryOpExpr.setOperator(SQLBinaryOperator.Subtract);
+                //build a SIGN method invoke expr.
+                SQLMethodInvokeExpr signMethodInvokeExpr = new SQLMethodInvokeExpr(FunctionConstant.SIGN);
+                signMethodInvokeExpr.addArgument(sqlBinaryOpExpr);
+                x.getArguments().clear();
+                x.getArguments().add(signMethodInvokeExpr);
+                x.getArguments().addAll(args);
+            }
         }
         return super.visit(x);
     }
@@ -387,7 +401,7 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
      */
     @Override
     public boolean visit(SQLInsertStatement x) {
-        this.tableName = x.getTableName().getSimpleName();
+        this.tableName = this.cleanMySQLTableNameout(x.getTableName().getSimpleName());
         String tablePrimaryKey = PrimaryKeyHandler.getTablePrimaryKey(this.tableName);
         SQLInsertStatement.ValuesClause values = x.getValues();
         List<SQLExpr> columns = x.getColumns();
@@ -541,5 +555,14 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
         return targets;
     }
 
+    /**
+     * Obtain MySQL table name
+     */
+    private String cleanMySQLTableNameout(String tableName) {
+        if (StringUtils.isEmpty(tableName)) {
+            return tableName;
+        }
+        return tableName.replace("`", "");
+    }
 
 }

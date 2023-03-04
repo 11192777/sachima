@@ -62,4 +62,7 @@ public interface FunctionConstant {
 
     String MONTH = "MONTH";
 
+    String IF = "IF";
+
+    String SIGN = "SIGN";
 }

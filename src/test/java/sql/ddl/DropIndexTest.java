@@ -18,8 +18,7 @@ public class DropIndexTest extends TestHelper {
     @Test
     public void case1() {
         String sql = "DROP INDEX EARCHIVESTEST.idx__document__tenant_id_created_date";
-        SQLStatement statement = getStatement(sql);
-        System.out.println(statement);
+   
         System.out.println(mysqlToOracle(sql));
     }
 

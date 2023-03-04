@@ -2,6 +2,7 @@ package sql.dml;
 
 import custom.TestHelper;
 import org.junit.Test;
+import org.zaizai.sachima.sql.ast.SQLStatement;
 
 /**
  * <H1></H1>
@@ -27,7 +28,23 @@ public class UpdateTest extends TestHelper {
                 "        SET\n" +
                 "            euof.widget_type = eff.widget_type, name = 'ZhangSan'" +
                 "      WHERE\n" +
-                "            euof.widget_type != eff.widget_type";
-        System.out.println(mysqlToOracle(sql));
+                "            euof.widget_type != ef" +
+                "f.widget_type";
+        System.out.println(sql);
     }
+
+    @Test
+    public void case3() {
+        String sql = "update ea_archive set check_result = if(LENGTH(lack_doc_form_id)>2,1,2)";
+        eq(sql, "UPDATE ea_archive\n" +
+                "SET check_result = DECODE(SIGN(LENGTH(lack_doc_form_id) - 2), 1, 1, 2)");
+    }
+
+    @Test
+    public void case4() {
+        String sql = "update ea_archive set check_result = if(LENGTH(lack_doc_form_id)>=2,1,2)";
+        eq(sql, "UPDATE ea_archive\n" +
+                "SET check_result = DECODE(SIGN(LENGTH(lack_doc_form_id) - 2), -1, 2, 1)");
+    }
+
 }

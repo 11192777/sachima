@@ -110,15 +110,15 @@ public class FunctionsTest extends TestHelper {
     @Test
     public void case12() {
         String sql = "select * from user where id in (1, 3, 4, 2) order by field(id, 4, 3, 2, 1)";
-        SQLStatement statement = getStatement(sql);
-        System.out.println(statement);
         eq(sql, "select * from \"USER\" where id in (1, 3, 4, 2) order by DECODE(id, 4, 1, 3, 3, 2, 5, 1, 7)");
     }
 
 
     @Test
     public void case13() {
-
+        String sql = "select concat(name, '-', code, concat('haha', id, 'zaizai')) from ea_form;";
+        eq(sql, "SELECT (name||'-'||code||('haha'||id||'zaizai'))\n" +
+                "FROM ea_form;");
     }
 
 

@@ -1,7 +1,9 @@
 package org.zaizai.sachima.util;
 
 import org.zaizai.sachima.sql.ast.SQLExpr;
+import org.zaizai.sachima.sql.ast.expr.SQLBinaryOperator;
 import org.zaizai.sachima.sql.ast.expr.SQLIdentifierExpr;
+import org.zaizai.sachima.sql.ast.expr.SQLMethodInvokeExpr;
 import org.zaizai.sachima.sql.ast.statement.SQLAssignItem;
 
 import java.util.List;

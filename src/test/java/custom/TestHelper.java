@@ -14,6 +14,7 @@ import sql.dml.DeleteTest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -56,7 +57,11 @@ public class TestHelper {
     }
 
     public static String mysqlToOracle(String sql) {
-        return SQLAdaptHelper.translateMysqlToOracle(sql);
+        return mysqlToOracle(sql, SQLAdaptHelper::translateMysqlToOracle);
+    }
+
+    public static String mysqlToOracle(String sql, Function<String, String> fun) {
+        return fun.apply(sql);
     }
 
     public static SQLStatement getStatement(String sql) {

@@ -12,8 +12,9 @@ import java.util.Objects;
  */
 public class MapUtils {
 
+    private MapUtils() {}
 
-    public static boolean isEmpty(Map map) {
+    public static boolean isEmpty(Map<?, ?> map) {
         return Objects.isNull(map) || map.isEmpty();
     }
 }

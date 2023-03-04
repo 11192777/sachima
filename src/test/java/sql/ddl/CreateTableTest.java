@@ -66,8 +66,7 @@ public class CreateTableTest extends TestHelper {
     @Test
     public void case3() {
         String sql = "comment on COLUMN EARCHIVESTEST.ea_form_field.modify is '是否支持修改';";
-        SQLStatement statement = getStatement(sql);
-        System.out.println(statement);
+   
         System.out.println(mysqlToOracle(sql));
     }
 

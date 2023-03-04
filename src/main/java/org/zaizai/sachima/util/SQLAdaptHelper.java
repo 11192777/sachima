@@ -21,29 +21,30 @@ import java.util.Objects;
  */
 public class SQLAdaptHelper {
 
-    private SQLAdaptHelper() {}
+    private SQLAdaptHelper() {
+    }
 
     private static final Log LOG = LogFactory.getLog(SQLAdaptHelper.class);
 
     /**
      * <H2>not format</H2>
      *
-     * @param sql           MySQL sql
-     * @param features      f
+     * @param sql      MySQL sql
+     * @param features f
      * @return {@link java.lang.String} Oracle sql
      * @author Qingyu.Meng
      * @since 2022/11/18
      */
-    public static String translateMysqlToOracle(String sql, VisitorFeature... features)  throws SQLTranslateException{
+    public static String translateMysqlToOracle(String sql, VisitorFeature... features) throws SQLTranslateException {
         return translateMysqlToOracle(sql, null, features);
     }
 
     /**
      * <H2>not format</H2>
      *
-     * @param sql           MySQL sql
-     * @param visitor       default: {@link MySqlToOracleOutputVisitor}
-     * @param features      f
+     * @param sql      MySQL sql
+     * @param visitor  default: {@link MySqlToOracleOutputVisitor}
+     * @param features f
      * @return {@link java.lang.String} Oracle sql
      * @author Qingyu.Meng
      * @since 2022/11/18
@@ -51,7 +52,7 @@ public class SQLAdaptHelper {
     public static String translateMysqlToOracle(String sql, SQLASTOutputVisitor visitor, VisitorFeature... features) throws SQLTranslateException {
         LOG.debug("Original SQL:" + sql);
         if (Objects.isNull(visitor)) {
-            visitor =  new MySqlToOracleOutputVisitor(new StringBuilder());
+            visitor = new MySqlToOracleOutputVisitor(new StringBuilder());
         }
         handleVisitor(SQLUtils.parseSingleStatement(sql, DbType.mysql), visitor, features);
         String adaptSql = visitor.getAppender().toString();
@@ -62,10 +63,10 @@ public class SQLAdaptHelper {
     /**
      * <H2>handle statement</H2>
      *
-     * @param statement     {@link SQLStatement}
-     * @param visitor       AST visitor
-     * @param features      f
-     * @return  {@link java.lang.String}
+     * @param statement {@link SQLStatement}
+     * @param visitor   AST visitor
+     * @param features  f
+     * @return {@link java.lang.String}
      * @author Qingyu.Meng
      * @since 2023/1/12
      */
@@ -122,7 +123,7 @@ public class SQLAdaptHelper {
      * </ol>
      *
      * @param sql MySQL SQL
-     * @return  {@link java.lang.String} Oracle SQL
+     * @return {@link java.lang.String} Oracle SQL
      * @author Qingyu.Meng
      * @since 2023/1/12
      */
@@ -135,5 +136,13 @@ public class SQLAdaptHelper {
         String adaptSql = handleVisitor(statement, new MySqlToOracleOutputVisitor(new StringBuilder()));
         LOG.debug("Adapted SQL:" + adaptSql);
         return adaptSql;
+    }
+
+    /**
+     * Environment: MyBatis plus + Liquibase
+     */
+    public static String translateMysqlToOracleOnLiquibaseAndMyBaitsPlus(String sql) {
+        sql = SQLUtils.removeLastSeparator(sql, DbType.mysql);
+        return translateMysqlToOracleOnLiquibase(sql);
     }
 }

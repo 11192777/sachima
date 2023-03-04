@@ -761,7 +761,6 @@ public class SQLEvalVisitorUtils {
     }
 
     public static boolean visit(SQLEvalVisitor visitor, SQLBinaryOpExpr x) {
-        System.out.println("Wall visit");
         return false;
     }
 

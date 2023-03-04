@@ -9,6 +9,10 @@ public class CharUtils {
         return isBlankChar((int) c);
     }
 
+    public static boolean isNotBlankChar(char c) {
+        return !isBlankChar(c);
+    }
+
     public static boolean isBlankChar(int c) {
         return Character.isWhitespace(c) || Character.isSpaceChar(c) || c == '\ufeff' || c == '\u202a' || c == '\u0000';
     }
