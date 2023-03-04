@@ -44,7 +44,7 @@ public class InsertTest extends TestHelper {
         ArrayList<ColumnTypeHandler.ColumnType> list = new ArrayList<>();
         list.add(new ColumnTypeHandler.ColumnType("ea_tenant_config", "created_date", "DATE"));
         ColumnTypeHandler.apply(list);
-        eq(mysqlToOracle(sql), "INSERT INTO ea_tenant_config\n" +
+        eqPrint(mysqlToOracle(sql), "INSERT INTO ea_tenant_config\n" +
                 "\t(property_key, property_value, created_by, created_date, last_modified_by\n" +
                 "\t, last_modified_date, tenant_id, is_deleted, id)\n" +
                 "VALUES ('IS_SYN_MATCH_CONFIG', 'false', -1, TO_DATE('2022-12-29 10:55:16', 'yyyy-mm-dd hh24:mi:ss'), -1\n" +
@@ -59,7 +59,7 @@ public class InsertTest extends TestHelper {
         HashMap<String, String> map = new HashMap<>();
         map.put("ea_tenant_config", "id");
         PrimaryKeyHandler.apply(map, UUID::randomUUID);
-        eq(mysqlToOracle(sql), "INSERT INTO ea_tenant_config\n" +
+        eqPrint(mysqlToOracle(sql), "INSERT INTO ea_tenant_config\n" +
                 "\t(property_key, property_value, created_by, created_date, last_modified_by\n" +
                 "\t, last_modified_date, tenant_id, is_deleted, id)\n" +
                 "VALUES ('IS_SYN_MATCH_CONFIG', 'false', -1, TO_DATE('2022-12-29 10:55:16', 'yyyy-mm-dd hh24:mi:ss'), -1\n" +

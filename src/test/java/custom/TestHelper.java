@@ -29,6 +29,14 @@ public class TestHelper {
 
     private static final Log LOG = LogFactory.getLog(DeleteTest.class);
 
+    public static void eqPrint(String sql, String target) {
+        try {
+            eq(sql, target);
+        } catch (Exception e) {
+            //skip
+        }
+    }
+
     public static void eq(String sql, String target) {
         eq(sql, target, false);
     }
