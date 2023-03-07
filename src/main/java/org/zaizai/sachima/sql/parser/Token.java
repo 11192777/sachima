@@ -209,6 +209,7 @@ public enum Token {
     COMMIT("COMMIT"),
     SAVEPOINT("SAVEPOINT"),
     CROSS("CROSS"),
+    ROWID("ROWID"),
     
     PCTFREE("PCTFREE"),
     INITRANS("INITRANS"),
@@ -276,7 +277,7 @@ public enum Token {
     SIZE("SIZE"),
     MODIFY("MODIFY"),
     NUMBER("NUMBER"),
-    
+
     // odps,hive
     PARTITION,
     PARTITIONED,

@@ -115,4 +115,30 @@ public class SelectTest extends TestHelper {
                 "WHERE tenant_id = 1534382837723181057");
     }
 
+    @Test
+    public void case11() {
+        String sql = "SELECT id AS storehouseId, str.name AS storehouseName, area.id AS areaId, area.name AS areaName, cab.id AS cabinetId\n" +
+                "     , cab.name AS cabinetName, shrow.id AS rowId, shrow.name AS rowName, gri.id AS gridId, gri.name AS gridName\n" +
+                "     , gri.capacity AS capacity, gri.hold_number AS holdNumber\n" +
+                "FROM ea_storehouse str\n" +
+                "    RIGHT JOIN ea_storehouse_area area ON str.id = area.storehouse_id\n" +
+                "    RIGHT JOIN ea_storehouse_cabinet cab ON area.id = cab.area_id\n" +
+                "    RIGHT JOIN ea_storehouse_row shrow ON cab.id = shrow.cabinet_id\n" +
+                "    RIGHT JOIN ea_storehouse_grid gri\n" +
+                "    ON shrow.id = gri.row_id\n" +
+                "    AND gri.id = ?\n" +
+                "WHERE str.tenant_id = ?;";
+        eq(sql, "SELECT id AS storehouseId, str.name AS storehouseName, area.id AS areaId, area.name AS areaName, cab.id AS cabinetId\n" +
+                "\t, cab.name AS cabinetName, shrow.id AS \"ROWID\", shrow.name AS rowName, gri.id AS gridId, gri.name AS gridName\n" +
+                "\t, gri.capacity AS capacity, gri.hold_number AS holdNumber\n" +
+                "FROM ea_storehouse str\n" +
+                "\tRIGHT JOIN ea_storehouse_area area ON str.id = area.storehouse_id\n" +
+                "\tRIGHT JOIN ea_storehouse_cabinet cab ON area.id = cab.area_id\n" +
+                "\tRIGHT JOIN ea_storehouse_row shrow ON cab.id = shrow.cabinet_id\n" +
+                "\tRIGHT JOIN ea_storehouse_grid gri\n" +
+                "\tON shrow.id = gri.row_id\n" +
+                "\t\tAND gri.id = ?\n" +
+                "WHERE str.tenant_id = ?;");
+    }
+
 }

@@ -117,6 +117,7 @@ public class OracleLexer extends Lexer {
         map.put("MODIFY", Token.MODIFY);
         map.put("NUMBER", Token.NUMBER);
         map.put("PASSWORD", Token.PASSWORD);
+        map.put("ROWID", Token.ROWID);
 
         DEFAULT_ORACLE_KEYWORDS = new Keywords(map);
     }
