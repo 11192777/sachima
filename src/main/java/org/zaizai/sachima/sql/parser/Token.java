@@ -210,6 +210,7 @@ public enum Token {
     SAVEPOINT("SAVEPOINT"),
     CROSS("CROSS"),
     ROWID("ROWID"),
+    PASSWORD_ORACLE("password"),
     
     PCTFREE("PCTFREE"),
     INITRANS("INITRANS"),
