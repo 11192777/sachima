@@ -105,4 +105,14 @@ public class SelectTest extends TestHelper {
                 "WHERE widget_type_property LIKE ?", mysqlToOracle(sql, SQLAdaptHelper::translateMysqlToOracleOnLiquibaseAndMyBaitsPlus));
     }
 
+    @Test
+    public void case10() {
+        String sql = "SELECT id, is_enabled, imap_host, imap_port, is_enabled_ssl, user_name, password, created_by, created_date, last_modified_by, last_modified_date, tenant_id FROM ea_mail_collect_task WHERE tenant_id = 1534382837723181057";
+        eq(sql, "SELECT id, is_enabled, imap_host, imap_port, is_enabled_ssl\n" +
+                "\t, user_name, \"PASSWORD\", created_by, created_date, last_modified_by\n" +
+                "\t, last_modified_date, tenant_id\n" +
+                "FROM ea_mail_collect_task\n" +
+                "WHERE tenant_id = 1534382837723181057");
+    }
+
 }
