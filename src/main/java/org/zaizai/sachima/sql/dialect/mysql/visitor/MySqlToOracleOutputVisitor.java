@@ -432,50 +432,26 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
             }
         }
 
-        List<SQLCommentHint> headHints = x.getHeadHintsDirect();
-        if (headHints != null) {
-            for (SQLCommentHint hint : headHints) {
-                hint.accept(this);
-                println();
+        if (x.getValuesList().size() <= 1) {
+            return super.visit(x);
+        }
+
+        print0(ucase ? "INSERT ALL " : "insert all ");
+        println();
+        for (SQLInsertStatement.ValuesClause valuesClause : x.getValuesList()) {
+            print(ucase ? "INTO " : "into ");
+            x.getTableSource().accept(this);
+            String columnsString = x.getColumnsString();
+            if (columnsString != null) {
+                print0(columnsString);
+            } else {
+                printInsertColumns(x.getColumns());
             }
-        }
-
-        SQLWithSubqueryClause with = x.getWith();
-        if (with != null) {
-            visit(with);
+            print0(ucase ? " VALUES " : " values ");
+            valuesClause.accept(this);
             println();
         }
-
-        if (x.getValuesList().size() > 1) {
-            print0(ucase ? "INSERT ALL INTO " : "insert all into ");
-        } else {
-            print0(ucase ? "INSERT INTO " : "insert into ");
-        }
-
-        x.getTableSource().accept(this);
-
-        String columnsString = x.getColumnsString();
-        if (columnsString != null) {
-            print0(columnsString);
-        } else {
-            printInsertColumns(x.getColumns());
-        }
-
-        if (x.getValuesList().size() == 1) {
-            println();
-            print0(ucase ? "VALUES " : "values ");
-            printAndAccept(x.getValuesList(), ", ");
-        } else if (x.getValuesList().size() > 1) {
-            println();
-            print0(ucase ? "VALUES " : "values ");
-            printAndAccept(x.getValuesList(), " into " + this.tableName + " values ");
-            print0(" SELECT 1 FROM DUAL ");
-        } else {
-            if (x.getQuery() != null) {
-                println();
-                x.getQuery().accept(this);
-            }
-        }
+        print0("SELECT 1 FROM DUAL");
         return false;
     }
 

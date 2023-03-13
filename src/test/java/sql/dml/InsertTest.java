@@ -75,9 +75,12 @@ public class InsertTest extends TestHelper {
 
     @Test
     public void case5() {
-        String sql = "insert into EA_FORM (id, NAME) values (1, 'ss'), (2, 'dd'), (3, 'cc');";
-        eq(sql, "INSERT ALL INTO EA_FORM (id, NAME)\n" +
-                "VALUES (1, 'ss') into EA_FORM values (2, 'dd') into EA_FORM values (3, 'cc') SELECT 1 FROM DUAL ;");
+        String sql = "insert into EA_FORM (id, NAME) values (1, 'aa'), (2, 'dd'), (3, 'cc');";
+        eq(sql, "INSERT ALL \n" +
+                "INTO EA_FORM (id, NAME) VALUES (1, 'aa')\n" +
+                "INTO EA_FORM (id, NAME) VALUES (2, 'dd')\n" +
+                "INTO EA_FORM (id, NAME) VALUES (3, 'cc')\n" +
+                "SELECT 1 FROM DUAL;");
     }
 
 }
