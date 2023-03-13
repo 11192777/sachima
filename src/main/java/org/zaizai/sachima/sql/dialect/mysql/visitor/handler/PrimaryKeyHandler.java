@@ -55,7 +55,7 @@ public class PrimaryKeyHandler {
             return;
         }
         Assert.notNull(owner, "Owner parameter is required.");
-        String obtainSql = "SELECT CU.TABLE_NAME, CU.COLUMN_NAME FROM DBA_CONS_COLUMNS CU, DBA_CONSTRAINTS AU WHERE CU.CONSTRAINT_NAME = AU.CONSTRAINT_NAME AND AU.CONSTRAINT_TYPE = 'P' AND CU.OWNER = ? and CU.TABLE_NAME not like 'BIN$%'";
+        String obtainSql = "SELECT CU.TABLE_NAME, CU.COLUMN_NAME FROM USER_CONS_COLUMNS CU, USER_CONSTRAINTS AU WHERE CU.constraint_name = AU.constraint_name AND AU.constraint_type = 'P' AND AU.TABLE_NAME NOT LIKE 'BIN$%' and AU.OWNER = ?";
         Map<String, String> tablesPrimaryKeyMap = new HashMap<>();
         ResultSet resultSet = null;
         try (Connection connection = dataSource.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(obtainSql)) {
