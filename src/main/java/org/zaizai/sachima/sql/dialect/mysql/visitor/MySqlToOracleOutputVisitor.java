@@ -2,9 +2,7 @@ package org.zaizai.sachima.sql.dialect.mysql.visitor;
 
 import org.zaizai.sachima.constant.TokenFnvConstants;
 import org.zaizai.sachima.lang.Assert;
-import org.zaizai.sachima.sql.ast.SQLDataType;
-import org.zaizai.sachima.sql.ast.SQLExpr;
-import org.zaizai.sachima.sql.ast.SQLName;
+import org.zaizai.sachima.sql.ast.*;
 import org.zaizai.sachima.sql.ast.expr.*;
 import org.zaizai.sachima.sql.ast.statement.*;
 import org.zaizai.sachima.sql.dialect.mysql.ast.MySqlObjectImpl;
@@ -433,7 +431,52 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
                 }
             }
         }
-        return super.visit(x);
+
+        List<SQLCommentHint> headHints = x.getHeadHintsDirect();
+        if (headHints != null) {
+            for (SQLCommentHint hint : headHints) {
+                hint.accept(this);
+                println();
+            }
+        }
+
+        SQLWithSubqueryClause with = x.getWith();
+        if (with != null) {
+            visit(with);
+            println();
+        }
+
+        if (x.getValuesList().size() > 1) {
+            print0(ucase ? "INSERT ALL INTO " : "insert all into ");
+        } else {
+            print0(ucase ? "INSERT INTO " : "insert into ");
+        }
+
+        x.getTableSource().accept(this);
+
+        String columnsString = x.getColumnsString();
+        if (columnsString != null) {
+            print0(columnsString);
+        } else {
+            printInsertColumns(x.getColumns());
+        }
+
+        if (x.getValuesList().size() == 1) {
+            println();
+            print0(ucase ? "VALUES " : "values ");
+            printAndAccept(x.getValuesList(), ", ");
+        } else if (x.getValuesList().size() > 1) {
+            println();
+            print0(ucase ? "VALUES " : "values ");
+            printAndAccept(x.getValuesList(), " into " + this.tableName + " values ");
+            print0(" SELECT 1 FROM DUAL ");
+        } else {
+            if (x.getQuery() != null) {
+                println();
+                x.getQuery().accept(this);
+            }
+        }
+        return false;
     }
 
     /**

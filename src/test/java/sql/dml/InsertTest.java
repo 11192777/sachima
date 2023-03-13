@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.zaizai.sachima.sql.ast.SQLStatement;
 import org.zaizai.sachima.sql.dialect.mysql.visitor.handler.ColumnTypeHandler;
 import org.zaizai.sachima.sql.dialect.mysql.visitor.handler.PrimaryKeyHandler;
+import org.zaizai.sachima.sql.dialect.oracle.visitor.OracleASTVisitor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,6 +71,13 @@ public class InsertTest extends TestHelper {
     public void case4() {
         String sql = "INSERT INTO user (is_enabled) values (0)";
         eq(sql, "INSERT INTO user (is_enabled) values (0)");
+    }
+
+    @Test
+    public void case5() {
+        String sql = "insert into EA_FORM (id, NAME) values (1, 'ss'), (2, 'dd'), (3, 'cc');";
+        eq(sql, "INSERT ALL INTO EA_FORM (id, NAME)\n" +
+                "VALUES (1, 'ss') into EA_FORM values (2, 'dd') into EA_FORM values (3, 'cc')SELECT 1 FROM DUAL ;");
     }
 
 }
