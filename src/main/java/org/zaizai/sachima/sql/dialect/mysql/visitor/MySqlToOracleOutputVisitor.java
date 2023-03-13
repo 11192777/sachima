@@ -565,4 +565,16 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
         return tableName.replace("`", "");
     }
 
+    /**
+     * MySQL Binary Expr adapt.
+     *
+     * MySQL:  SELECT * FROM user WHERE is_enabled = b'1'
+     * Oracle: SELECT * FROM user WHERE is_enabled = 1
+     */
+    @Override
+    public boolean visit(SQLBinaryExpr x) {
+        print0(x.getText());
+        return false;
+    }
+
 }

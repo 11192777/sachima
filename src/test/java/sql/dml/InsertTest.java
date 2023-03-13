@@ -68,7 +68,8 @@ public class InsertTest extends TestHelper {
 
     @Test
     public void case4() {
-
+        String sql = "INSERT INTO user (is_enabled) values (0)";
+        eq(sql, "INSERT INTO user (is_enabled) values (0)");
     }
 
 }

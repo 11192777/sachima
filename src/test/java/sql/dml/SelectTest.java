@@ -2,6 +2,7 @@ package sql.dml;
 
 import custom.TestHelper;
 import org.junit.Test;
+import org.zaizai.sachima.sql.ast.SQLStatement;
 import org.zaizai.sachima.util.SQLAdaptHelper;
 
 /**
@@ -141,4 +142,9 @@ public class SelectTest extends TestHelper {
                 "WHERE str.tenant_id = ?;");
     }
 
+    @Test
+    public void case12() {
+        String sql = "SELECT * FROM user WHERE is_enabled = b'1';";
+        eq(sql, "SELECT * FROM user WHERE is_enabled = 1;");
+    }
 }
