@@ -2739,7 +2739,7 @@ public class SQLASTOutputVisitor extends SQLASTVisitorAdapter implements Paramet
 
         if (expr instanceof SQLIdentifierExpr) {
             SQLIdentifierExpr identifierExpr = (SQLIdentifierExpr) expr;
-            final String name = identifierExpr.getName();
+            final String name = identifierExpr.normalizedName();
             if (!this.parameterized) {
                 printName0(name);
                 return;

@@ -22,6 +22,7 @@ import org.zaizai.sachima.sql.ast.SQLName;
 import org.zaizai.sachima.sql.ast.SQLOrderBy;
 import org.zaizai.sachima.sql.ast.statement.SQLDeleteStatement;
 import org.zaizai.sachima.sql.dialect.mysql.visitor.MySqlASTVisitor;
+import org.zaizai.sachima.sql.dialect.oracle.visitor.OracleASTVisitor;
 import org.zaizai.sachima.sql.visitor.SQLASTVisitor;
 
 import java.util.ArrayList;
@@ -138,6 +139,8 @@ public class MySqlDeleteStatement extends SQLDeleteStatement {
     protected void accept0(SQLASTVisitor visitor) {
         if (visitor instanceof MySqlASTVisitor) {
             accept0((MySqlASTVisitor) visitor);
+        } else if (visitor instanceof OracleASTVisitor) {
+            visitor.visit(this);
         } else {
             super.accept0(visitor);
         }

@@ -2,6 +2,8 @@ package sql.dml;
 
 import custom.TestHelper;
 import org.junit.Test;
+import org.zaizai.sachima.sql.ast.SQLStatement;
+import org.zaizai.sachima.sql.dialect.mysql.visitor.handler.PrimaryKeyHandler;
 
 /**
  * <H1></H1>
@@ -26,6 +28,12 @@ public class DeleteTest extends TestHelper {
         eq(toOracleLimit3(sql), "DELETE FROM user u\n" +
                 "WHERE u.id IN (1, 2)\n" +
                 "\tAND name IN ('zhangsan', 'wangwu')", true);
+    }
+
+    @Test
+    public void case3() {
+        String sql = "DELETE FROM `ea_evidence_chain_template`;\n";
+        eq(sql, "DELETE FROM ea_evidence_chain_template;");
     }
 
 }
