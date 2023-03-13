@@ -27,7 +27,9 @@ public class TokenTest extends TestHelper {
     @Test   //empty char
     public void case2() {
         String sql = "select * from user where name = ''";
-        eq(sql, "select * from \"USER\" where name is null");
+        eq(sql, "SELECT *\n" +
+                "FROM USER\n" +
+                "WHERE name IS NULL");
     }
 
     @Test

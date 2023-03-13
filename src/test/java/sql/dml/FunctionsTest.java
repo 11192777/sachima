@@ -45,49 +45,49 @@ public class FunctionsTest extends TestHelper {
     @Test   //order by field -> order by decode
     public void case4() {
         String sql = "select * from user where id in (1, 2, 3) order by field(id, 3, 1, 2)";
-        eq(sql, "select * from \"USER\" where id in (1, 2, 3) order by DECODE(id, 3, 1, 1, 3, 2, 5)");
+        eq(sql, "select * from USER where id in (1, 2, 3) order by DECODE(id, 3, 1, 1, 3, 2, 5)");
     }
 
 
     @Test   //remove binary function
     public void case5() {
         String sql = "select * from user where name =  binary('zhanSan')";
-        eq(sql, "select * from \"USER\" where name = 'zhanSan'");
+        eq(sql, "select * from USER where name = 'zhanSan'");
     }
 
 
     @Test
     public void case6() {
         String sql = "select * from user where name =  binary('zhanSan') and id = 123 and code = 'zzzz'";
-        eq(sql, "select * from \"USER\" where name = 'zhanSan' and id = 123 and code = 'zzzz'");
+        eq(sql, "select * from USER where name = 'zhanSan' and id = 123 and code = 'zzzz'");
     }
 
 
     @Test   //left -> substr
     public void case7() {
         String sql = "select left(name, 10) from user;";
-        eq(sql, "select SUBSTR(name, 0, 10) from \"USER\";");
+        eq(sql, "select SUBSTR(name, 0, 10) from USER;");
     }
 
 
     @Test
     public void case8() {
         String sql = "select concat(left(name, 10), ',' ,name) from user;";
-        eq(sql, "select (SUBSTR(name, 0, 10)||','||name) from \"USER\";");
+        eq(sql, "select (SUBSTR(name, 0, 10)||','||name) from USER;");
     }
 
 
     @Test   //year -> to_char(?, 'yyyy')
     public void case9() {
         String sql = "select year(date) from user";
-        eq(sql, "select TO_CHAR(date, 'yyyy') from \"USER\"");
+        eq(sql, "select TO_CHAR(date, 'yyyy') from USER");
     }
 
 
     @Test //month -> to_char(?, 'MM')
     public void case10() {
         String sql = "select year(date) from user";
-        eq(sql, "select TO_CHAR(date, 'yyyy') from \"USER\"");
+        eq(sql, "select TO_CHAR(date, 'yyyy') from USER");
     }
 
 
@@ -110,7 +110,7 @@ public class FunctionsTest extends TestHelper {
     @Test
     public void case12() {
         String sql = "select * from user where id in (1, 3, 4, 2) order by field(id, 4, 3, 2, 1)";
-        eq(sql, "select * from \"USER\" where id in (1, 3, 4, 2) order by DECODE(id, 4, 1, 3, 3, 2, 5, 1, 7)");
+        eq(sql, "select * from USER where id in (1, 3, 4, 2) order by DECODE(id, 4, 1, 3, 3, 2, 5, 1, 7)");
     }
 
 
