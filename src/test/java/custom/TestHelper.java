@@ -1,9 +1,11 @@
 package custom;
 
 
+import org.junit.Before;
 import org.zaizai.sachima.enums.DbType;
 import org.zaizai.sachima.sql.ast.SQLStatement;
 import org.zaizai.sachima.sql.dialect.mysql.visitor.handler.ColumnTypeHandler;
+import org.zaizai.sachima.sql.dialect.mysql.visitor.handler.PrimaryKeyHandler;
 import org.zaizai.sachima.util.SQLAdaptHelper;
 import org.zaizai.sachima.util.SQLUtils;
 import org.zaizai.sachima.util.StringUtils;
@@ -11,6 +13,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import sql.dml.DeleteTest;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +29,22 @@ import java.util.stream.Stream;
  * @date 2022/11/16 18:04
  */
 public class TestHelper {
+
+    @Before
+    public void initPrimaryTypeHandler() {
+        HashMap<String, String> primaryKeyMap = new HashMap<>();
+        primaryKeyMap.put("EA_FORM", "UID");
+        primaryKeyMap.put("ea_tenant_config", "id");
+        PrimaryKeyHandler.apply(primaryKeyMap, () -> 10000L);
+    }
+
+    @Before
+    public void initDataTypeHandler() {
+        ArrayList<ColumnTypeHandler.ColumnType> list = new ArrayList<>();
+        list.add(new ColumnTypeHandler.ColumnType("ea_tenant_config", "created_date", "DATE"));
+        ColumnTypeHandler.apply(list);
+    }
+
 
     private static final Log LOG = LogFactory.getLog(DeleteTest.class);
 

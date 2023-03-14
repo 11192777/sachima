@@ -20,8 +20,8 @@ public class DateTest extends TestHelper {
 
     @Test   //NOW() -> SYSDATE
     public void case1() {
-        String sql = "insert into ea_form (created_date) VALUES (now());";
-        eq(sql, "insert into ea_form (created_date) values (SYSDATE);");
+        String sql = "insert into TEST (created_date) VALUES (now());";
+        eq(sql, "insert into TEST (created_date) values (SYSDATE);");
     }
 
     @Test

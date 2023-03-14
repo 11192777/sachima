@@ -400,12 +400,11 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
     @Override
     public boolean visit(SQLInsertStatement x) {
         this.tableName = this.cleanMySQLTableNameout(x.getTableName().getSimpleName());
+
         String tablePrimaryKey = PrimaryKeyHandler.getTablePrimaryKey(this.tableName);
-        SQLInsertStatement.ValuesClause values = x.getValues();
-        List<SQLExpr> columns = x.getColumns();
         if (Objects.nonNull(tablePrimaryKey)) {
             boolean existPrimaryField = false;
-            for (SQLExpr column : columns) {
+            for (SQLExpr column : x.getColumns()) {
                 if (column instanceof SQLIdentifierExpr && ((SQLIdentifierExpr) column).getName().equalsIgnoreCase(tablePrimaryKey)) {
                     existPrimaryField = true;
                     break;
@@ -413,23 +412,12 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
             }
             if (!existPrimaryField) {
                 x.getColumns().add(new SQLIdentifierExpr(tablePrimaryKey));
-                values.addValue(new SQLCharExpr(PrimaryKeyHandler.generateId()));
+                x.getValuesList().forEach(item -> item.addValue(new SQLCharExpr(PrimaryKeyHandler.generateId())));
             }
         }
-        for (int i = 0; i < columns.size(); i++) {
-            SQLExpr column = columns.get(i);
-            if (column instanceof SQLIdentifierExpr) {
-                String columnName = ((SQLIdentifierExpr) column).getName();
-                if (ColumnTypeHandler.contains(TokenFnvConstants.DATE, this.tableName, columnName)) {
-                    SQLExpr sqlExpr = values.getValues().get(i);
-                    if (sqlExpr instanceof SQLCharExpr) {
-                        SQLMethodInvokeExpr sqlMethodInvokeExpr = new SQLMethodInvokeExpr(FunctionConstant.TO_DATE);
-                        sqlMethodInvokeExpr.getArguments().add(x.getValues().getValues().get(i));
-                        sqlMethodInvokeExpr.getArguments().add(new SQLCharExpr(this.getOracleDateFormat(((SQLCharExpr) sqlExpr).getText())));
-                        values.getValues().set(i, sqlMethodInvokeExpr);
-                    }
-                }
-            }
+
+        if (CollectionUtils.isNotEmpty(x.getValuesList())) {
+            x.getValuesList().forEach(item -> this.handleInsertValueItem(x.getColumns(), item));
         }
 
         if (x.getValuesList().size() <= 1) {
@@ -453,6 +441,37 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
         }
         print0("SELECT 1 FROM DUAL");
         return false;
+    }
+
+    /**
+     * <H2>处理Insert操作</H2>
+     *
+     * <pre>
+     *     1.如果存在字段为DATE类型，则to_date包裹一下
+     * </pre>
+     *
+     * @param columns       插入列
+     * @param valuesItem    插入值
+     * @author Qingyu.Meng
+     * @since 2023/3/14
+     */
+    private void handleInsertValueItem(List<SQLExpr> columns, SQLInsertStatement.ValuesClause valuesItem) {
+        for (int i = 0; i < columns.size(); i++) {
+            SQLExpr column = columns.get(i);
+            if (column instanceof SQLIdentifierExpr) {
+                String columnName = ((SQLIdentifierExpr) column).getName();
+                if (ColumnTypeHandler.contains(TokenFnvConstants.DATE, this.tableName, columnName)) {
+                    SQLExpr sqlExpr = valuesItem.getValues().get(i);
+                    if (sqlExpr instanceof SQLCharExpr) {
+                        SQLMethodInvokeExpr sqlMethodInvokeExpr = new SQLMethodInvokeExpr(FunctionConstant.TO_DATE);
+                        sqlMethodInvokeExpr.getArguments().add(valuesItem.getValues().get(i));
+                        sqlMethodInvokeExpr.getArguments().add(new SQLCharExpr(this.getOracleDateFormat(((SQLCharExpr) sqlExpr).getText())));
+                        valuesItem.getValues().set(i, sqlMethodInvokeExpr);
+                    }
+                }
+            }
+        }
+
     }
 
     /**
