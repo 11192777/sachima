@@ -16,6 +16,7 @@ import org.zaizai.sachima.sql.dialect.oracle.visitor.OracleOutputVisitor;
 import org.zaizai.sachima.sql.parser.Token;
 import org.zaizai.sachima.util.CollectionUtils;
 import org.zaizai.sachima.util.OracleUtils;
+import org.zaizai.sachima.util.SQLUtils;
 import org.zaizai.sachima.util.StringUtils;
 
 import java.util.*;
@@ -49,6 +50,10 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
         return true;
     }
 
+    private void setTableName(String tableName) {
+        this.tableName = SQLUtils.normalize(tableName);
+    }
+
     /**
      * <ol>
      *     <li>u.`name` -> u."NAME"</li>
@@ -62,7 +67,7 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
 
     @Override
     public boolean visit(SQLExprTableSource x) {
-        this.tableName = this.cleanMySQLTableNameout(x.getTableName());
+        this.setTableName(x.getTableName());
         if (x.getExpr() instanceof SQLIdentifierExpr) {
             this.identifierTransferredMeaning((SQLIdentifierExpr) x.getExpr());
         }
@@ -399,7 +404,7 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
      */
     @Override
     public boolean visit(SQLInsertStatement x) {
-        this.tableName = this.cleanMySQLTableNameout(x.getTableName().getSimpleName());
+        this.setTableName(x.getTableName().getSimpleName());
 
         String tablePrimaryKey = PrimaryKeyHandler.getTablePrimaryKey(this.tableName);
         if (Objects.nonNull(tablePrimaryKey)) {
@@ -591,16 +596,6 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
             targets.add(item.getValue());
         }
         return targets;
-    }
-
-    /**
-     * Obtain MySQL table name
-     */
-    private String cleanMySQLTableNameout(String tableName) {
-        if (StringUtils.isEmpty(tableName)) {
-            return tableName;
-        }
-        return tableName.replace("`", "");
     }
 
     /**

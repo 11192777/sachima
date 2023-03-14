@@ -131,6 +131,7 @@ public class ColumnTypeHandler {
         if (Objects.isNull(instance) || StringUtils.isEmpty(tableName) || StringUtils.isEmpty(columnName)) {
             return false;
         }
+        columnName = SQLUtils.normalize(columnName);
         long[] hashArray = instance.columnTypeIndexMap.get(dataType);
         if (Objects.isNull(hashArray)) {
             return false;

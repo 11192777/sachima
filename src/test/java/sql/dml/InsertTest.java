@@ -94,7 +94,15 @@ public class InsertTest extends TestHelper {
     @Test
     public void case7() {
         String sql = "insert into TIME_STAMP_TABLE (created_date) values ('2022-12-22 12:22:12')";
-        System.out.println(mysqlToOracle(sql));
+        eq(sql, "INSERT INTO TIME_STAMP_TABLE (created_date)\n" +
+                "VALUES (TO_DATE('2022-12-22 12:22:12', 'yyyy-mm-dd hh24:mi:ss'))");
+    }
+
+    @Test
+    public void case8() {
+        String sql = "insert into TIME_STAMP_TABLE (`created_date`) values ('2022-12-22 12:22:12')";
+        eq(sql, "INSERT INTO TIME_STAMP_TABLE (created_date)\n" +
+                "VALUES (TO_DATE('2022-12-22 12:22:12', 'yyyy-mm-dd hh24:mi:ss'))");
     }
 
 }
