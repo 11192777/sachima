@@ -162,7 +162,8 @@ public class ColumnTypeHandler {
         public ColumnType(String tableName, String columnName, String dataType) {
             this.tableName = tableName;
             this.columnName = columnName;
-            this.dataType = dataType;
+            int leftBracketIndex = dataType.indexOf("(");
+            this.dataType = leftBracketIndex == -1 ? dataType : dataType.substring(0, leftBracketIndex);
         }
 
         public String getTableName() {
