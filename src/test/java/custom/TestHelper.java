@@ -42,6 +42,7 @@ public class TestHelper {
     public void initDataTypeHandler() {
         ArrayList<ColumnTypeHandler.ColumnType> list = new ArrayList<>();
         list.add(new ColumnTypeHandler.ColumnType("ea_tenant_config", "created_date", "DATE"));
+        list.add(new ColumnTypeHandler.ColumnType("TIME_STAMP_TABLE", "created_date", "TIMESTAMP"));
         ColumnTypeHandler.apply(list);
     }
 

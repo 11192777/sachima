@@ -91,4 +91,10 @@ public class InsertTest extends TestHelper {
                 "SELECT 1 FROM DUAL;");
     }
 
+    @Test
+    public void case7() {
+        String sql = "insert into TIME_STAMP_TABLE (created_date) values ('2022-12-22 12:22:12')";
+        System.out.println(mysqlToOracle(sql));
+    }
+
 }

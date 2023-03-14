@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  *
  * <p>Singleton {@link ColumnTypeHandler#instance}</p>
  * <pre>
- *     Use binary search algorithm. {@link ColumnTypeHandler#contains(long, String, String)}
+ *     Use binary search algorithm. {@link ColumnTypeHandler#contains(String, String, long)}
  *     Time complexity: O(logn)
  * </pre>
  *
@@ -127,7 +127,7 @@ public class ColumnTypeHandler {
      *
      * @param dataType {@link TokenFnvConstants}
      */
-    public static boolean contains(long dataType, String tableName, String columnName) {
+    public static boolean contains(String tableName, String columnName, long dataType) {
         if (Objects.isNull(instance) || StringUtils.isEmpty(tableName) || StringUtils.isEmpty(columnName)) {
             return false;
         }
@@ -136,6 +136,21 @@ public class ColumnTypeHandler {
             return false;
         }
         return Arrays.binarySearch(hashArray, getIndexHash(tableName, columnName)) >= 0;
+    }
+
+    /**
+     * @see ColumnTypeHandler#contains(String, String, long)
+     */
+    public static boolean containsAny(String tableName, String columnName, Long... dataTypes) {
+        if (ArrayUtil.isEmpty(dataTypes)) {
+            return false;
+        }
+        for (Long dataType : dataTypes) {
+            if (contains(tableName, columnName, dataType)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static class ColumnType {

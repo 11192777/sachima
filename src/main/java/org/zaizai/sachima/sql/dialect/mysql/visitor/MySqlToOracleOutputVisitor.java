@@ -298,7 +298,7 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
 
         if (ColumnTypeHandler.nonNull() && x.getLeft() instanceof SQLName && Objects.nonNull(tableName)) {
             SQLName filed = (SQLName) x.getLeft();
-            if (ColumnTypeHandler.contains(TokenFnvConstants.NCLOB, tableName, filed.getSimpleName())) {
+            if (ColumnTypeHandler.contains(tableName, filed.getSimpleName(), TokenFnvConstants.NCLOB)) {
                 x.setLeft(new SQLMethodInvokeExpr(FunctionConstant.TO_CHAR, null, Collections.singletonList(filed)));
             }
         }
@@ -460,7 +460,7 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
             SQLExpr column = columns.get(i);
             if (column instanceof SQLIdentifierExpr) {
                 String columnName = ((SQLIdentifierExpr) column).getName();
-                if (ColumnTypeHandler.contains(TokenFnvConstants.DATE, this.tableName, columnName)) {
+                if (ColumnTypeHandler.containsAny(this.tableName, columnName, TokenFnvConstants.DATE, TokenFnvConstants.TIMESTAMP)) {
                     SQLExpr sqlExpr = valuesItem.getValues().get(i);
                     if (sqlExpr instanceof SQLCharExpr) {
                         SQLMethodInvokeExpr sqlMethodInvokeExpr = new SQLMethodInvokeExpr(FunctionConstant.TO_DATE);
