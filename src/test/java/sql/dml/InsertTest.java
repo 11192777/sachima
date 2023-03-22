@@ -105,4 +105,19 @@ public class InsertTest extends TestHelper {
                 "VALUES (TO_DATE('2022-12-22 12:22:12', 'yyyy-mm-dd hh24:mi:ss'))");
     }
 
+    @Test
+    public void case9() {
+        String sql = "insert into null_test_table (id, name) values (1, NULL)";
+        eq(sql, "INSERT INTO null_test_table (id)\n" +
+                "VALUES (1)");
+    }
+
+    @Test
+    public void case10() {
+        String sql = "INSERT INTO EXAMPLE (ID, NAME) VALUES (1000, NULL), (1001, 'ZhangSan');";
+        eq(sql, "INSERT ALL \n" +
+                "INTO EXAMPLE (ID) VALUES (1000)\n" +
+                "INTO EXAMPLE (ID, NAME) VALUES (1001, 'ZhangSan')\n" +
+                "SELECT 1 FROM DUAL;");
+    }
 }

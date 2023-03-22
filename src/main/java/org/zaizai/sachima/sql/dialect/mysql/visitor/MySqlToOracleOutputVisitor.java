@@ -399,8 +399,27 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
      * <ol>
      *     <li>ID compensate</li>
      *     <li>Insert columns to_char format</li>
+     *     <li>Remove Null insert item</li>
      * </ol>
      *
+     * <pre>
+     *     围绕NAME列在Oracle的定义举例子，从而对删除空值的插入说明：
+     *     example  :  INSERT INTO EXAMPLE (ID, NAME) VALUES (1000, NULL);
+     *     adapt    :  INSERT INTO EXAMPLE (ID) VALUES (1000);
+     *
+     *     <ol>
+     *         <li>当NAME列，定义可为空时，@example 和 @adapt 效果一样</li>
+     *         <li>当NAME列，定义不为空时，@example 和 @adapt 无论在MySQL和Oracle都会失败</li>
+     *         <li>当NAME列，定义不为空时且存在默认值，@example 在Oracle因为显示插入NULL而失败，适配后解决</li>
+     *     </ol>
+     *
+     *     Batch情况适配：
+     *     example  :  INSERT INTO EXAMPLE (ID, NAME) VALUES (1000, NULL), (1001, 'ZhangSan');
+     *     adapt    :  INSERT ALL
+     *                    INTO EXAMPLE (ID) VALUES (1000)
+     *                    INTO EXAMPLE (ID, NAME) VALUES (1001, 'ZhangSan')
+     *                 SELECT 1 FROM DUAL;
+     * </pre>
      */
     @Override
     public boolean visit(SQLInsertStatement x) {
@@ -426,6 +445,11 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
         }
 
         if (x.getValuesList().size() <= 1) {
+            for (int index = x.getValuesList().get(0).getValues().size() - 1; index >= 0 ; index--) {
+                if (x.getValuesList().get(0).getValues().get(index) instanceof SQLNullExpr) {
+                    x.getColumns().remove(index);
+                }
+            }
             return super.visit(x);
         }
 
@@ -438,7 +462,7 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
             if (columnsString != null) {
                 print0(columnsString);
             } else {
-                printInsertColumns(x.getColumns());
+                printInsertColumns(this.listNonnullExprColumns(x.getColumns(), valuesClause));
             }
             print0(ucase ? " VALUES " : " values ");
             valuesClause.accept(this);
@@ -447,6 +471,40 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
         print0("SELECT 1 FROM DUAL");
         return false;
     }
+
+    /**
+     * <H2>过滤掉为空的列</H2>
+     *
+     * @param columns           insert columns
+     * @param valuesClause      insert column values
+     * @return  {@link java.util.List<org.zaizai.sachima.sql.ast.SQLExpr>}  filter NullExpr column items.
+     * @author Qingyu.Meng
+     * @since 2023/3/22
+     */
+    private List<SQLExpr> listNonnullExprColumns(List<SQLExpr> columns, SQLInsertStatement.ValuesClause valuesClause) {
+        ArrayList<SQLExpr> targetList = new ArrayList<>(columns.size());
+        for (int index = 0; index < valuesClause.getValues().size(); index++) {
+            if (!(valuesClause.getValues().get(index) instanceof SQLNullExpr)) {
+                targetList.add(columns.get(index));
+            }
+        }
+        return targetList;
+    }
+
+    /**
+     * <H2>过滤掉为空的值</H2>
+     *
+     * @param x     values of Sql insert.
+     * @return  {@link boolean}
+     * @author Qingyu.Meng
+     * @since 2023/3/22
+     */
+    @Override
+    public boolean visit(SQLInsertStatement.ValuesClause x) {
+        x.getValues().removeIf(SQLNullExpr.class::isInstance);
+        return super.visit(x);
+    }
+
 
     /**
      * <H2>处理Insert操作</H2>
