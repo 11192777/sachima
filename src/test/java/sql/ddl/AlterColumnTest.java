@@ -2,6 +2,7 @@ package sql.ddl;
 
 import custom.TestHelper;
 import org.junit.Test;
+import org.zaizai.sachima.sql.ast.SQLStatement;
 
 /**
  * <H1></H1>
@@ -39,5 +40,22 @@ public class AlterColumnTest extends TestHelper {
 
     @Test
     public void case5() {
+        String sql = "alter table sachima add column code varchar(100) not null;\n";
+        SQLStatement statement = getStatement(sql);
+        System.out.println(statement);
+    }
+
+    @Test
+    public void case6() {
+        String sql = "ALTER TABLE sachima DROP code;";
+        SQLStatement statement = getStatement(sql);
+        System.out.println(statement);
+    }
+
+    @Test
+    public void case7() {
+        String sql = "ALTER TABLE sachima CHANGE ori new varchar(200) NULL COMMENT 'com';";
+        SQLStatement statement = getStatement(sql);
+        System.out.println(statement);
     }
 }

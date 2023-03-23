@@ -7,6 +7,9 @@ import org.zaizai.sachima.exception.SQLTranslateException;
 import org.zaizai.sachima.sql.ast.SQLStatement;
 import org.zaizai.sachima.sql.dialect.mysql.ast.statement.MySqlCreateTableStatement;
 import org.zaizai.sachima.sql.dialect.mysql.visitor.MySqlToOracleOutputVisitor;
+import org.zaizai.sachima.sql.dialect.mysql.visitor.handler.ColumnTypeHandler;
+import org.zaizai.sachima.sql.dialect.mysql.visitor.handler.DataTypeHandler;
+import org.zaizai.sachima.sql.dialect.mysql.visitor.handler.PrimaryKeyHandler;
 import org.zaizai.sachima.sql.visitor.SQLASTOutputVisitor;
 import org.zaizai.sachima.sql.visitor.VisitorFeature;
 
@@ -130,6 +133,8 @@ public class SQLAdaptHelper {
     public static String translateMysqlToOracleOnLiquibase(String sql) {
         LOG.debug("Original SQL:" + sql);
         SQLStatement statement = SQLUtils.parseSingleStatement(sql, DbType.mysql);
+        ColumnTypeHandler.refresh(statement);
+        PrimaryKeyHandler.refresh(statement);
         if (statement instanceof MySqlCreateTableStatement) {
             return sql;
         }
