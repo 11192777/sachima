@@ -402,9 +402,11 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
      *     <li>Remove Null insert item</li>
      * </ol>
      *
+     * Oracle nonsupport [''] & [""] value.
+     *
      * <pre>
      *     围绕NAME列在Oracle的定义举例子，从而对删除空值的插入说明：
-     *     example  :  INSERT INTO EXAMPLE (ID, NAME) VALUES (1000, NULL);
+     *     example  :  INSERT INTO EXAMPLE (ID, NAME) VALUES (1000, [NULL | '' | ""])
      *     adapt    :  INSERT INTO EXAMPLE (ID) VALUES (1000);
      *
      *     <ol>
@@ -446,7 +448,7 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
 
         if (x.getValuesList().size() <= 1) {
             for (int index = x.getValuesList().get(0).getValues().size() - 1; index >= 0 ; index--) {
-                if (x.getValuesList().get(0).getValues().get(index) instanceof SQLNullExpr) {
+                if (this.isSQLNullExpr(x.getValuesList().get(0).getValues().get(index))) {
                     x.getColumns().remove(index);
                 }
             }
@@ -484,11 +486,21 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
     private List<SQLExpr> listNonnullExprColumns(List<SQLExpr> columns, SQLInsertStatement.ValuesClause valuesClause) {
         ArrayList<SQLExpr> targetList = new ArrayList<>(columns.size());
         for (int index = 0; index < valuesClause.getValues().size(); index++) {
-            if (!(valuesClause.getValues().get(index) instanceof SQLNullExpr)) {
+            if (!this.isSQLNullExpr(valuesClause.getValues().get(index))) {
                 targetList.add(columns.get(index));
             }
         }
         return targetList;
+    }
+
+
+    /**
+     * <p>[NULL] & [''] & [""]</p>
+     *
+     * Oracle nonsupport '' value.
+     */
+    private boolean isSQLNullExpr(SQLExpr x) {
+        return x instanceof SQLNullExpr || (x instanceof SQLCharExpr && ((SQLCharExpr) x).getValue().equals(""));
     }
 
     /**
@@ -501,7 +513,7 @@ public class MySqlToOracleOutputVisitor extends OracleOutputVisitor {
      */
     @Override
     public boolean visit(SQLInsertStatement.ValuesClause x) {
-        x.getValues().removeIf(SQLNullExpr.class::isInstance);
+        x.getValues().removeIf(this::isSQLNullExpr);
         return super.visit(x);
     }
 
