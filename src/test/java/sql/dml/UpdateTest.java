@@ -4,6 +4,8 @@ import custom.TestHelper;
 import org.junit.Test;
 import org.zaizai.sachima.sql.ast.SQLStatement;
 
+import java.sql.PreparedStatement;
+
 /**
  * <H1></H1>
  *
@@ -23,14 +25,22 @@ public class UpdateTest extends TestHelper {
     @Test
     public void case2() {
         String sql  ="UPDATE\n" +
-                "            ea_user_often_field         AS euof\n" +
-                "            INNER JOIN ea_form_field    AS eff ON euof.field_id = eff.id\n" +
-                "        SET\n" +
-                "            euof.widget_type = eff.widget_type, name = 'ZhangSan'" +
-                "      WHERE\n" +
-                "            euof.widget_type != ef" +
-                "f.widget_type";
-        System.out.println(sql);
+                "    sachima AS sa\n" +
+                "    INNER JOIN user AS us ON sa.name = us.name\n" +
+                "SET\n" +
+                "    sa.sex    = us.sex,\n" +
+                "    sa.remark = 'Update from user'\n" +
+                "WHERE\n" +
+                "    sa.id = us.id;";
+        eq(sql, "UPDATE (\n" +
+                "    SELECT\n" +
+                "        sa.sex sa__sex, us.sex us__sex, sa.remark sa__remark\n" +
+                "    FROM sachima sa\n" +
+                "    INNER JOIN USER us ON sa.name = us.name\n" +
+                "    WHERE sa.id = us.id\n" +
+                ")\n" +
+                "SET sa__sex = us__sex, sa__remark = 'Update from user'\n" +
+                "WHERE 1=1;");
     }
 
     @Test

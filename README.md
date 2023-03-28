@@ -299,6 +299,31 @@ MySQL:  INSERT INTO sachima (id, name) VALUES (1, 'ZhangSan');
 Oracle: INSERT INTO sachima (id, name) VALUES (1, 'ZhangSan');
 ```
 
+- Update use JOIN
+
+```sql
+MySQL:
+    UPDATE
+        sachima AS sa
+        INNER JOIN user AS us ON sa.name = us.name
+    SET
+      sa.sex    = us.sex,
+      sa.remark = 'Update from user'
+    WHERE
+      sa.id = us.id;
+Oracle:
+    UPDATE (
+        SELECT
+            sa.sex sa__sex, us.sex us__sex, sa.remark sa__remark
+        FROM 
+            sachima sa
+            INNER JOIN USER us ON sa.name = us.name
+        WHERE sa.id = us.id
+    )
+    SET sa__sex = us__sex, sa__remark = 'Update from user'
+    WHERE 1=1;
+```
+
 <hr/>
 
 ## Guides
