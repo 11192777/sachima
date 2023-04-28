@@ -1,4 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  org.zaizai.sachima.boot.starter.SachimaAutoConfiguration,\
-  org.zaizai.sachima.boot.starter.MyBatisPlusAutoConfiguration,\
-  org.zaizai.sachima.boot.starter.LiquibaseAutoConfiguration
