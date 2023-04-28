@@ -1,0 +1,52 @@
+{
+    "groups": [
+        {
+            "sourceType": "org.zaizai.sachima.boot.starter.SachimaProperties",
+            "name": "sachima",
+            "type": "org.zaizai.sachima.boot.starter.SachimaProperties",
+            "defaultValue": false
+        },
+        {
+            "sourceType": "org.zaizai.sachima.boot.starter.SachimaProperties",
+            "name": "sachima.adapt-in-mybatis-plus",
+            "sourceMethod": "getAdaptInMybatisPlus()",
+            "type": "java.lang.Boolean",
+            "defaultValue": true
+        },
+        {
+            "sourceType": "org.zaizai.sachima.boot.starter.SachimaProperties",
+            "name": "sachima.adapt-in-liquibase",
+            "sourceMethod": "getAdaptInLiquibase()",
+            "type": "java.lang.Boolean",
+            "defaultValue": false
+        },
+        {
+            "sourceType": "org.zaizai.sachima.boot.starter.SachimaProperties",
+            "name": "sachima.handler-settings",
+            "sourceMethod": "getHandlerSettings()",
+            "type": "org.zaizai.sachima.boot.starter.SachimaProperties$HandlerSettings",
+            "defaultValue": true
+        },
+        {
+            "sourceType": "org.zaizai.sachima.boot.starter.SachimaProperties$HandlerSettings",
+            "name": "sachima.handler-settings.enabled-column-type-handler",
+            "sourceMethod": "getEnabledColumnTypeHandler()",
+            "type": "java.lang.Boolean",
+            "defaultValue": true
+        },
+        {
+            "sourceType": "org.zaizai.sachima.boot.starter.SachimaProperties$HandlerSettings",
+            "name": "sachima.handler-settings.enabled-primary-key-handler",
+            "sourceMethod": "getEnabledPrimaryKeyHandler()",
+            "type": "java.lang.Boolean",
+            "defaultValue": true
+        },
+        {
+            "sourceType": "org.zaizai.sachima.boot.starter.SachimaProperties$HandlerSettings",
+            "name": "sachima.handler-settings.enabled-non-null-type-handler",
+            "sourceMethod": "getEnabledNonNullTypeHandler()",
+            "type": "java.lang.Boolean",
+            "defaultValue": true
+        }
+    ]
+}

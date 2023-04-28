@@ -1,0 +1,8 @@
+org/zaizai/sachima/boot/starter/LiquibaseAutoConfiguration.class
+org/zaizai/sachima/boot/starter/SachimaProperties.class
+org/zaizai/sachima/boot/starter/SachimaProperties$HandlerSettings.class
+org/zaizai/sachima/boot/starter/MyBatisPlusAutoConfiguration$1.class
+org/zaizai/sachima/boot/starter/MyBatisPlusAutoConfiguration.class
+org/zaizai/sachima/boot/starter/SachimaAutoConfiguration.class
+org/zaizai/sachima/boot/starter/LiquibaseAutoConfiguration$OracleSupportLiquibase$SQLAdaptFilter.class
+org/zaizai/sachima/boot/starter/LiquibaseAutoConfiguration$OracleSupportLiquibase.class
