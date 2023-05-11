@@ -374,7 +374,7 @@ public class MySQLToOracleAdaptVisitor extends OracleOutputVisitor implements Ad
      */
     @Override
     public boolean visit(SQLDataType x) {
-        //x.setName(DataTypeHandler.getOracleDataType(x.getName()));
+        //x.setName(DataTypeMappingHandler.getOracleDataType(x.getName()));
         return super.visit(x);
     }
 

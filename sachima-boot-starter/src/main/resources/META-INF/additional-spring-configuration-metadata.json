@@ -47,6 +47,12 @@
             "sourceMethod": "getEnabledNonNullTypeHandler()",
             "type": "java.lang.Boolean",
             "defaultValue": true
+        },
+        {
+            "sourceType": "org.zaizai.sachima.boot.starter.SachimaProperties$HandlerSettings",
+            "name": "sachima.data-type-mapping",
+            "sourceMethod": "getDataTypeMapping()",
+            "type": "java.util.Map"
         }
     ]
 }

@@ -1,8 +1,14 @@
 package org.zaizai.sachima.sql.adapter.visitor;
 
 import org.zaizai.sachima.sql.adapter.MySqlToOracleAdapterImpl;
+import org.zaizai.sachima.sql.ast.SQLDataTypeImpl;
+import org.zaizai.sachima.sql.ast.statement.SQLAlterTableItem;
 import org.zaizai.sachima.sql.ast.statement.SQLAlterTableStatement;
+import org.zaizai.sachima.sql.ast.statement.SQLColumnDefinition;
+import org.zaizai.sachima.sql.dialect.mysql.ast.statement.MySqlAlterTableModifyColumn;
 import org.zaizai.sachima.sql.dialect.mysql.ast.statement.MySqlCreateTableStatement;
+
+import java.util.Objects;
 
 /**
  * @author Qingyu.Meng
@@ -27,9 +33,17 @@ public class LiquibaseAdaptVisitor extends MySQLToOracleAdaptVisitor {
 
     @Override
     public boolean visit(SQLAlterTableStatement x) {
-        print0(sourceSql);
+        for (SQLAlterTableItem item : x.getItems()) {
+            if (item instanceof MySqlAlterTableModifyColumn) {
+                SQLColumnDefinition columnDefinition = ((MySqlAlterTableModifyColumn) item).getNewColumnDefinition();
+                String replaceType = super.adapter.getMappingDataType(columnDefinition.getDataType().getName());
+                if (Objects.nonNull(replaceType)) {
+                    columnDefinition.setDataType(new SQLDataTypeImpl(replaceType));
+                }
+            }
+        }
         this.adapter.onEvent(x);
-        return false;
+        return super.visit(x);
     }
 
 }

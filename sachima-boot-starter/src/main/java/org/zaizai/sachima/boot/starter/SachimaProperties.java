@@ -2,6 +2,8 @@ package org.zaizai.sachima.boot.starter;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.util.Map;
+
 /**
  * <H1></H1>
  *
@@ -51,6 +53,11 @@ public class SachimaProperties {
          */
         private Boolean enabledNonNullTypeHandler;
 
+        /**
+         * Data type mapping.
+         */
+        private Map<String, String> dataTypeMapping;
+
         public Boolean getEnabledColumnTypeHandler() {
             return enabledColumnTypeHandler;
         }
@@ -73,6 +80,14 @@ public class SachimaProperties {
 
         public void setEnabledNonNullTypeHandler(Boolean enabledNonNullTypeHandler) {
             this.enabledNonNullTypeHandler = enabledNonNullTypeHandler;
+        }
+
+        public Map<String, String> getDataTypeMapping() {
+            return dataTypeMapping;
+        }
+
+        public void setDataTypeMapping(Map<String, String> dataTypeMapping) {
+            this.dataTypeMapping = dataTypeMapping;
         }
     }
 

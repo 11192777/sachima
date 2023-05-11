@@ -48,6 +48,12 @@
       "type": "java.lang.Boolean",
       "description": "Primary keys are AutoFill.",
       "sourceType": "org.zaizai.sachima.boot.starter.SachimaProperties$HandlerSettings"
+    },
+    {
+      "name": "sachima.handler-settings.data-type-mapping",
+      "type": "java.util.Map",
+      "description": "Data type mapping.",
+      "sourceType": "org.zaizai.sachima.boot.starter.SachimaProperties$HandlerSettings"
     }
   ],
   "hints": []

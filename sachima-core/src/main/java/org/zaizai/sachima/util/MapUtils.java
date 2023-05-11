@@ -19,6 +19,10 @@ public class MapUtils {
         return Objects.isNull(map) || map.isEmpty();
     }
 
+    public static boolean isNotEmpty(Map<?, ?> map) {
+        return !isEmpty(map);
+    }
+
     public static <K, V> Map<K, V> newHashMap(int size) {
         return new HashMap<>((int) (size / 0.75) + 1);
     }

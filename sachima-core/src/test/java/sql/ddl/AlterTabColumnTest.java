@@ -58,4 +58,10 @@ public class AlterTabColumnTest extends TestHelper {
         SQLStatement statement = getStatement(sql);
         System.out.println(statement);
     }
+
+    @Test
+    public void case8() {
+        String sql = "ALTER TABLE EARCHIVES.ea_user_download_task_queue MODIFY parameter CLOB";
+        System.out.println(super.handler.translateMysqlToOracleOnLiquibase(sql));
+    }
 }

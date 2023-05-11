@@ -15,11 +15,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.zaizai.sachima.sql.adapter.MySqlToOracleAdapterImpl;
 import org.zaizai.sachima.sql.adapter.handler.ColumnTypeHandler;
+import org.zaizai.sachima.sql.adapter.handler.DataTypeMappingHandler;
 import org.zaizai.sachima.sql.adapter.handler.NonNullTypeHandler;
 import org.zaizai.sachima.sql.adapter.handler.PrimaryKeyHandler;
 import org.zaizai.sachima.util.JDBCUtils;
+import org.zaizai.sachima.util.MapUtils;
 
 import javax.sql.DataSource;
+import java.util.Map;
 import java.util.Objects;
 
 
@@ -69,6 +72,11 @@ public class SachimaAutoConfiguration implements InitializingBean {
         }
         if (Boolean.TRUE.equals(this.sachimaProperties.getHandlerSettings().getEnabledPrimaryKeyHandler())) {
             this.adapter.setPrimaryKeyHandler(PrimaryKeyHandler.build(dataSource, owner));
+        }
+
+        Map<String, String> dataTypeMapping = this.sachimaProperties.getHandlerSettings().getDataTypeMapping();
+        if (MapUtils.isNotEmpty(dataTypeMapping)) {
+            this.adapter.setDataTypeMappingHandler(DataTypeMappingHandler.build(dataTypeMapping));
         }
     }
 

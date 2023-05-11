@@ -9,6 +9,7 @@ import org.zaizai.sachima.enums.DbType;
 import org.zaizai.sachima.exception.SQLTranslateException;
 import org.zaizai.sachima.sql.adapter.event.ColumnAlterEvent;
 import org.zaizai.sachima.sql.adapter.handler.ColumnTypeHandler;
+import org.zaizai.sachima.sql.adapter.handler.DataTypeMappingHandler;
 import org.zaizai.sachima.sql.adapter.handler.NonNullTypeHandler;
 import org.zaizai.sachima.sql.adapter.handler.PrimaryKeyHandler;
 import org.zaizai.sachima.sql.adapter.visitor.MySQLToOracleAdaptVisitor;
@@ -40,8 +41,11 @@ public class MySqlToOracleAdapterImpl implements MySqlToOracleAdapter {
     private NonNullTypeHandler nonNullTypeHandler;
     private final Set<ColumnAlterEvent> handlerChain;
 
+    private DataTypeMappingHandler dataTypeMappingHandler;
+
     public MySqlToOracleAdapterImpl() {
         this.handlerChain = new HashSet<>();
+        this.dataTypeMappingHandler = new DataTypeMappingHandler();
     }
 
     public void setColumnTypeHandler(ColumnTypeHandler columnTypeHandler) {
@@ -63,6 +67,10 @@ public class MySqlToOracleAdapterImpl implements MySqlToOracleAdapter {
         if (Objects.nonNull(nonNullTypeHandler)) {
             this.handlerChain.add(nonNullTypeHandler);
         }
+    }
+
+    public void setDataTypeMappingHandler(DataTypeMappingHandler dataTypeMappingHandler) {
+        this.dataTypeMappingHandler = dataTypeMappingHandler;
     }
 
     /**
@@ -241,5 +249,15 @@ public class MySqlToOracleAdapterImpl implements MySqlToOracleAdapter {
 
     public void onEvent(SQLStatement statement) {
         this.handlerChain.forEach(h -> h.onStatement(statement));
+    }
+
+    /**
+     * mapping target data type to oracle data type;
+     * @param targetDataType such as bigint、 varchar()、 timestamp
+     * @return oracle data type: Number、 Nvarchar()、 Date
+     */
+    public String getMappingDataType(String targetDataType) {
+        String mappingValue = this.dataTypeMappingHandler.getMappingValue(targetDataType);
+        return Objects.isNull(mappingValue) ? targetDataType : mappingValue;
     }
 }
