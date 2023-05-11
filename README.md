@@ -337,3 +337,21 @@ sachima:
   adaptInLiquibase: true
   adaptInMybatisPlus: true
 ```
+
+完整配置参考：
+```yaml
+sachima:
+  enabled: true
+  adaptInLiquibase: false
+  adaptInMybatisPlus: false
+  handlerSettings:
+    enabledColumnTypeHandler: true
+    enabledNonNullTypeHandler: true
+    enabledPrimaryKeyHandler: true
+    # default: org.zaizai.sachima.sql.adapter.handler.DataTypeMappingHandler.DataTypeMappingHandler()
+    dataTypeMapping: 
+      # CLOB : NCLOB，ALTER TABLE sachima MODIFY name CLOB ===> ALTER TABLE sachima MODIFY name NCLOB;
+      CLOB : NCLOB
+      BIGINT : NUMBER
+      VARCHAR : NVARCHAR
+```
